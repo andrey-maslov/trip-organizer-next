@@ -8,7 +8,7 @@ type LoaderProps = {
   className?: string
 }
 
-const Loader: React.FC<LoaderProps> = ({ type, className }) => (
+const Loader: React.FC<LoaderProps> = ({ className }) => (
   <div className={clsx('flex justify-center align-middle', className)}>
     <CgSpinnerTwoAlt
       className='spinner text-primary'

@@ -6,8 +6,7 @@ import { FiLogIn, FiLogOut } from 'react-icons/fi'
 import { useEarthoOne } from '@eartho/one-client-react'
 
 export const UserPopup = () => {
-  const { isConnected, isLoading, user, connectWithPopup, logout } =
-    useEarthoOne()
+  const { isConnected, user, connectWithPopup, logout } = useEarthoOne()
 
   const EARTHO_ACCESS_POINT = process.env.NEXT_PUBLIC_EARTHO_ACCESS_POINT ?? ''
 

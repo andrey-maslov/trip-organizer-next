@@ -38,7 +38,7 @@ export default function TripsList() {
                 alt={item.name}
                 className='w-full object-cover h-[240px]'
                 src={
-                  'https://images.unsplash.com/photo-1699962622373-0872b71fae56?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                  'https://images.unsplash.com/photo-1699962622373-0872b71fae56?q=80&w=3024'
                 }
               />
             </CardBody>
