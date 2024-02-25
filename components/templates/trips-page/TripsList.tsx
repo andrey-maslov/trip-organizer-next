@@ -3,8 +3,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
 import { getAllTrips } from '@/apiRequests/apiRequests'
+import { FiPlus } from 'react-icons/fi'
+import { useRouter } from 'next/navigation'
 
 export default function TripsList() {
+  const router = useRouter()
+
   const {
     isPending,
     error,
@@ -28,7 +32,7 @@ export default function TripsList() {
             shadow='sm'
             key={item._id}
             isPressable
-            onPress={() => console.log('item pressed')}
+            onPress={() => router.push(`/trips/${item._id}`)}
           >
             <CardBody className='overflow-visible p-0'>
               <Image
@@ -48,6 +52,17 @@ export default function TripsList() {
             </CardFooter>
           </Card>
         ))}
+        <Card
+          shadow='sm'
+          key='new'
+          isPressable
+          onPress={() => console.log('item pressed')}
+        >
+          <CardBody className='overflow-visible p-0 flex flex-col justify-center items-center'>
+            <FiPlus className='text-yellow-500 text-4xl mb-4' />
+            <span className='text-foreground'>Add new Trip</span>
+          </CardBody>
+        </Card>
       </div>
     </div>
   )

@@ -2,8 +2,8 @@
 
 import { Providers } from '@/app/providers'
 import { Navbar } from '@/components/layouts/header/Navbar'
-import { Link } from '@nextui-org/link'
 import { useEffect, useState } from 'react'
+import { Divider } from '@nextui-org/divider'
 
 type PagesLayoutProps = {
   children: React.ReactNode
@@ -25,16 +25,11 @@ export const PagesLayout = ({ children }: PagesLayoutProps) => {
             <main className='container mx-auto max-w-7xl pt-16 px-6 flex-grow'>
               {children}
             </main>
-            <footer className='w-full flex items-center justify-center py-3'>
-              <Link
-                isExternal
-                className='flex items-center gap-1 text-current'
-                href='https://nextui-docs-v2.vercel.app?utm_source=next-app-template'
-                title='nextui.org homepage'
-              >
-                <span className='text-default-600'>Powered by</span>
-                <p className='text-primary'>NextUI</p>
-              </Link>
+            <Divider />
+            <footer className='w-full flex items-center justify-center py-4'>
+              <span className='flex items-center gap-1 text-sm text-foreground-500'>
+                Trip Organizer © 2024
+              </span>
             </footer>
           </div>
         </Providers>

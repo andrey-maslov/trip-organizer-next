@@ -10,8 +10,6 @@ export const UserPopup = () => {
 
   const EARTHO_ACCESS_POINT = process.env.NEXT_PUBLIC_EARTHO_ACCESS_POINT ?? ''
 
-  console.log('User', user)
-
   return (
     <div>
       {isConnected ? (
@@ -31,7 +29,7 @@ export const UserPopup = () => {
       ) : (
         <Button
           className='text-sm font-normal text-default-600 bg-default-100'
-          startContent={<FiLogIn className='text-danger' />}
+          startContent={<FiLogIn className='text-yellow-600' />}
           variant='flat'
           onClick={() => connectWithPopup({ access_id: EARTHO_ACCESS_POINT })}
         >

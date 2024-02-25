@@ -1,7 +1,35 @@
+import { Link } from '@nextui-org/link'
+import { button as buttonStyles } from '@nextui-org/theme'
+import { mainSubtitle } from '@/config/site'
+import { title, subtitle } from '@/components/primitives'
+
 export default function Home() {
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24 text-4xl'>
-      Main
-    </main>
+    <section className='flex flex-col items-center justify-center gap-4 py-8 md:py-10'>
+      <div className='inline-block max-w-xl text-center justify-center'>
+        <h1 className={title()}>Make your travels</h1>
+        <br />
+        <h1 className={title({ color: 'yellow' })}>
+          unforgettable and optimal&nbsp;
+        </h1>
+        <br />
+        <h1 className={title()}>regardless of the mode of transportation</h1>
+
+        <h2 className={subtitle({ class: 'mt-4' })}>{mainSubtitle}</h2>
+      </div>
+
+      <div className='flex gap-3'>
+        <Link
+          href={'/trips'}
+          className={buttonStyles({
+            color: 'primary',
+            radius: 'full',
+            variant: 'shadow',
+          })}
+        >
+          Start organizing
+        </Link>
+      </div>
+    </section>
   )
 }

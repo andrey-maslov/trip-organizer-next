@@ -2,15 +2,11 @@ export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
   name: 'Trip Organizer',
-  description: 'Create your best journey',
+  description: 'Quick and easy tool for organizing costs and logistics',
   navItems: [
     {
       label: 'Home',
       href: '/',
-    },
-    {
-      label: 'Docs',
-      href: '/docs',
     },
     {
       label: 'Pricing',
@@ -67,3 +63,8 @@ export const siteConfig = {
     sponsor: '',
   },
 }
+
+export const mainTitle =
+  'Make your travels unforgettable and optimal regardless of the mode of transportation and the time of year'
+export const mainSubtitle =
+  'Quick and easy tool for organizing costs and logistics'

@@ -1,18 +1,18 @@
 import React, { Suspense } from 'react'
 
 import Loader from '@/components/Loader'
-import TripsList from '@/components/templates/trips-page/TripsList'
+import { OneTrip } from '@/components/templates/one-trip-page/OneTrip'
 
 export const metadata = {
-  title: 'My trips-page',
+  title: 'My journey',
 }
 
-export default function TripsPageTemplate() {
+export default function OneTripPageTemplate() {
   return (
     <div className='container p-4 lg:p-8'>
       <Suspense fallback={<Loader />}>
         <div>
-          <TripsList />
+          <OneTrip />
         </div>
       </Suspense>
     </div>

@@ -4,6 +4,8 @@ import TripSchema from '@/lib/db/schemas/Trip'
 export async function GET() {
   await connectMongo()
 
+  console.log('Trips API')
+
   // Get many teams
   try {
     const trips = await TripSchema.find().lean()

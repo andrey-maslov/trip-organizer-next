@@ -16,7 +16,7 @@ export type Section = {
   dateTimeEnd: string
   transportType?: 'bus' | 'aircraft' | 'train' | 'unknown'
   placementType?: 'flat' | 'hotel'
-  serviceProvider: ServiceProvider
+  serviceProvider: ServiceProvider | null
   status: 'bought' | 'reserved' | 'to_buy' | 'to_find'
   payments: Payment[]
   notes?: string
