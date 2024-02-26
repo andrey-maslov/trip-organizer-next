@@ -12,28 +12,38 @@ import {
   DropdownMenu,
   DropdownItem,
   Chip,
-  User,
   Selection,
   SortDescriptor,
 } from '@nextui-org/react'
-import { FiPlus, FiMoreVertical, FiSearch, FiChevronDown } from 'react-icons/fi'
+import {
+  FiPlus,
+  FiMoreVertical,
+  FiSearch,
+  FiChevronDown,
+  FiEdit2,
+} from 'react-icons/fi'
 import {
   columns,
   INITIAL_VISIBLE_COLUMNS,
-  sections,
   statusColorMap,
   statusOptionsMap,
 } from './trip-table.config'
 import { Key, ReactNode, useCallback, useMemo, useState } from 'react'
-import { capitalize } from '@/lib/utils'
+import { capitalize, getTotalPriceFromSection } from '@/lib/utils'
 import { Section } from '@/types/models'
+import { ApproachCell } from '@/components/templates/one-trip-page/ApproachCell'
+import {
+  getFormattedDate,
+  getFormattedTime,
+  getHumanizedTimeDuration,
+} from '@/lib/date'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
   name,
 }))
 
-export const OneTripTable = () => {
+export const OneTripTable = ({ sections }: { sections: Section[] }) => {
   const [filterValue, setFilterValue] = useState('')
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -41,8 +51,8 @@ export const OneTripTable = () => {
   )
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: 'name',
-    direction: 'ascending',
+    // column: 'name',
+    // direction: 'ascending',
   })
 
   const hasSearchFilter = Boolean(filterValue)
@@ -111,28 +121,42 @@ export const OneTripTable = () => {
         )
       }
       if (columnKey === 'transportType') {
-        return (
-          <User
-            avatarProps={{ radius: 'full', size: 'sm', src: '' }}
-            classNames={{
-              description: 'text-default-500',
-            }}
-            description={section.name}
-            name={section.name}
-          >
-            {section.name}
-          </User>
-        )
+        return <ApproachCell data={section} />
       }
-      if (columnKey === 'dateTimeStart') {
+      if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
         return (
           <div className='flex flex-col'>
             <p className='text-bold text-small capitalize'>
-              {cellValue as string}
+              {getFormattedDate(section.dateTimeStart)}
             </p>
             <p className='text-bold text-tiny capitalize text-default-500'>
-              {section.dateTimeStart}
+              {getFormattedTime(section.dateTimeStart)}
             </p>
+          </div>
+        )
+      }
+      if (columnKey === 'price') {
+        return (
+          <div className='text-nowrap'>
+            {getTotalPriceFromSection(section.payments)}
+          </div>
+        )
+      }
+      if (columnKey === 'duration') {
+        return (
+          <div className='text-nowrap'>
+            {getHumanizedTimeDuration(
+              section.dateTimeStart,
+              section.dateTimeEnd
+            )}
+          </div>
+        )
+      }
+
+      if (columnKey === 'notes') {
+        return (
+          <div className='overflow-hidden max-w-24'>
+            <div>{section.notes}</div>
           </div>
         )
       }
@@ -166,6 +190,10 @@ export const OneTripTable = () => {
     } else {
       setFilterValue('')
     }
+  }, [])
+
+  const onEditCell = useCallback((columnKey: Key) => {
+    console.log(columnKey)
   }, [])
 
   const topContent = useMemo(
@@ -298,7 +326,22 @@ export const OneTripTable = () => {
         {(item) => (
           <TableRow key={item._id}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell>
+                <div className='relative cell-wrapper'>
+                  {renderCell(item, columnKey)}
+                  <Button
+                    isIconOnly
+                    size='sm'
+                    color='warning'
+                    variant='faded'
+                    aria-label='edit'
+                    className='absolute z-10 right-0 -bottom-3 hidden edit-cell-button'
+                    onClick={() => onEditCell(columnKey)}
+                  >
+                    <FiEdit2 />
+                  </Button>
+                </div>
+              </TableCell>
             )}
           </TableRow>
         )}

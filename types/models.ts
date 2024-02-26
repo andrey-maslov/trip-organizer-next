@@ -1,53 +1,91 @@
+import {
+  currencyISONameList,
+  placementTypeList,
+  sectionTypesList,
+  statusTypesList,
+  transportTypesList,
+} from '@/constants/constants'
+
 export type Trip = {
-  _id: string
   name: string
-  dateTimeStart: string
-  dateTimeEnd: string
+  dateTimeStart: string | null
+  dateTimeEnd: string | null
   description: string
   sections: Section[]
+  summary: TripSummaryValues
+  _id: string
 }
 
 export type Section = {
   name: string
-  type: 'road' | 'stay'
-  points?: Point[]
-  waypoints?: Waypoint[]
-  dateTimeStart: string
-  dateTimeEnd: string
-  transportType?: 'bus' | 'aircraft' | 'train' | 'unknown'
-  placementType?: 'flat' | 'hotel'
+  type: SectionType
+  waypoints: Waypoint[]
+  points?: []
+  dateTimeStart: string | null
+  dateTimeEnd: string | null
+  transportType: TransportType | null
+  placementType: PlacementType | null
   serviceProvider: ServiceProvider | null
-  status: 'bought' | 'reserved' | 'to_buy' | 'to_find'
-  payments: Payment[]
-  notes?: string
+  status: Status
+  payments: Payment[] | null
+  notes: string
   _id: string
-}
-
-export type Point = {
-  // Assuming structure from the provided JSON, it seems points are empty arrays in this sample.
-  // Define a more specific type if points have a known structure.
 }
 
 export type Waypoint = {
   name: string
-  country?: string
+  coords?: string[] | null
+  country?: string | null
   description?: string
   _id: string
 }
 
+export type TransportType = (typeof transportTypesList)[number]
+export type Status = (typeof statusTypesList)[number]
+export type SectionType = (typeof sectionTypesList)[number]
+export type PlacementType = (typeof placementTypeList)[number]
+export type CurrencyISOName = (typeof currencyISONameList)[number]
+
 export type ServiceProvider = {
   name: string
-  link?: string
+  link: string | null
 }
 
 export type Payment = {
   name: string
-  price: Price
-  link?: string
+  link?: string | null
+  price?: {
+    amount: number
+    currency: CurrencyISOName
+  }
   _id: string
 }
 
-export type Price = {
-  amount: number
-  currency: string
+export type CurrencyRates = {
+  success: boolean
+  timestamp: number
+  base: string
+  date: string
+  rates: Record<Exclude<CurrencyISOName, string>, number>
+}
+
+export type AllCurrencyRates = Record<CurrencyISOName, CurrencyRates>
+
+export type TripSummaryValues = {
+  totalTimeMs: number
+  totalTimeStr: string
+  roadTimeMs: number
+  roadTimeStr: string
+  stayTimeMs: number
+  stayTimeStr: string
+  waitingTimeMs: number
+  waitingTimeStr: string
+  totalCost: number
+  roadCost: number
+  stayCost: number
+  currency: CurrencyISOName
+}
+
+export type GetOneTripParams = {
+  currency: CurrencyISOName
 }

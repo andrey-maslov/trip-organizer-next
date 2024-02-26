@@ -31,3 +31,12 @@
     text-wrap: balance;
   }
 }
+
+/* Sections table */
+.cell-wrapper {
+  &:hover {
+    .edit-cell-button {
+      display: inline-flex;
+    }
+  }
+}

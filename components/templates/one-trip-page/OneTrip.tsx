@@ -7,11 +7,7 @@ import { OneTripTable } from '@/components/templates/one-trip-page/OneTripTable'
 
 export const OneTrip = () => {
   const params = useParams()
-  const {
-    isPending,
-    error,
-    data: trip,
-  } = useQuery({
+  const { isPending, error, data } = useQuery({
     queryKey: ['trip', params.id],
     queryFn: () => getOneTrip(params.id as string),
   })
@@ -22,11 +18,9 @@ export const OneTrip = () => {
     return 'An error has occurred: ' + error?.message
   }
 
-  console.log(trip)
-
   return (
     <div className='container p-4 lg:p-8'>
-      <OneTripTable />
+      <OneTripTable sections={data?.sections ?? []} />
     </div>
   )
 }
