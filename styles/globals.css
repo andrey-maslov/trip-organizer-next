@@ -26,16 +26,28 @@
 /*    rgb(var(--background-start-rgb));*/
 /*}*/
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
+/*@layer utilities {*/
+/*  .text-balance {*/
+/*    text-wrap: balance;*/
+/*  }*/
+/*}*/
 
 /* Sections table */
-.cell-wrapper {
+.trip-table {
+    /*td:hover {*/
+    /*  @apply bg-foreground-200;*/
+    /*}*/
+}
+
+.cell-editable {
+  @apply relative;
+
+  .btn-edit {
+    @apply absolute z-10 right-0 -bottom-3 hidden;
+  }
+
   &:hover {
-    .edit-cell-button {
+    .btn-edit {
       display: inline-flex;
     }
   }

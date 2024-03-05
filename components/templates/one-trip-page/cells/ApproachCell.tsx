@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { FaBus, FaCarSide, FaHotel, FaQuestion, FaTrain } from 'react-icons/fa'
 import { ImAirplane } from 'react-icons/im'
 import { Section } from '@/types/models'
+import { ButtonEdit } from '@/components/ButtonEdit'
 
 const approachIcons: Record<string, ReactNode> = {
   bus: <FaBus />,
@@ -18,9 +19,13 @@ type TransportCellProps = {
     Section,
     'type' | 'transportType' | 'placementType' | 'serviceProvider'
   >
+  onEditClick: () => void
 }
 
-export const ApproachCell: React.FC<TransportCellProps> = ({ data }) => {
+export const ApproachCell: React.FC<TransportCellProps> = ({
+  data,
+  onEditClick,
+}) => {
   const { type, transportType, placementType, serviceProvider } = data
 
   if (!transportType) {
@@ -31,7 +36,7 @@ export const ApproachCell: React.FC<TransportCellProps> = ({ data }) => {
     type === 'road' ? transportType || 'unknown' : placementType || 'unknown'
 
   return (
-    <div className='flex items-center'>
+    <div className='flex items-center relative cell-editable'>
       <div className='mr-3 text-2xl text-foreground-400'>
         {approachIcons[approachType]}
       </div>
@@ -50,6 +55,7 @@ export const ApproachCell: React.FC<TransportCellProps> = ({ data }) => {
           <div>{serviceProvider?.name}</div>
         )}
       </div>
+      <ButtonEdit onClick={() => onEditClick()} />
     </div>
   )
 }

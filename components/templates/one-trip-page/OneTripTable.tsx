@@ -11,49 +11,46 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
   Selection,
   SortDescriptor,
 } from '@nextui-org/react'
-import {
-  FiPlus,
-  FiMoreVertical,
-  FiSearch,
-  FiChevronDown,
-  FiEdit2,
-} from 'react-icons/fi'
+import { FiPlus, FiMoreVertical, FiSearch, FiChevronDown } from 'react-icons/fi'
 import {
   columns,
   INITIAL_VISIBLE_COLUMNS,
-  statusColorMap,
   statusOptionsMap,
 } from './trip-table.config'
 import { Key, ReactNode, useCallback, useMemo, useState } from 'react'
-import { capitalize, getTotalPriceFromSection } from '@/lib/utils'
+import { capitalize } from '@/lib/utils'
 import { Section } from '@/types/models'
-import { ApproachCell } from '@/components/templates/one-trip-page/ApproachCell'
-import {
-  getFormattedDate,
-  getFormattedTime,
-  getHumanizedTimeDuration,
-} from '@/lib/date'
+import { ApproachCell } from '@/components/templates/one-trip-page/cells/ApproachCell'
+import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
+import { statusTypesList } from '@/constants/constants'
+import { DateTimeCell } from '@/components/templates/one-trip-page/cells/DateTimeCell'
+import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
+import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
+import { NotesCell } from '@/components/templates/one-trip-page/cells/NotesCell'
+import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
+import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
   name,
 }))
 
+const sortingDefault = {
+  // column: 'name',
+  // direction: 'ascending',
+}
+
 export const OneTripTable = ({ sections }: { sections: Section[] }) => {
   const [filterValue, setFilterValue] = useState('')
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]))
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    // column: 'name',
-    // direction: 'ascending',
-  })
+  const [sortDescriptor, setSortDescriptor] =
+    useState<SortDescriptor>(sortingDefault)
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -106,59 +103,56 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
       const cellValue = section[columnKey as keyof Section]
 
       if (columnKey === 'name') {
-        return <div className='font-bold'>{section.name}</div>
+        return (
+          <NameCell
+            name={section.name}
+            onEditClick={() => onEditCell(columnKey)}
+          />
+        )
       }
       if (columnKey === 'status') {
         return (
-          <Chip
-            className='capitalize border-none gap-1 text-default-600'
-            color={statusColorMap[section.status]}
-            size='sm'
-            variant='flat'
-          >
-            {statusOptionsMap[cellValue as keyof typeof statusOptionsMap]}
-          </Chip>
+          <StatusCell
+            status={cellValue?.toString() || statusTypesList[0]}
+            onEditClick={() => onEditCell(columnKey)}
+          />
         )
       }
       if (columnKey === 'transportType') {
-        return <ApproachCell data={section} />
+        return (
+          <ApproachCell
+            data={section}
+            onEditClick={() => onEditCell(columnKey)}
+          />
+        )
       }
       if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
         return (
-          <div className='flex flex-col'>
-            <p className='text-bold text-small capitalize'>
-              {getFormattedDate(section.dateTimeStart)}
-            </p>
-            <p className='text-bold text-tiny capitalize text-default-500'>
-              {getFormattedTime(section.dateTimeStart)}
-            </p>
-          </div>
+          <DateTimeCell
+            dateTime={section.dateTimeStart}
+            onEditClick={() => onEditCell(columnKey)}
+          />
         )
       }
       if (columnKey === 'price') {
         return (
-          <div className='text-nowrap'>
-            {getTotalPriceFromSection(section.payments)}
-          </div>
+          <PriceCell
+            data={section.payments}
+            onEditClick={() => onEditCell(columnKey)}
+          />
         )
       }
       if (columnKey === 'duration') {
         return (
-          <div className='text-nowrap'>
-            {getHumanizedTimeDuration(
-              section.dateTimeStart,
-              section.dateTimeEnd
-            )}
-          </div>
+          <DurationCell
+            dateTimeStart={section.dateTimeStart}
+            dateTimeEnd={section.dateTimeEnd}
+          />
         )
       }
 
       if (columnKey === 'notes') {
-        return (
-          <div className='overflow-hidden max-w-24'>
-            <div>{section.notes}</div>
-          </div>
-        )
+        return <NotesCell data={section.notes} />
       }
 
       if (columnKey === 'actions') {
@@ -292,60 +286,40 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
   )
 
   return (
-    <Table
-      isCompact
-      removeWrapper
-      aria-label='Example table with custom cells, pagination and sorting'
-      // bottomContent={bottomContent}
-      bottomContentPlacement='outside'
-      checkboxesProps={{
-        classNames: {
-          wrapper: 'after:bg-foreground after:text-background text-background',
-        },
-      }}
-      selectedKeys={selectedKeys}
-      selectionMode='multiple'
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement='outside'
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === 'actions' ? 'center' : 'start'}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={'No users found'} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item._id}>
-            {(columnKey) => (
-              <TableCell>
-                <div className='relative cell-wrapper'>
-                  {renderCell(item, columnKey)}
-                  <Button
-                    isIconOnly
-                    size='sm'
-                    color='warning'
-                    variant='faded'
-                    aria-label='edit'
-                    className='absolute z-10 right-0 -bottom-3 hidden edit-cell-button'
-                    onClick={() => onEditCell(columnKey)}
-                  >
-                    <FiEdit2 />
-                  </Button>
-                </div>
-              </TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        isCompact
+        removeWrapper
+        aria-label='Table with trip sections'
+        className='trip-table'
+        // bottomContent={bottomContent}
+        bottomContentPlacement='outside'
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement='outside'
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === 'actions' ? 'center' : 'start'}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={'No users found'} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item._id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
   )
 }
