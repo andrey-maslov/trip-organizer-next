@@ -13,6 +13,7 @@
     "@formkit/tempo": "^0.0.12",
     "@nextui-org/react": "^2.2.9",
     "@tanstack/react-query": "^5.22.2",
+    "@tiptap/extension-link": "^2.2.4",
     "@tiptap/extension-typography": "^2.2.4",
     "@tiptap/pm": "^2.2.4",
     "@tiptap/react": "^2.2.4",

@@ -5,9 +5,9 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Link from '@tiptap/extension-link'
-import TaskList from '@tiptap/extension-task-list'
-import TaskItem from '@tiptap/extension-task-item'
-import Placeholder from '@tiptap/extension-placeholder'
+// import TaskList from '@tiptap/extension-task-list'
+// import TaskItem from '@tiptap/extension-task-item'
+// import Placeholder from '@tiptap/extension-placeholder'
 
 import type { Extensions } from '@tiptap/react'
 
@@ -37,12 +37,12 @@ type TiptapProps = {
 export const TiptapEditor = ({
   content = exampleContent,
   editable = true,
-  placeholder = "Type '/' for actions…",
+  // placeholder = "Type '/' for actions…",
   withToolbar = true,
   withTypographyExtension = false,
   withLinkExtension = true,
-  withTaskListExtension = false,
-  withPlaceholderExtension = false,
+  // withTaskListExtension = false,
+  // withPlaceholderExtension = false,
 }: TiptapProps) => {
   const extensions: Extensions = [StarterKit]
 
@@ -59,17 +59,17 @@ export const TiptapEditor = ({
     )
   }
 
-  if (withTaskListExtension) {
-    extensions.push(TaskList, TaskItem)
-  }
-
-  if (withPlaceholderExtension) {
-    extensions.push(
-      Placeholder.configure({
-        placeholder,
-      })
-    )
-  }
+  // if (withTaskListExtension) {
+  //   extensions.push(TaskList, TaskItem)
+  // }
+  //
+  // if (withPlaceholderExtension) {
+  //   extensions.push(
+  //     Placeholder.configure({
+  //       placeholder,
+  //     })
+  //   )
+  // }
 
   const editor = useEditor({
     content,
