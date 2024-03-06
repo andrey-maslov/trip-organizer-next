@@ -13,6 +13,11 @@
     "@formkit/tempo": "^0.0.12",
     "@nextui-org/react": "^2.2.9",
     "@tanstack/react-query": "^5.22.2",
+    "@tiptap/extension-typography": "^2.2.4",
+    "@tiptap/pm": "^2.2.4",
+    "@tiptap/react": "^2.2.4",
+    "@tiptap/starter-kit": "^2.2.4",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.0.5",
     "mongodb": "^6.3.0",
@@ -22,7 +27,10 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
-    "react-modern-drawer": "^1.2.2"
+    "react-intersection-observer": "^9.8.1",
+    "react-modern-drawer": "^1.2.2",
+    "sass": "^1.71.1",
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
     "@types/mongodb": "^4.0.7",

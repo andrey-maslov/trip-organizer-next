@@ -286,6 +286,7 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
 
   return (
     <>
+      <h1 className='text-foreground'>TESE</h1>
       <Table
         isCompact
         removeWrapper
