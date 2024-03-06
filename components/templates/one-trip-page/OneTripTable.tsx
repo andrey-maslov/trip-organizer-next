@@ -31,7 +31,6 @@ import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
 import { NotesCell } from '@/components/templates/one-trip-page/cells/NotesCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
-import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,

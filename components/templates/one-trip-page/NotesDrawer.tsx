@@ -20,8 +20,8 @@ export const NotesDrawer: React.FC<NotesProps> = ({
     onClose={onClose}
     direction='right'
     className='notes-drawer'
-    size={'50vw'}
+    size={'70vw'}
   >
-    <div>{data}</div>
+    <div className='bg-background'>{data}</div>
   </Drawer>
 )

@@ -20,7 +20,9 @@ export const NotesCell: React.FC<NotesProps> = ({ data }) => {
           {data}
         </div>
       </div>
-      <NotesDrawer data={data} isOpen={isOpen} onClose={toggleDrawer} />
+      {isOpen && (
+        <NotesDrawer data={data} isOpen={isOpen} onClose={toggleDrawer} />
+      )}
     </>
   )
 }
