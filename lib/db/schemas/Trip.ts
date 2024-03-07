@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, models } from 'mongoose'
 import { SectionSchema } from './Section'
 
 const TripSchema = new Schema({
@@ -9,4 +9,6 @@ const TripSchema = new Schema({
   sections: [SectionSchema],
 })
 
-export default model('Trip', TripSchema, 'trips')
+const TripModel = models.TripModel || model('TripModel', TripSchema, 'trips')
+
+export default TripModel

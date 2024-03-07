@@ -15,7 +15,6 @@ import {
   RiParagraph,
   RiListOrdered,
   RiListUnordered,
-  RiCodeBoxLine,
   RiLink,
   RiLinkUnlink,
   RiDoubleQuotesL,
@@ -28,6 +27,7 @@ import {
 
 import './toolbar.scss'
 import { setLink } from '@/components/tiptap-editor/set-link'
+import { Button } from '@nextui-org/button'
 
 type ToolbarProps = {
   editor: Editor
@@ -40,6 +40,8 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
     // rootMargin: '-1px 0px 0px 0px',
     threshold: 0,
   })
+
+  // TODO change all the divs to buttons. See below
 
   return (
     <div
@@ -73,7 +75,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         </div>
         <div className='divider' />
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('heading', { level: 1 }),
+          })}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
@@ -81,7 +85,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiH1 />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('heading', { level: 2 }),
+          })}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
@@ -89,7 +95,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiH2 />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('heading', { level: 3 }),
+          })}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
@@ -97,7 +105,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiH3 />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('heading', { level: 4 }),
+          })}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 4 }).run()
           }
@@ -105,7 +115,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiH4 />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('heading', { level: 5 }),
+          })}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 5 }).run()
           }
@@ -113,7 +125,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiH5 />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('heading', { level: 6 }),
+          })}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 6 }).run()
           }
@@ -127,25 +141,28 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiParagraph />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('bulletList'),
+          })}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
           <RiListOrdered />
         </div>
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('orderedList'),
+          })}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
           <RiListUnordered />
         </div>
-        <div
-          className='icon'
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        >
-          <RiCodeBoxLine />
-        </div>
         <div className='divider' />
-        <div className='icon' onClick={() => setLink(editor)}>
+        <div
+          className={classNames('icon', {
+            'is-active': editor.isActive('link'),
+          })}
+          onClick={() => setLink(editor)}
+        >
           <RiLink />
         </div>
         <div
@@ -156,7 +173,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         </div>
         <div className='divider' />
         <div
-          className='icon'
+          className={classNames('icon', {
+            'is-active': editor.isActive('blockquote'),
+          })}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
         >
           <RiDoubleQuotesL />
@@ -183,18 +202,28 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
           <RiFormatClear />
         </div>
         <div className='divider' />
-        <div
-          className='icon'
+        <Button
+          isIconOnly
+          size='sm'
+          variant='light'
+          aria-label='undo'
+          title='undo'
           onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().chain().focus().undo().run()}
         >
           <RiArrowGoBackLine />
-        </div>
-        <div
-          className='icon'
+        </Button>
+        <Button
+          isIconOnly
+          size='sm'
+          variant='light'
+          aria-label='redo'
+          title='redo'
           onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().chain().focus().redo().run()}
         >
           <RiArrowGoForwardLine />
-        </div>
+        </Button>
       </div>
     </div>
   )

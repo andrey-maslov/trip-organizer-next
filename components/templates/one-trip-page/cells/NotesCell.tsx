@@ -1,11 +1,13 @@
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 import { useState } from 'react'
+import { Section } from '@/types/models'
+import { Button } from '@nextui-org/button'
 
-type NotesProps = {
-  data: string | null
+type NotesCellProps = {
+  section: Section
 }
 
-export const NotesCell: React.FC<NotesProps> = ({ data }) => {
+export const NotesCell: React.FC<NotesCellProps> = ({ section }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleDrawer = () => {
     setIsOpen((prevState) => !prevState)
@@ -13,15 +15,17 @@ export const NotesCell: React.FC<NotesProps> = ({ data }) => {
   return (
     <>
       <div className='flex items-center relative max-w-[140px] overflow-hidden'>
-        <div
-          className='text-nowrap text-sm hover:cursor-pointer'
+        <Button
+          color='default'
+          size='sm'
+          variant='light'
           onClick={() => setIsOpen(true)}
         >
-          {data}
-        </div>
+          {section.notes ? 'Notes' : 'Add notes'}
+        </Button>
       </div>
       {isOpen && (
-        <NotesDrawer data={data} isOpen={isOpen} onClose={toggleDrawer} />
+        <NotesDrawer section={section} isOpen={isOpen} onClose={toggleDrawer} />
       )}
     </>
   )

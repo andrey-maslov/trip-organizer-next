@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, models } from 'mongoose'
 
 export const SectionSchema = new Schema({
   name: String,
@@ -33,4 +33,6 @@ export const SectionSchema = new Schema({
   notes: String,
 })
 
-export default model('Section', SectionSchema)
+const SectionModel = models.SectionModel || model('SectionModel', SectionSchema)
+
+export default SectionModel

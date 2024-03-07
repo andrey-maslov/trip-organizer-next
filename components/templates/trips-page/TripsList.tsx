@@ -58,7 +58,7 @@ export default function TripsList() {
           isPressable
           onPress={() => console.log('item pressed')}
         >
-          <CardBody className='overflow-visible p-0 flex flex-col justify-center items-center'>
+          <CardBody className='overflow-visible p-20 flex flex-col justify-center items-center'>
             <FiPlus className='text-yellow-500 text-4xl mb-4' />
             <span className='text-foreground'>Add new Trip</span>
           </CardBody>

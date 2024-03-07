@@ -34,7 +34,7 @@ type TiptapProps = {
   withHexColorsDecorator?: boolean
 }
 
-export const TiptapEditor = ({
+const TiptapEditor = ({
   content = exampleContent,
   editable = true,
   // placeholder = "Type '/' for actions…",
@@ -49,6 +49,8 @@ export const TiptapEditor = ({
   if (withTypographyExtension) {
     extensions.push(Typography)
   }
+
+  console.log(content)
 
   if (withLinkExtension) {
     extensions.push(
@@ -86,10 +88,12 @@ export const TiptapEditor = ({
 
   return (
     <>
-      <div className='WhiteCard'>
+      <div className='tiptap-editor-wrapper'>
         {withToolbar ? <Toolbar editor={editor} /> : null}
         <EditorContent editor={editor} />
       </div>
     </>
   )
 }
+
+export default TiptapEditor

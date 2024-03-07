@@ -151,7 +151,7 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
       }
 
       if (columnKey === 'notes') {
-        return <NotesCell data={section.notes} />
+        return <NotesCell section={section} />
       }
 
       if (columnKey === 'actions') {

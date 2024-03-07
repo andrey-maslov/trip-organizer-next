@@ -1,12 +1,7 @@
 .ToolbarContainer {
-  background: #ffffff;
-  border-bottom: 2px solid #999999;
-  border-radius: 10px 10px 0 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  margin: -20px -20px 20px -20px;
+  border-bottom: 1px solid #e1e1e1;
+  margin-bottom: 20px;
+  padding: 3px;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -22,12 +17,13 @@
 
   .icon {
     border-radius: 5px;
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #333333;
+    @apply text-foreground;
 
     &.disabled {
       color: rgba(#333333, 0.5);
@@ -43,8 +39,8 @@
 
   .divider {
     border: none;
-    border-left: 2px solid rgba(#333333, 0.2);
-    margin: 2px 10px;
+    border-left: 1px solid rgba(#333333, 0.2);
+    margin: 4px 10px;
   }
 
   .icon + .icon {
