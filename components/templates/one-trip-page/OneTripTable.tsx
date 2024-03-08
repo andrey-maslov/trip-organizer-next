@@ -286,7 +286,6 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
 
   return (
     <>
-      <h1 className='text-foreground'>TESE</h1>
       <Table
         isCompact
         removeWrapper
@@ -310,7 +309,11 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={'No users found'} items={sortedItems}>
+        <TableBody
+          // TODO add button 'Add'
+          emptyContent={'You have no sections yet. Add the first'}
+          items={sortedItems}
+        >
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (

@@ -7,5 +7,7 @@ export const getAllTrips = async (): Promise<{ trips: Trip[] }> =>
 export const getOneTrip = async (id: string): Promise<Trip> =>
   ky(`trips/${id}`, { prefixUrl: '/api' }).json()
 
-export const createTrip = async (data: Partial<Trip>): Promise<Trip> =>
+export const createTrip = async (
+  data: Partial<Trip>
+): Promise<{ id: string }> =>
   ky.post('trips', { prefixUrl: '/api', json: data }).json()

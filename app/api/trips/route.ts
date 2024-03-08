@@ -1,5 +1,6 @@
 import connectMongo from '@/lib/db/connectMongo'
 import TripSchema from '@/lib/db/schemas/Trip'
+import { Trip } from '@/types/models'
 
 export async function GET() {
   await connectMongo()
@@ -21,8 +22,8 @@ export async function POST(request: Request) {
 
   try {
     const data = await request.json()
-    const newTrip = TripSchema.create(data)
-    return Response.json({ trip: newTrip })
+    const newTrip: Trip = await TripSchema.create(data)
+    return Response.json({ id: newTrip._id })
   } catch (error: any) {
     return new Response(`error!!!: ${error?.message}`, {
       status: 500,
