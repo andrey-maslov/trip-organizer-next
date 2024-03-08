@@ -1,10 +1,11 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
-import { getAllTrips } from '@/apiRequests/apiRequests'
+import { createTrip, getAllTrips } from '@/apiRequests/apiRequests'
 import { FiPlus } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
+import { defaultTrip } from '@/constants/defaultEntities'
 
 export default function TripsList() {
   const router = useRouter()
@@ -17,6 +18,18 @@ export default function TripsList() {
     queryKey: ['trips'],
     queryFn: getAllTrips,
   })
+
+  // Create New Trip
+  const { mutate: createTripMutation } = useMutation({
+    mutationFn: createTrip,
+    onSuccess: () => {
+      console.log('success')
+    },
+  })
+
+  const onCreateNewTrip = () => {
+    createTripMutation(defaultTrip)
+  }
 
   if (isPending) return 'Loading...'
 
@@ -56,7 +69,7 @@ export default function TripsList() {
           shadow='sm'
           key='new'
           isPressable
-          onPress={() => console.log('item pressed')}
+          onPress={() => onCreateNewTrip()}
         >
           <CardBody className='overflow-visible p-20 flex flex-col justify-center items-center'>
             <FiPlus className='text-yellow-500 text-4xl mb-4' />

@@ -1,7 +1,11 @@
 import { Trip } from '@/types/models'
+import ky from 'ky'
 
-export const getAllTrips = (): Promise<{ trips: Trip[] }> =>
-  fetch('/api/trips').then((res) => res.json())
+export const getAllTrips = async (): Promise<{ trips: Trip[] }> =>
+  ky('trips', { prefixUrl: '/api' }).json()
 
-export const getOneTrip = (id: string): Promise<Trip> =>
-  fetch(`/api/trips/${id}`).then((res) => res.json())
+export const getOneTrip = async (id: string): Promise<Trip> =>
+  ky(`trips/${id}`, { prefixUrl: '/api' }).json()
+
+export const createTrip = async (data: Partial<Trip>): Promise<Trip> =>
+  ky.post('trips', { prefixUrl: '/api', json: data }).json()

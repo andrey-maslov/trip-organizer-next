@@ -50,8 +50,6 @@ const TiptapEditor = ({
     extensions.push(Typography)
   }
 
-  console.log(content)
-
   if (withLinkExtension) {
     extensions.push(
       Link.configure({
