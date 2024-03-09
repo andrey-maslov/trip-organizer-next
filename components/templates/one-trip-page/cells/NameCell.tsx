@@ -2,7 +2,6 @@ import { ButtonEdit } from '@/components/ButtonEdit'
 import React, { useRef, useState } from 'react'
 import { Input } from '@nextui-org/react'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
-import { Button } from '@nextui-org/button'
 import { FiCheck } from 'react-icons/fi'
 
 type NameCellProps = {
@@ -10,7 +9,7 @@ type NameCellProps = {
   onEditClick: () => void
 }
 
-export const NameCell: React.FC<NameCellProps> = ({ name, onEditClick }) => {
+export const NameCell: React.FC<NameCellProps> = ({ name }) => {
   const [editMode, setEditMode] = useState(false)
   const [newName, setNewName] = useState(name)
 
