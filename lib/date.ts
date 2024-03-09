@@ -1,10 +1,11 @@
 import { format } from '@formkit/tempo'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { DateType } from '@/types/models'
 
 dayjs.extend(duration)
 
-type Time = number | string | undefined | null | dayjs.Dayjs
+type Time = DateType | dayjs.Dayjs
 
 export const getFormattedDate = (
   date: Date | string | null,

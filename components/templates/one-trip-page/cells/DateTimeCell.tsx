@@ -1,8 +1,9 @@
 import { ButtonEdit } from '@/components/ButtonEdit'
 import { getFormattedDate, getFormattedTime } from '@/lib/date'
+import { DateType } from '@/types/models'
 
 type DateTimeCellProps = {
-  dateTime: string | null
+  dateTime: DateType
   onEditClick: () => void
 }
 

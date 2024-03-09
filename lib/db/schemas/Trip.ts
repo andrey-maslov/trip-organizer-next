@@ -6,6 +6,7 @@ const TripSchema = new Schema({
   dateTimeStart: String,
   dateTimeEnd: String,
   description: String,
+  cover: String,
   sections: [SectionSchema],
 })
 

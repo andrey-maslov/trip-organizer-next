@@ -1,8 +1,9 @@
 import { getHumanizedTimeDuration } from '@/lib/date'
+import { DateType } from '@/types/models'
 
 type DurationCellProps = {
-  dateTimeStart: string | null
-  dateTimeEnd: string | null
+  dateTimeStart: DateType
+  dateTimeEnd: DateType
 }
 
 export const DurationCell: React.FC<DurationCellProps> = ({

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import '../styles/globals.css'
+import 'react-day-picker/dist/style.css'
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/config/fonts'
 import clsx from 'clsx'
