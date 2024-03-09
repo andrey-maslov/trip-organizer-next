@@ -96,7 +96,7 @@ export const getPrice = (payments: Payment[] | null): string => {
 }
 
 export const getTotalPriceFromSection = (
-  paymentsList: Payment[] | null
+  paymentsList: Payment[] | null | undefined
 ): string => {
   if (!paymentsList || paymentsList.length === 0) {
     return '-'

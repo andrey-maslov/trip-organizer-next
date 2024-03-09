@@ -20,7 +20,7 @@ const DynamicTiptapEditor = dynamic(
 )
 
 type NotesProps = {
-  section: Section
+  section: Partial<Section>
   isOpen: boolean
   onClose: () => void
 }

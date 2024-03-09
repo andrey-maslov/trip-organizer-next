@@ -34,7 +34,6 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   await connectMongo()
 
-  // Get one trip
   try {
     const payload = await request.json()
     await TripSchema.deleteOne({ _id: payload.id })

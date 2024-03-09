@@ -24,3 +24,8 @@ export const searchPictures = async (
 
 export const deleteOneTrip = async (id: string): Promise<any> =>
   ky.delete(`trips`, { prefixUrl: '/api', json: { id } }).text()
+
+export const updateTrip = async (
+  data: Partial<Trip>
+): Promise<{ id: string }> =>
+  ky.put(`trips/${data._id}`, { prefixUrl: '/api', json: data }).json()

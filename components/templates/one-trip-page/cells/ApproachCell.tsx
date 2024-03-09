@@ -16,7 +16,7 @@ const approachIcons: Record<string, ReactNode> = {
 
 type TransportCellProps = {
   data: Pick<
-    Section,
+    Partial<Section>,
     'type' | 'transportType' | 'placementType' | 'serviceProvider'
   >
   onEditClick: () => void

@@ -4,7 +4,7 @@ import { Section } from '@/types/models'
 import { Button } from '@nextui-org/button'
 
 type NotesCellProps = {
-  section: Section
+  section: Partial<Section>
 }
 
 export const NotesCell: React.FC<NotesCellProps> = ({ section }) => {

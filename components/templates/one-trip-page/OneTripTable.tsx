@@ -14,7 +14,13 @@ import {
   Selection,
   SortDescriptor,
 } from '@nextui-org/react'
-import { FiPlus, FiMoreVertical, FiSearch, FiChevronDown } from 'react-icons/fi'
+import {
+  FiPlus,
+  FiMoreVertical,
+  FiSearch,
+  FiChevronDown,
+  FiSave,
+} from 'react-icons/fi'
 import {
   columns,
   INITIAL_VISIBLE_COLUMNS,
@@ -31,6 +37,8 @@ import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
 import { NotesCell } from '@/components/templates/one-trip-page/cells/NotesCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
+import { defaultSection } from '@/constants/defaultEntities'
+import { toast } from 'react-toastify'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
@@ -42,7 +50,12 @@ const sortingDefault = {
   // direction: 'ascending',
 }
 
-export const OneTripTable = ({ sections }: { sections: Section[] }) => {
+interface OneTripTableProps {
+  sections: Section[]
+  onUpdateTrip: (sections?: Section[]) => void
+}
+
+export const OneTripTable = ({ sections, onUpdateTrip }: OneTripTableProps) => {
   const [filterValue, setFilterValue] = useState('')
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
@@ -50,6 +63,9 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
   const [sortDescriptor, setSortDescriptor] =
     useState<SortDescriptor>(sortingDefault)
+  const [sectionsToDisplay, setSectionsToDisplay] = useState<
+    Array<Partial<Section>>
+  >([...sections])
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -62,11 +78,11 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
   }, [visibleColumns])
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = [...sections]
+    let filteredUsers = [...sectionsToDisplay]
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+        (user?.name ?? '').toLowerCase().includes(filterValue.toLowerCase())
       )
     }
     if (
@@ -74,37 +90,68 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+        Array.from(statusFilter).includes(user?.status ?? '')
       )
     }
 
     return filteredUsers
-  }, [sections, filterValue, statusFilter])
+  }, [sectionsToDisplay, filterValue, statusFilter])
 
-  const sortedItems = useMemo(
-    () =>
-      [...filteredItems].sort((a: Section, b: Section) => {
-        const first = a[
-          sortDescriptor.column as keyof Section
-        ] as unknown as number
-        const second = b[
-          sortDescriptor.column as keyof Section
-        ] as unknown as number
-        const cmp = first < second ? -1 : first > second ? 1 : 0
+  // const sortedItems = useMemo(
+  //   () =>
+  //     [...filteredItems].sort((a: Section, b: Section) => {
+  //       const first = a[
+  //         sortDescriptor.column as keyof Section
+  //       ] as unknown as number
+  //       const second = b[
+  //         sortDescriptor.column as keyof Section
+  //       ] as unknown as number
+  //       const cmp = first < second ? -1 : first > second ? 1 : 0
+  //
+  //       return sortDescriptor.direction === 'descending' ? -cmp : cmp
+  //     }),
+  //   [sortDescriptor, filteredItems]
+  // )
 
-        return sortDescriptor.direction === 'descending' ? -cmp : cmp
-      }),
-    [sortDescriptor, filteredItems]
-  )
+  const sortedItems = filteredItems
+
+  const onSearchChange = useCallback((value?: string) => {
+    if (value) {
+      setFilterValue(value)
+    } else {
+      setFilterValue('')
+    }
+  }, [])
+
+  const onEditCell = useCallback((columnKey: Key) => {
+    console.log(columnKey)
+  }, [])
+
+  const onSaveTrip = () => {
+    // const newTrip = {}
+    // if () {
+    //   updateTrip()
+    // }
+    onUpdateTrip(
+      sections.filter((section) => section.name && section.name?.length > 0)
+    )
+  }
+
+  const onAddNewSection = () => {
+    setSectionsToDisplay((prevSections) => [...prevSections, defaultSection])
+    toast.success('Section added', {
+      position: 'top-center',
+    })
+  }
 
   const renderCell = useCallback(
-    (section: Section, columnKey: Key): ReactNode => {
+    (section: Partial<Section>, columnKey: Key): ReactNode => {
       const cellValue = section[columnKey as keyof Section]
 
       if (columnKey === 'name') {
         return (
           <NameCell
-            name={section.name}
+            name={section?.name ?? ''}
             onEditClick={() => onEditCell(columnKey)}
           />
         )
@@ -177,18 +224,6 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
     []
   )
 
-  const onSearchChange = useCallback((value?: string) => {
-    if (value) {
-      setFilterValue(value)
-    } else {
-      setFilterValue('')
-    }
-  }, [])
-
-  const onEditCell = useCallback((columnKey: Key) => {
-    console.log(columnKey)
-  }, [])
-
   const topContent = useMemo(
     () => (
       <div className='flex flex-col gap-4'>
@@ -259,17 +294,26 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
               </DropdownMenu>
             </Dropdown>
             <Button
-              className='bg-foreground text-background'
               endContent={<FiPlus />}
               size='sm'
+              onClick={() => onAddNewSection()}
             >
               Add New
+            </Button>
+            <Button
+              color='primary'
+              endContent={<FiSave />}
+              size='sm'
+              onClick={() => onSaveTrip()}
+              className='bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg'
+            >
+              Save trip
             </Button>
           </div>
         </div>
         <div className='flex justify-between items-center'>
           <span className='text-default-400 text-small'>
-            Total {sections.length} sections
+            Total {sectionsToDisplay.length} sections
           </span>
         </div>
       </div>
@@ -279,7 +323,7 @@ export const OneTripTable = ({ sections }: { sections: Section[] }) => {
       statusFilter,
       visibleColumns,
       onSearchChange,
-      sections.length,
+      sectionsToDisplay.length,
       hasSearchFilter,
     ]
   )
