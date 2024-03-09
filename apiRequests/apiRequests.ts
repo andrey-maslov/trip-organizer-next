@@ -21,3 +21,6 @@ export const searchPictures = async (
   ky(
     `${unsplashUrl}?page=1&per_page=5&query=${query}&client_id=${unsplashKey}`
   ).json()
+
+export const deleteOneTrip = async (id: string): Promise<any> =>
+  ky.delete(`trips`, { prefixUrl: '/api', json: { id } }).text()
