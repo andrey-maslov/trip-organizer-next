@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   deleteOneTrip,
   getOneTrip,
@@ -17,7 +17,9 @@ import { Section } from '@/types/models'
 export const OneTrip = () => {
   const { id } = useParams()
   const router = useRouter()
+  const queryClient = useQueryClient()
 
+  // Fetch Trip
   const {
     isPending,
     error,
@@ -25,6 +27,19 @@ export const OneTrip = () => {
   } = useQuery({
     queryKey: ['trip', id],
     queryFn: () => getOneTrip(id as string),
+  })
+
+  // Update Trip
+  const { mutate: updateTripMutation } = useMutation({
+    mutationFn: updateTrip,
+    onSuccess: async () => {
+      toast.success('Trip successfully updated')
+      await queryClient.invalidateQueries({ queryKey: ['trip', id] })
+    },
+    onError: (err) => {
+      console.error(err)
+      toast.error('Trip updating failed')
+    },
   })
 
   const onDeleteTrip = () => {
@@ -44,18 +59,7 @@ export const OneTrip = () => {
       newTripDto.sections = newSections
     }
 
-    updateTrip(newTripDto)
-      .then(() => {
-        toast.success('Trip successfully updated', {
-          position: 'top-center',
-        })
-      })
-      .catch((err) => {
-        console.error(err)
-        toast.error('Trip updating failed', {
-          position: 'top-center',
-        })
-      })
+    updateTripMutation(newTripDto)
   }
 
   if (isPending) return 'Loading...'
@@ -74,7 +78,7 @@ export const OneTrip = () => {
       </h2>
       <OneTripTable
         sections={trip?.sections ?? []}
-        onUpdateTrip={onUpdateTrip}
+        onUpdateTripSections={(sections) => onUpdateTrip(sections)}
       />
       <Divider className='my-8' />
       <div className='flex justify-end'>

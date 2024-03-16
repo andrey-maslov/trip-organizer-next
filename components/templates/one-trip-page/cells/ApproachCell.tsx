@@ -17,7 +17,11 @@ const approachIcons: Record<string, ReactNode> = {
 type TransportCellProps = {
   data: Pick<
     Partial<Section>,
-    'type' | 'transportType' | 'placementType' | 'serviceProvider'
+    | 'type'
+    | 'transportType'
+    | 'placementType'
+    | 'serviceProviderName'
+    | 'serviceProviderLink'
   >
   onEditClick: () => void
 }
@@ -26,7 +30,13 @@ export const ApproachCell: React.FC<TransportCellProps> = ({
   data,
   onEditClick,
 }) => {
-  const { type, transportType, placementType, serviceProvider } = data
+  const {
+    type,
+    transportType,
+    placementType,
+    serviceProviderLink,
+    serviceProviderName,
+  } = data
 
   if (!transportType) {
     return <div>-</div>
@@ -42,17 +52,17 @@ export const ApproachCell: React.FC<TransportCellProps> = ({
       </div>
       <div>
         <div>{approachType}</div>
-        {serviceProvider?.link ? (
+        {serviceProviderLink ? (
           <a
-            href={serviceProvider.link}
+            href={serviceProviderLink}
             className='text-blue-600 underline'
             target={'_blank'}
             rel='noreferrer'
           >
-            {serviceProvider.name}
+            {serviceProviderName}
           </a>
         ) : (
-          <div>{serviceProvider?.name}</div>
+          <div>{serviceProviderName}</div>
         )}
       </div>
       <ButtonEdit onClick={() => onEditClick()} />

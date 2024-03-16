@@ -1,5 +1,6 @@
-import { Payment } from '@/types/models'
+import { Payment, Section } from '@/types/models'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
+import { defaultSection } from '@/constants/defaultEntities'
 
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -87,10 +88,10 @@ export const getPrice = (payments: Payment[] | null): string => {
   }
 
   const paymentTotalAmount = payments
-    .map((payment) => payment.price?.amount || 0)
+    .map((payment) => payment?.amount || 0)
     .reduce((a, b) => a + b)
 
-  const currency = payments[0]?.price?.currency || DEFAULT_CURRENCY
+  const currency = payments[0]?.currency || DEFAULT_CURRENCY
 
   return `${paymentTotalAmount} ${currency}`
 }
@@ -103,12 +104,20 @@ export const getTotalPriceFromSection = (
   }
 
   const paymentTotalAmount = paymentsList
-    .map((payment) => payment.price?.amount || 0)
+    .map((payment) => payment?.amount || 0)
     .reduce((a, b) => a + b)
 
   // TODO fix approach of choosing currency inside one section (???)
   // user should chose one currency ... or ...
-  const currency = paymentsList[0]?.price?.currency || DEFAULT_CURRENCY
+  const currency = paymentsList[0]?.currency || DEFAULT_CURRENCY
 
   return `${paymentTotalAmount} ${currency}`
 }
+
+export const createNewSection = (
+  totalSectionsCount: number,
+  initialSection = defaultSection
+): Section => ({
+  ...initialSection,
+  id: (totalSectionsCount + 1).toString(),
+})

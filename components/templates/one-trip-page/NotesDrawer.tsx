@@ -50,7 +50,7 @@ export const NotesDrawer: React.FC<NotesProps> = ({
           Section: {section.name}
         </h2>
         <Divider />
-        <DynamicTiptapEditor content={section.notes} />
+        <DynamicTiptapEditor content={section.note} />
       </div>
     </Drawer>
   )

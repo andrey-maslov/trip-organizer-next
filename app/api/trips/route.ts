@@ -1,5 +1,5 @@
 import connectMongo from '@/lib/db/connectMongo'
-import TripSchema from '@/lib/db/schemas/Trip'
+import TripSchema from '@/lib/db/schemas/Trip.scheme'
 import { Trip } from '@/types/models'
 
 export async function GET() {

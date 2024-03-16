@@ -21,7 +21,7 @@ export const NotesCell: React.FC<NotesCellProps> = ({ section }) => {
           variant='light'
           onClick={() => setIsOpen(true)}
         >
-          {section.notes ? 'Notes' : 'Add notes'}
+          {section.note ? 'Note' : 'Add note'}
         </Button>
       </div>
       {isOpen && (

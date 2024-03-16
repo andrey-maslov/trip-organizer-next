@@ -9,7 +9,7 @@ export const columns = [
   { name: 'End', uid: 'dateTimeEnd' },
   { name: 'Duration', uid: 'duration' },
   { name: 'Price', uid: 'price' },
-  { name: 'Notes', uid: 'notes' },
+  { name: 'Notes', uid: 'note' },
   { name: 'Actions', uid: 'actions' },
 ]
 
@@ -20,7 +20,7 @@ export const INITIAL_VISIBLE_COLUMNS = [
   'dateTimeStart',
   'duration',
   'price',
-  'notes',
+  'note',
   'actions',
 ]
 

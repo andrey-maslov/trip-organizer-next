@@ -1,13 +1,14 @@
 import { Section, Trip } from '@/types/models'
+import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
 
 export const defaultTrip: Partial<Trip> = {
   name: 'new trip',
   sections: [],
 }
 
-export const defaultSection: Partial<Section> = {
+export const defaultSection: Omit<Section, 'id' | '_id'> = {
   name: 'New section',
-  _id: '42', // Just number, change
+  status: DEFAULT_SECTION_STATUS,
 }
 
 export const defaultCoverImage =

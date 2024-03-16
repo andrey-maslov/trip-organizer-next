@@ -1,24 +1,26 @@
 import { ButtonEdit } from '@/components/ButtonEdit'
 import React, { useRef, useState } from 'react'
-import { Input } from '@nextui-org/react'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { FiCheck } from 'react-icons/fi'
 
 type NameCellProps = {
-  name: string | null
-  onEditClick: () => void
+  name: string
+  onUpdate: (value: string) => void
 }
 
-export const NameCell: React.FC<NameCellProps> = ({ name }) => {
+export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
   const [editMode, setEditMode] = useState(false)
-  const [newName, setNewName] = useState(name)
+  const [nameInInput, setNameInInput] = useState<string>(name)
 
   const ref = useRef(null)
 
-  useOnClickOutside(ref, () => setEditMode(false))
+  useOnClickOutside(ref, () => {
+    setEditMode(false)
+    setNameInInput(name)
+  })
 
   return (
-    <div className='flex items-center relative cell-editable'>
+    <div className='flex items-center relative cell-editable min-w-[200px]'>
       {!editMode ? (
         <>
           <div className='text-nowrap font-bold'>
@@ -28,16 +30,18 @@ export const NameCell: React.FC<NameCellProps> = ({ name }) => {
         </>
       ) : (
         <div className='flex items-center' ref={ref}>
-          <Input
+          <input
             type='text'
-            size='sm'
-            variant='underlined'
-            value={newName ?? ''}
-            onChange={(event) => setNewName(event.target.value)}
+            className='block w-full'
+            value={nameInInput ?? ''}
+            onChange={(event) => setNameInInput(event.target.value)}
           />
           <button
             className='bg-transparent border-0 text-green-600 font-bold'
-            onClick={() => setEditMode(false)}
+            onClick={() => {
+              setEditMode(false)
+              onUpdate(nameInInput ?? '')
+            }}
           >
             <FiCheck />
           </button>

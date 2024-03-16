@@ -1,4 +1,4 @@
-import TripSchema from '@/lib/db/schemas/Trip'
+import TripSchema from '@/lib/db/schemas/Trip.scheme'
 import connectMongo from '@/lib/db/connectMongo'
 
 export async function GET(
@@ -28,7 +28,7 @@ export async function PUT(request: Request) {
   try {
     const trip = await TripSchema.findByIdAndUpdate(payload._id, payload, {
       new: true,
-    })
+    }).lean()
     return Response.json({ ...trip })
   } catch (e) {
     return new Response(`Update trip error`, {

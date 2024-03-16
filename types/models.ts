@@ -6,42 +6,35 @@ import {
   transportTypesList,
 } from '@/constants/constants'
 
-export type DateType = Date | string | null | undefined
+export type DateType = Date | string | undefined
 
 export type Trip = {
-  name: string
-  dateTimeStart: DateType
-  dateTimeEnd: DateType
-  description: string
-  sections: Section[]
-  summary: TripSummaryValues
-  cover: string | null
   _id: string
+  name: string
+  sections: SectionBE[]
+  dateTimeStart?: DateType
+  dateTimeEnd?: DateType
+  description?: string
+  cover?: string
 }
 
 export type Section = {
+  // _id: string // do not use in FE
+  id: string // for FE only
   name: string
-  type: SectionType
-  waypoints: Waypoint[]
-  points?: []
-  dateTimeStart: DateType
-  dateTimeEnd: DateType
-  transportType: TransportType | null
-  placementType: PlacementType | null
-  serviceProvider: ServiceProvider | null
   status: Status
-  payments: Payment[] | null
-  notes: string
-  _id: string
+  type?: SectionType
+  dateTimeStart?: DateType
+  dateTimeEnd?: DateType
+  transportType?: TransportType
+  placementType?: PlacementType
+  serviceProviderName?: string
+  serviceProviderLink?: string
+  payments?: Payment[]
+  note?: string // TODO noteID
 }
 
-export type Waypoint = {
-  name: string
-  coords?: string[] | null
-  country?: string | null
-  description?: string
-  _id: string
-}
+export type SectionBE = Section & { _id?: string }
 
 export type TransportType = (typeof transportTypesList)[number]
 export type Status = (typeof statusTypesList)[number]
@@ -49,19 +42,12 @@ export type SectionType = (typeof sectionTypesList)[number]
 export type PlacementType = (typeof placementTypeList)[number]
 export type CurrencyISOName = (typeof currencyISONameList)[number]
 
-export type ServiceProvider = {
-  name: string
-  link: string | null
-}
-
 export type Payment = {
-  name: string
-  link?: string | null
-  price?: {
-    amount: number
-    currency: CurrencyISOName
-  }
   _id: string
+  name?: string
+  link?: string
+  amount?: number
+  currency?: CurrencyISOName
 }
 
 export type CurrencyRates = {
