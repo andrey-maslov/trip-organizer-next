@@ -20,14 +20,7 @@ import {
   INITIAL_VISIBLE_COLUMNS,
   statusOptionsMap,
 } from './trip-table.config'
-import {
-  Key,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { Key, useCallback, useEffect, useMemo, useState } from 'react'
 import { capitalize, createNewSection } from '@/lib/utils'
 import { Section, SectionBE } from '@/types/models'
 import { ApproachCell } from '@/components/templates/one-trip-page/cells/ApproachCell'
@@ -154,8 +147,6 @@ export const OneTripTable = ({
       (section) => section.name && section.name?.length > 0
     )
 
-    // console.log(newSectionsSignificant)
-
     onUpdateTripSections(newSectionsSignificant)
   }
 
@@ -175,110 +166,112 @@ export const OneTripTable = ({
     })
   }
 
-  const renderCell = (columnKey: Key, section: Section): CellElement => {
-    const cellValue = section[columnKey as keyof Section]
+  const renderCell = useCallback(
+    (columnKey: Key, section: Section): CellElement => {
+      const cellValue = getKeyValue(section, columnKey)
 
-    console.log(cellValue)
-
-    if (columnKey === 'name') {
-      return (
-        <TableCell>
-          <NameCell
-            name={section?.name ?? ''}
-            onUpdate={(newValue) =>
-              onSaveSectionField(newValue, section.id, 'name')
-            }
-          />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'status') {
-      return (
-        <TableCell>
-          <StatusCell
-            status={getKeyValue(section, columnKey) || DEFAULT_SECTION_STATUS}
-            onUpdate={(newValue) =>
-              onSaveSectionField(newValue, section.id, 'status')
-            }
-          />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'transportType') {
-      return (
-        <TableCell>
-          <ApproachCell
-            data={section}
-            onEditClick={() =>
-              onSaveSectionField('newValue', section.id, 'status')
-            }
-          />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
-      return (
-        <TableCell>
-          <DateTimeCell
-            dateTime={section.dateTimeStart}
-            onEditClick={() =>
-              onSaveSectionField('newValue', section.id, 'status')
-            }
-          />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'price') {
-      return (
-        <TableCell>
-          <PriceCell
-            data={section.payments}
-            onEditClick={() =>
-              onSaveSectionField('newValue', section.id, 'status')
-            }
-          />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'duration') {
-      return (
-        <TableCell>
-          <DurationCell
-            dateTimeStart={section.dateTimeStart}
-            dateTimeEnd={section.dateTimeEnd}
-          />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'note') {
-      return (
-        <TableCell>
-          <NotesCell section={section} />
-        </TableCell>
-      )
-    }
-    if (columnKey === 'actions') {
-      return (
-        <TableCell>
-          <div className='relative flex justify-end items-center gap-2'>
-            <Dropdown className='bg-background border-1 border-default-200'>
-              <DropdownTrigger>
-                <Button isIconOnly radius='full' size='sm' variant='light'>
-                  <FiMoreVertical className='text-default-400' />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        </TableCell>
-      )
-    }
-    return <TableCell>{getKeyValue(section, columnKey)}</TableCell>
-  }
+      if (columnKey === 'name') {
+        console.log('name-2')
+        return (
+          <TableCell>
+            <NameCell
+              name={section?.name ?? ''}
+              onUpdate={(newValue) =>
+                onSaveSectionField(newValue, section.id, 'name')
+              }
+            />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'status') {
+        return (
+          <TableCell>
+            <StatusCell
+              status={cellValue || DEFAULT_SECTION_STATUS}
+              onUpdate={(newValue) =>
+                onSaveSectionField(newValue, section.id, 'status')
+              }
+            />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'transportType') {
+        return (
+          <TableCell>
+            <ApproachCell
+              data={section}
+              onEditClick={() =>
+                onSaveSectionField('newValue', section.id, 'status')
+              }
+            />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
+        return (
+          <TableCell>
+            <DateTimeCell
+              dateTime={section.dateTimeStart}
+              onEditClick={() =>
+                onSaveSectionField('newValue', section.id, 'status')
+              }
+            />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'price') {
+        return (
+          <TableCell>
+            <PriceCell
+              data={section.payments}
+              onEditClick={() =>
+                onSaveSectionField('newValue', section.id, 'status')
+              }
+            />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'duration') {
+        return (
+          <TableCell>
+            <DurationCell
+              dateTimeStart={section.dateTimeStart}
+              dateTimeEnd={section.dateTimeEnd}
+            />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'note') {
+        return (
+          <TableCell>
+            <NotesCell section={section} />
+          </TableCell>
+        )
+      }
+      if (columnKey === 'actions') {
+        return (
+          <TableCell>
+            <div className='relative flex justify-end items-center gap-2'>
+              <Dropdown className='bg-background border-1 border-default-200'>
+                <DropdownTrigger>
+                  <Button isIconOnly radius='full' size='sm' variant='light'>
+                    <FiMoreVertical className='text-default-400' />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu>
+                  <DropdownItem>View</DropdownItem>
+                  <DropdownItem>Edit</DropdownItem>
+                  <DropdownItem>Delete</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          </TableCell>
+        )
+      }
+      return <TableCell>{getKeyValue(section, columnKey)}</TableCell>
+    },
+    []
+  )
 
   const topContent = useMemo(
     () => (
@@ -378,17 +371,27 @@ export const OneTripTable = ({
         // removeWrapper
         aria-label='Table with trip sections'
         className='trip-table'
-        // bottomContent={bottomContent}
-        // bottomContentPlacement='outside'
         // sortDescriptor={sortDescriptor}
-        // topContent={topContent}
-        // topContentPlacement='outside'
+        topContent={topContent}
+        topContentPlacement='outside'
         // onSortChange={setSortDescriptor}
       >
-        <TableHeader>
-          {columns.map((column) => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          ))}
+        {/*<TableHeader>*/}
+        {/*  {columns.map((column) => (*/}
+        {/*    <TableColumn key={column.uid}>{column.name}</TableColumn>*/}
+        {/*  ))}*/}
+        {/*</TableHeader>*/}
+
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === 'actions' ? 'center' : 'start'}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
         </TableHeader>
         <TableBody>
           {sectionsToDisplay.map((section) => (
@@ -397,31 +400,6 @@ export const OneTripTable = ({
             </TableRow>
           ))}
         </TableBody>
-
-        {/*<TableHeader columns={headerColumns}>*/}
-        {/*  {(column) => (*/}
-        {/*    <TableColumn*/}
-        {/*      key={column.uid}*/}
-        {/*      align={column.uid === 'actions' ? 'center' : 'start'}*/}
-        {/*      allowsSorting={column.sortable}*/}
-        {/*    >*/}
-        {/*      {column.name}*/}
-        {/*    </TableColumn>*/}
-        {/*  )}*/}
-        {/*</TableHeader>*/}
-        {/*<TableBody*/}
-        {/*  // TODO add button 'Add'*/}
-        {/*  emptyContent={'You have no sections yet. Add the first'}*/}
-        {/*  items={sortedItems}*/}
-        {/*>*/}
-        {/*  {(section) => (*/}
-        {/*    <TableRow key={section.id}>*/}
-        {/*      {(columnKey) => (*/}
-        {/*        <TableCell>{renderCell(section, columnKey)}</TableCell>*/}
-        {/*      )}*/}
-        {/*    </TableRow>*/}
-        {/*  )}*/}
-        {/*</TableBody>*/}
       </Table>
     </>
   )
