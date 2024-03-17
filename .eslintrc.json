@@ -41,6 +41,7 @@
       "component": true,
       "html": true
     }],
-    "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }]
+    "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }],
+    "typescript-eslint/ban-ts-comment": "off"
   }
 }

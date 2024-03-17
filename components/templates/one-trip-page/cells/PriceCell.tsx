@@ -3,7 +3,7 @@ import { Payment } from '@/types/models'
 import { getTotalPriceFromSection } from '@/lib/utils'
 
 type PriceCellProps = {
-  data: Payment[] | null
+  data: Payment[] | null | undefined
   onEditClick: () => void
 }
 

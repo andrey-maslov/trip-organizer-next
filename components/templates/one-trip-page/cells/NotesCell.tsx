@@ -4,7 +4,7 @@ import { Section } from '@/types/models'
 import { Button } from '@nextui-org/button'
 
 type NotesCellProps = {
-  section: Section
+  section: Partial<Section>
 }
 
 export const NotesCell: React.FC<NotesCellProps> = ({ section }) => {
@@ -21,7 +21,7 @@ export const NotesCell: React.FC<NotesCellProps> = ({ section }) => {
           variant='light'
           onClick={() => setIsOpen(true)}
         >
-          {section.notes ? 'Notes' : 'Add notes'}
+          {section.note ? 'Note' : 'Add note'}
         </Button>
       </div>
       {isOpen && (

@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import '../styles/globals.css'
 import 'react-day-picker/dist/style.css'
+import 'react-toastify/dist/ReactToastify.min.css'
+
 import { siteConfig } from '@/config/site'
 import { fontSans } from '@/config/fonts'
 import clsx from 'clsx'
 import { PagesLayout } from '@/components/layouts/PagesLayout'
+
+import { ToastContainer } from 'react-toastify'
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +38,7 @@ export default function RootLayout({
         )}
       >
         <PagesLayout>{children}</PagesLayout>
+        <ToastContainer />
       </body>
     </html>
   )

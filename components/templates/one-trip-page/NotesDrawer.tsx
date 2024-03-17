@@ -20,7 +20,7 @@ const DynamicTiptapEditor = dynamic(
 )
 
 type NotesProps = {
-  section: Section
+  section: Partial<Section>
   isOpen: boolean
   onClose: () => void
 }
@@ -50,7 +50,7 @@ export const NotesDrawer: React.FC<NotesProps> = ({
           Section: {section.name}
         </h2>
         <Divider />
-        <DynamicTiptapEditor content={section.notes} />
+        <DynamicTiptapEditor content={section.note} />
       </div>
     </Drawer>
   )
