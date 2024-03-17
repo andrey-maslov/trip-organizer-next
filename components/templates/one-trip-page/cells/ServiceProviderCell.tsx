@@ -13,8 +13,6 @@ import {
 } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
 import { serviceProviderTypes } from '@/constants/constants'
-import { statusOptionsMap } from '@/components/templates/one-trip-page/trip-table.config'
-import { ButtonEdit } from '@/components/ButtonEdit'
 
 const typeIcons: Record<string, ReactNode> = {
   bus: <FaBus />,
