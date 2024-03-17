@@ -23,9 +23,9 @@ import {
 import { Key, useCallback, useEffect, useMemo, useState } from 'react'
 import { capitalize, createNewSection } from '@/lib/utils'
 import { Section, SectionBE } from '@/types/models'
-import { ApproachCell } from '@/components/templates/one-trip-page/cells/ApproachCell'
+import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
 import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
-import { DEFAULT_SECTION_STATUS, statusTypesList } from '@/constants/constants'
+import { DEFAULT_SECTION_STATUS, statusTypes } from '@/constants/constants'
 import { DateTimeCell } from '@/components/templates/one-trip-page/cells/DateTimeCell'
 import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
@@ -44,6 +44,15 @@ const sortingDefault = {
   // direction: 'ascending',
 }
 
+// Section fields thad may be updated directly as one field has one string value
+const simpleTableCells = [
+  'name',
+  'status',
+  'dateTimeStart',
+  'dateTimeEnd',
+  'serviceProvider',
+]
+
 interface OneTripTableProps {
   sections: SectionBE[]
   onUpdateTripSections: (sections: Section[]) => void
@@ -58,8 +67,8 @@ export const OneTripTable = ({
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
-  const [sortDescriptor, setSortDescriptor] =
-    useState<SortDescriptor>(sortingDefault)
+  // const [sortDescriptor, setSortDescriptor] =
+  //   useState<SortDescriptor>(sortingDefault)
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>(
     sections.map((section) => ({ ...section, id: section._id ?? '' }))
   )
@@ -76,25 +85,25 @@ export const OneTripTable = ({
     )
   }, [visibleColumns])
 
-  const filteredItems = useMemo(() => {
-    let filteredUsers = [...sectionsToDisplay]
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        (user?.name ?? '').toLowerCase().includes(filterValue.toLowerCase())
-      )
-    }
-    if (
-      statusFilter !== 'all' &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user?.status ?? '')
-      )
-    }
-
-    return filteredUsers
-  }, [sectionsToDisplay, filterValue, statusFilter])
+  // const filteredItems = useMemo(() => {
+  //   let filteredUsers = [...sectionsToDisplay]
+  //
+  //   if (hasSearchFilter) {
+  //     filteredUsers = filteredUsers.filter((user) =>
+  //       (user?.name ?? '').toLowerCase().includes(filterValue.toLowerCase())
+  //     )
+  //   }
+  //   if (
+  //     statusFilter !== 'all' &&
+  //     Array.from(statusFilter).length !== statusOptions.length
+  //   ) {
+  //     filteredUsers = filteredUsers.filter((user) =>
+  //       Array.from(statusFilter).includes(user?.status ?? '')
+  //     )
+  //   }
+  //
+  //   return filteredUsers
+  // }, [sectionsToDisplay, filterValue, statusFilter])
 
   // const sortedItems = useMemo(
   //   () =>
@@ -112,9 +121,6 @@ export const OneTripTable = ({
   //   [sortDescriptor, filteredItems]
   // )
 
-  // TODO full realization - above. This is fake
-  const sortedItems = [...filteredItems]
-
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
       setFilterValue(value)
@@ -123,30 +129,37 @@ export const OneTripTable = ({
     }
   }, [])
 
-  // const onEditCell = useCallback((columnKey: Key) => {
-  //   console.log(columnKey)
-  // }, [])
-
-  const onSaveSectionField = (
+  const onSaveTableCell = (
     newValue: any,
     sectionId: string,
-    columnKey: keyof Section
+    columnKey: string
   ) => {
+    console.log('NV', newValue, sectionId, columnKey)
+    if (!newValue) {
+      return
+    }
+
     const newSections = [...sectionsToDisplay]
 
-    newSections.forEach((section) => {
-      if (section.id === sectionId) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        section[columnKey] = newValue
-      }
-    })
+    if (simpleTableCells.includes(columnKey)) {
+      newSections.forEach((section) => {
+        if (section.id === sectionId) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          section[columnKey] = newValue
+        }
+      })
+    }
+    if ((columnKey = 'transportType')) {
+      // think about cell
+    }
 
     // Applying filter we remove new sections created on FE without name
     const newSectionsSignificant = newSections.filter(
       (section) => section.name && section.name?.length > 0
     )
 
+    console.log('sectionsDTO', newSectionsSignificant)
     onUpdateTripSections(newSectionsSignificant)
   }
 
@@ -166,112 +179,108 @@ export const OneTripTable = ({
     })
   }
 
-  const renderCell = useCallback(
-    (columnKey: Key, section: Section): CellElement => {
-      const cellValue = getKeyValue(section, columnKey)
+  const renderCell = (columnKey: Key, section: Section): CellElement => {
+    const cellValue = getKeyValue(section, columnKey)
 
-      if (columnKey === 'name') {
-        console.log('name-2')
-        return (
-          <TableCell>
-            <NameCell
-              name={section?.name ?? ''}
-              onUpdate={(newValue) =>
-                onSaveSectionField(newValue, section.id, 'name')
-              }
-            />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'status') {
-        return (
-          <TableCell>
-            <StatusCell
-              status={cellValue || DEFAULT_SECTION_STATUS}
-              onUpdate={(newValue) =>
-                onSaveSectionField(newValue, section.id, 'status')
-              }
-            />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'transportType') {
-        return (
-          <TableCell>
-            <ApproachCell
-              data={section}
-              onEditClick={() =>
-                onSaveSectionField('newValue', section.id, 'status')
-              }
-            />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
-        return (
-          <TableCell>
-            <DateTimeCell
-              dateTime={section.dateTimeStart}
-              onEditClick={() =>
-                onSaveSectionField('newValue', section.id, 'status')
-              }
-            />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'price') {
-        return (
-          <TableCell>
-            <PriceCell
-              data={section.payments}
-              onEditClick={() =>
-                onSaveSectionField('newValue', section.id, 'status')
-              }
-            />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'duration') {
-        return (
-          <TableCell>
-            <DurationCell
-              dateTimeStart={section.dateTimeStart}
-              dateTimeEnd={section.dateTimeEnd}
-            />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'note') {
-        return (
-          <TableCell>
-            <NotesCell section={section} />
-          </TableCell>
-        )
-      }
-      if (columnKey === 'actions') {
-        return (
-          <TableCell>
-            <div className='relative flex justify-end items-center gap-2'>
-              <Dropdown className='bg-background border-1 border-default-200'>
-                <DropdownTrigger>
-                  <Button isIconOnly radius='full' size='sm' variant='light'>
-                    <FiMoreVertical className='text-default-400' />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu>
-                  <DropdownItem>View</DropdownItem>
-                  <DropdownItem>Edit</DropdownItem>
-                  <DropdownItem>Delete</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          </TableCell>
-        )
-      }
-      return <TableCell>{getKeyValue(section, columnKey)}</TableCell>
-    },
-    []
-  )
+    if (columnKey === 'name') {
+      return (
+        <TableCell>
+          <NameCell
+            name={section?.name ?? ''}
+            onUpdate={(newValue) =>
+              onSaveTableCell(newValue, section.id, columnKey)
+            }
+          />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'status') {
+      return (
+        <TableCell>
+          <StatusCell
+            status={cellValue || DEFAULT_SECTION_STATUS}
+            onUpdate={(newValue) =>
+              onSaveTableCell(newValue, section.id, columnKey)
+            }
+          />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'serviceProvider') {
+      return (
+        <TableCell>
+          <ServiceProviderCell
+            serviceProvider={section.serviceProvider}
+            onUpdate={(newValue) =>
+              onSaveTableCell(newValue, section.id, columnKey)
+            }
+          />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
+      return (
+        <TableCell>
+          <DateTimeCell
+            dateTime={section.dateTimeStart}
+            onEditClick={() =>
+              onSaveTableCell('newValue', section.id, columnKey)
+            }
+          />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'price') {
+      return (
+        <TableCell>
+          <PriceCell
+            data={section.payments}
+            onEditClick={() =>
+              onSaveTableCell('newValue', section.id, columnKey)
+            }
+          />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'duration') {
+      return (
+        <TableCell>
+          <DurationCell
+            dateTimeStart={section.dateTimeStart}
+            dateTimeEnd={section.dateTimeEnd}
+          />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'note') {
+      return (
+        <TableCell>
+          <NotesCell section={section} />
+        </TableCell>
+      )
+    }
+    if (columnKey === 'actions') {
+      return (
+        <TableCell>
+          <div className='relative flex justify-end items-center gap-2'>
+            <Dropdown className='bg-background border-1 border-default-200'>
+              <DropdownTrigger>
+                <Button isIconOnly radius='full' size='sm' variant='light'>
+                  <FiMoreVertical className='text-default-400' />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem>View</DropdownItem>
+                <DropdownItem>Edit</DropdownItem>
+                <DropdownItem>Delete</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        </TableCell>
+      )
+    }
+    return <TableCell>{getKeyValue(section, columnKey)}</TableCell>
+  }
 
   const topContent = useMemo(
     () => (
@@ -371,9 +380,9 @@ export const OneTripTable = ({
         // removeWrapper
         aria-label='Table with trip sections'
         className='trip-table'
-        // sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement='outside'
+        // sortDescriptor={sortDescriptor}
         // onSortChange={setSortDescriptor}
       >
         {/*<TableHeader>*/}

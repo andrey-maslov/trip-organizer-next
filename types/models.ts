@@ -1,9 +1,9 @@
 import {
-  currencyISONameList,
-  placementTypeList,
-  sectionTypesList,
-  statusTypesList,
-  transportTypesList,
+  currencyISONames,
+  placementTypes,
+  sectionTypes,
+  statusTypes,
+  transportTypes,
 } from '@/constants/constants'
 
 export type DateType = Date | string | undefined
@@ -28,19 +28,22 @@ export type Section = {
   dateTimeEnd?: DateType
   transportType?: TransportType
   placementType?: PlacementType
-  serviceProviderName?: string
-  serviceProviderLink?: string
+  serviceProvider?: {
+    type?: string
+    name?: string
+    url?: string
+  }
   payments?: Payment[]
   note?: string // TODO noteID
 }
 
 export type SectionBE = Section & { _id?: string }
 
-export type TransportType = (typeof transportTypesList)[number]
-export type Status = (typeof statusTypesList)[number]
-export type SectionType = (typeof sectionTypesList)[number]
-export type PlacementType = (typeof placementTypeList)[number]
-export type CurrencyISOName = (typeof currencyISONameList)[number]
+export type TransportType = (typeof transportTypes)[number]
+export type Status = (typeof statusTypes)[number]
+export type SectionType = (typeof sectionTypes)[number]
+export type PlacementType = (typeof placementTypes)[number]
+export type CurrencyISOName = (typeof currencyISONames)[number]
 
 export type Payment = {
   _id: string

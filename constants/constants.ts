@@ -5,15 +5,15 @@ import {
   Status,
 } from '@/types/models'
 
-export const transportTypesList = [
+export const transportTypes = [
   'bus',
-  'aircraft',
+  'flight',
   'train',
   'car',
   'unknown',
 ] as const
 
-export const statusTypesList = [
+export const statusTypes = [
   'to_find',
   'to_buy',
   'reserved',
@@ -22,13 +22,15 @@ export const statusTypesList = [
   'passed',
 ] as const
 
-export const sectionTypesList = ['road', 'stay'] as const
-export const placementTypeList = ['hotel', 'flat'] as const
+export const placementTypes = ['hotel', 'flat'] as const
+
+export const serviceProviderTypes = [...transportTypes, ...placementTypes]
+export const sectionTypes = ['road', 'stay'] as const
 export const DEFAULT_SECTION_STATUS: Status = 'to_find'
 
 export const DEFAULT_SECTION_TYPE: SectionType = 'road'
 
-export const currencyISONameList = ['EUR', 'USD', 'PLN', 'BYN'] as const
+export const currencyISONames = ['EUR', 'USD', 'PLN', 'BYN'] as const
 export const DEFAULT_CURRENCY: CurrencyISOName = 'EUR'
 
 export const currencies: Record<

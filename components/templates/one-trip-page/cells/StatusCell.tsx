@@ -6,10 +6,11 @@ import {
 } from '@/components/templates/one-trip-page/trip-table.config'
 import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
-import { statusTypesList } from '@/constants/constants'
+import { statusTypes } from '@/constants/constants'
+import { Status } from '@/types/models'
 
 type StatusCellProps = {
-  status: string
+  status: Status
   onUpdate: (value: string) => void
 }
 
@@ -23,7 +24,7 @@ export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => {
   })
 
   return (
-    <div className='flex items-center relative cell-editable'>
+    <div className='flex items-center relative cell-editable max-h-[43px]'>
       {!editMode ? (
         <>
           <Chip
@@ -39,17 +40,26 @@ export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => {
       ) : (
         <div className='flex items-center' ref={ref}>
           <Select
-            label='Select a status'
-            className='max-w-xs min-w-[150px]'
+            // label={nu}
+            aria-label='select status'
+            className='max-w-xs min-w-[120px]'
             size='sm'
             onChange={(event) => {
               setEditMode(false)
               onUpdate(event.target.value)
             }}
+            selectedKeys={[status]}
+            classNames={{
+              // innerWrapper: 'p-0 h-1',
+              trigger: 'h-4 min-h-unit-6',
+            }}
           >
-            {statusTypesList.map((item) => (
-              <SelectItem key={item} value={item}>
-                {statusOptionsMap[item as keyof typeof statusOptionsMap]}
+            {statusTypes.map((item) => (
+              <SelectItem key={item} textValue={item}>
+                <span className='text-xs'>
+                  {statusOptionsMap[item as keyof typeof statusOptionsMap] ??
+                    item}
+                </span>
               </SelectItem>
             ))}
           </Select>

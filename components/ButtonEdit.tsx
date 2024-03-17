@@ -2,7 +2,7 @@ import { Button } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
 
 type ButtonEditProps = {
-  onClick: () => void
+  onClick?: () => void
 }
 
 export const ButtonEdit = ({ onClick }: ButtonEditProps) => (

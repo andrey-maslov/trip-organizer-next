@@ -20,7 +20,7 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
   })
 
   return (
-    <div className='flex items-center relative cell-editable min-w-[200px]'>
+    <div className='flex items-center relative cell-editable min-w-[170px]'>
       {!editMode ? (
         <>
           <div className='text-nowrap font-bold'>

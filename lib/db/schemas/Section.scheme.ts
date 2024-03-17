@@ -16,8 +16,11 @@ export const SectionSchema = new Schema<Section>({
   dateTimeEnd: { type: Date, required: false },
   transportType: { type: String, required: false },
   placementType: { type: String, required: false },
-  serviceProviderName: { type: String, required: false },
-  serviceProviderLink: { type: String, required: false },
+  serviceProvider: {
+    type: { type: String, required: false },
+    name: { type: String, required: false },
+    url: { type: String, required: false },
+  },
   status: { type: String, required: true, default: DEFAULT_SECTION_STATUS },
   payments: [PaymentSchema],
   note: { type: String, required: false },
