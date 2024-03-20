@@ -26,6 +26,8 @@ export type Section = {
   type?: SectionType
   dateTimeStart?: DateType
   dateTimeEnd?: DateType
+  // startingPoint: Point
+  // endPoint: Point
   transportType?: TransportType
   placementType?: PlacementType
   serviceProvider?: {
@@ -44,6 +46,14 @@ export type Status = (typeof statusTypes)[number]
 export type SectionType = (typeof sectionTypes)[number]
 export type PlacementType = (typeof placementTypes)[number]
 export type CurrencyISOName = (typeof currencyISONames)[number]
+
+// TODO fix it keeping in mind geo coordinates etc
+export type Point = {
+  point: string
+  staringDate: string
+  startingTime: string
+  timeZone: any
+}
 
 export type Payment = {
   _id: string

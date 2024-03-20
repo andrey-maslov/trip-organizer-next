@@ -223,8 +223,8 @@ export const OneTripTable = ({
         <TableCell>
           <DateTimeCell
             dateTime={section.dateTimeStart}
-            onEditClick={() =>
-              onSaveTableCell('newValue', section.id, columnKey)
+            onUpdate={(newValue) =>
+              onSaveTableCell(newValue, section.id, columnKey)
             }
           />
         </TableCell>
