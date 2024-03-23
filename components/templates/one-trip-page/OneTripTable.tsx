@@ -33,6 +33,7 @@ import { NotesCell } from '@/components/templates/one-trip-page/cells/NotesCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
 import { toast } from 'react-toastify'
 import { CellElement } from '@react-types/table'
+import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
@@ -72,6 +73,7 @@ export const OneTripTable = ({
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>(
     sections.map((section) => ({ ...section, id: section._id ?? '' }))
   )
+  const [isNotesDrawerOpen, setNotesDrawerOpen] = useState(false)
 
   const [refresh, setRefresh] = useState(false)
 
@@ -255,7 +257,10 @@ export const OneTripTable = ({
     if (columnKey === 'note') {
       return (
         <TableCell>
-          <NotesCell section={section} />
+          <NotesCell
+            hasNote={true}
+            onOpenNote={() => setNotesDrawerOpen(true)}
+          />
         </TableCell>
       )
     }
@@ -410,6 +415,14 @@ export const OneTripTable = ({
           ))}
         </TableBody>
       </Table>
+
+      {isNotesDrawerOpen && (
+        <NotesDrawer
+          section={sectionsToDisplay[0]}
+          isOpen={isNotesDrawerOpen}
+          onClose={() => setNotesDrawerOpen(false)}
+        />
+      )}
     </>
   )
 }

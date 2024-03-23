@@ -5,6 +5,7 @@ import {
   statusTypes,
   transportTypes,
 } from '@/constants/constants'
+import { Types } from 'mongoose'
 
 export type DateType = Date | string | undefined
 
@@ -36,7 +37,7 @@ export type Section = {
     url?: string
   }
   payments?: Payment[]
-  note?: string // TODO noteID
+  note: Types.ObjectId | string
 }
 
 export type SectionBE = Section & { _id?: string }
@@ -142,4 +143,13 @@ export interface UnsplashApiResponse {
   total: number
   total_pages: number
   results: UnsplashPhoto[]
+}
+
+export type Note = {
+  _id: string
+  id: string
+  sectionId: Types.ObjectId | string
+  content: JSON | undefined
+  createdAt?: DateType
+  updatedAt?: DateType
 }

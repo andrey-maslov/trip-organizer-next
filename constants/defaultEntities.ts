@@ -1,4 +1,4 @@
-import { Section, Trip } from '@/types/models'
+import { Note, Section, Trip } from '@/types/models'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
 
 export const defaultTrip: Partial<Trip> = {
@@ -13,3 +13,9 @@ export const defaultSection: Omit<Section, 'id' | '_id'> = {
 
 export const defaultCoverImage =
   'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400'
+
+export const defaultNote: Note = {
+  id: '',
+  sectionId: '',
+  content: undefined,
+}

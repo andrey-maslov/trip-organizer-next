@@ -23,7 +23,7 @@ export const SectionSchema = new Schema<Section>({
   },
   status: { type: String, required: true, default: DEFAULT_SECTION_STATUS },
   payments: [PaymentSchema],
-  note: { type: String, required: false },
+  note: { type: Schema.Types.ObjectId, ref: 'Note', required: false },
 })
 
 const SectionModel = models.SectionModel || model('SectionModel', SectionSchema)

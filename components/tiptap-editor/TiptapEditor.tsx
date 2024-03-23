@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, Content } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Link from '@tiptap/extension-link'
@@ -15,10 +15,9 @@ import { Toolbar } from './Toolbar'
 
 import './tiptap.scss'
 import './content.scss'
-import { exampleContent } from '@/components/tiptap-editor/content'
 
 type TiptapProps = {
-  content?: string
+  content: Content | undefined
   editable?: boolean
   placeholder?: string
   withToolbar?: boolean
@@ -35,7 +34,7 @@ type TiptapProps = {
 }
 
 const TiptapEditor = ({
-  content = exampleContent,
+  content,
   editable = true,
   // placeholder = "Type '/' for actions…",
   withToolbar = true,
@@ -76,7 +75,9 @@ const TiptapEditor = ({
     extensions,
     editable,
     onUpdate: ({ editor }) => {
-      console.log(editor.getJSON())
+      const json = editor.getJSON()
+      // send the content to an API here
+      console.log(json)
     },
   })
 

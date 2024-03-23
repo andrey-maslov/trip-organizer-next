@@ -1,4 +1,4 @@
-import { Trip, UnsplashApiResponse } from '@/types/models'
+import { Note, Trip, UnsplashApiResponse } from '@/types/models'
 import ky from 'ky'
 
 const unsplashUrl = 'https://api.unsplash.com/search/photos'
@@ -29,3 +29,16 @@ export const updateTrip = async (
   data: Partial<Trip>
 ): Promise<{ id: string }> =>
   ky.put(`trips/${data._id}`, { prefixUrl: '/api', json: data }).json()
+
+/* Notes */
+
+export const getOneNote = async (id: string): Promise<Note> =>
+  ky(`notes/${id}`, { prefixUrl: '/api' }).json()
+
+export const createNote = async (
+  data: Partial<Note>
+): Promise<{ id: string }> =>
+  ky.post('notes', { prefixUrl: '/api', json: data }).json()
+
+export const updateNote = async (data: Partial<Note>): Promise<Note> =>
+  ky.put(`notes/${data._id}`, { prefixUrl: '/api', json: data }).json()
