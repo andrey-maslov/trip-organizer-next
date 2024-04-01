@@ -7,9 +7,8 @@ import 'react-modern-drawer/dist/index.css'
 import dynamic from 'next/dynamic'
 import { Section } from '@/types/models'
 import { title, subtitle } from '@/components/primitives'
-import { Divider } from '@nextui-org/divider'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { createNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
+import { useQuery } from '@tanstack/react-query'
+import { getOneNote, getOneTrip } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
 
 const DynamicTiptapEditor = dynamic(
@@ -66,10 +65,9 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
     >
       <div className='bg-background p-20'>
         <h1 className={title({ class: 'mb-10' })}>{trip?.name}</h1>
-        <h2 className={subtitle({ class: 'mb-10' })}>
+        <h2 className={subtitle({ class: 'mb-2' })}>
           Section: {section?.name}
         </h2>
-        <Divider />
         <DynamicTiptapEditor note={note} />
       </div>
     </Drawer>

@@ -1,14 +1,14 @@
 'use client'
 
 import React from 'react'
-import { useEditor, EditorContent, Content } from '@tiptap/react'
+import { useEditor, EditorContent } from '@tiptap/react'
 import { throttle } from 'lodash'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Link from '@tiptap/extension-link'
 // import TaskList from '@tiptap/extension-task-list'
 // import TaskItem from '@tiptap/extension-task-item'
-// import Placeholder from '@tiptap/extension-placeholder'
+import Placeholder from '@tiptap/extension-placeholder'
 
 // TODO https://tiptap.dev/docs/editor/examples/savvy
 
@@ -19,7 +19,8 @@ import { Toolbar } from './Toolbar'
 import './tiptap.scss'
 import './content.scss'
 import { Note } from '@/types/models'
-import { createNote, updateNote } from '@/apiRequests/apiDB'
+import { updateNote } from '@/apiRequests/apiDB'
+import { Divider } from '@nextui-org/divider'
 
 type TiptapProps = {
   note: Note
@@ -38,37 +39,11 @@ type TiptapProps = {
   withHexColorsDecorator?: boolean
 }
 
-const saveNote = (data: Partial<Note>) => {
-  if (data._id) {
-    return updateNote(data)
-  } else {
-    // return createNote(data)
-  }
-}
-
-const throttleOnUpdate = throttle(
-  ({
-    editor,
-    data,
-    callback,
-  }: {
-    editor: any
-    data: Partial<Note>
-    callback?: (note: Partial<Note>) => void
-  }) => {
-    const json = editor.getJSON()
-    // send the content to an API here
-    if (typeof callback !== 'undefined') {
-      if (data._id) {
-        // use prev created
-      }
-
-      // const newData = { ...data }
-      callback({ ...data, content: json })
-    }
-  },
-  3000
-)
+const throttleOnUpdate = throttle((editor: any, noteId: string) => {
+  const json = editor.getJSON()
+  // send the content to an API
+  void updateNote({ _id: noteId, updatedAt: new Date(), content: json })
+}, 3000)
 
 const TiptapEditor = ({
   note,
@@ -76,9 +51,9 @@ const TiptapEditor = ({
   // placeholder = "Type '/' for actions…",
   withToolbar = true,
   withTypographyExtension = false,
-  withLinkExtension = true,
+  withPlaceholderExtension = true,
   // withTaskListExtension = false,
-  // withPlaceholderExtension = false,
+  withLinkExtension = true,
 }: TiptapProps) => {
   const extensions: Extensions = [StarterKit]
 
@@ -98,22 +73,22 @@ const TiptapEditor = ({
   // if (withTaskListExtension) {
   //   extensions.push(TaskList, TaskItem)
   // }
-  //
-  // if (withPlaceholderExtension) {
-  //   extensions.push(
-  //     Placeholder.configure({
-  //       placeholder,
-  //     })
-  //   )
-  // }
+
+  if (withPlaceholderExtension) {
+    extensions.push(
+      Placeholder.configure({
+        placeholder: 'Start adding your note...',
+      })
+    )
+  }
 
   const editor = useEditor({
     content: note?.content,
     extensions,
     editable,
+    autofocus: true,
     onUpdate: ({ editor }) => {
-      const newData = { ...note }
-      throttleOnUpdate({ editor, data: newData, callback: updateNote })
+      throttleOnUpdate(editor, note._id)
     },
   })
 
@@ -123,6 +98,8 @@ const TiptapEditor = ({
 
   return (
     <>
+      <div className='mb-8'>Saved</div>
+      <Divider />
       <div className='tiptap-editor-wrapper'>
         {withToolbar ? <Toolbar editor={editor} /> : null}
         <EditorContent placeholder='Start typing here' editor={editor} />
