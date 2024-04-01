@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useEditor, EditorContent, Content } from '@tiptap/react'
+import { throttle } from 'lodash'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Link from '@tiptap/extension-link'
@@ -9,15 +10,19 @@ import Link from '@tiptap/extension-link'
 // import TaskItem from '@tiptap/extension-task-item'
 // import Placeholder from '@tiptap/extension-placeholder'
 
+// TODO https://tiptap.dev/docs/editor/examples/savvy
+
 import type { Extensions } from '@tiptap/react'
 
 import { Toolbar } from './Toolbar'
 
 import './tiptap.scss'
 import './content.scss'
+import { Note } from '@/types/models'
+import { createNote, updateNote } from '@/apiRequests/apiDB'
 
 type TiptapProps = {
-  content: Content | undefined
+  note: Note
   editable?: boolean
   placeholder?: string
   withToolbar?: boolean
@@ -33,8 +38,40 @@ type TiptapProps = {
   withHexColorsDecorator?: boolean
 }
 
+const saveNote = (data: Partial<Note>) => {
+  if (data._id) {
+    return updateNote(data)
+  } else {
+    // return createNote(data)
+  }
+}
+
+const throttleOnUpdate = throttle(
+  ({
+    editor,
+    data,
+    callback,
+  }: {
+    editor: any
+    data: Partial<Note>
+    callback?: (note: Partial<Note>) => void
+  }) => {
+    const json = editor.getJSON()
+    // send the content to an API here
+    if (typeof callback !== 'undefined') {
+      if (data._id) {
+        // use prev created
+      }
+
+      // const newData = { ...data }
+      callback({ ...data, content: json })
+    }
+  },
+  3000
+)
+
 const TiptapEditor = ({
-  content,
+  note,
   editable = true,
   // placeholder = "Type '/' for actions…",
   withToolbar = true,
@@ -71,13 +108,12 @@ const TiptapEditor = ({
   // }
 
   const editor = useEditor({
-    content,
+    content: note?.content,
     extensions,
     editable,
     onUpdate: ({ editor }) => {
-      const json = editor.getJSON()
-      // send the content to an API here
-      console.log(json)
+      const newData = { ...note }
+      throttleOnUpdate({ editor, data: newData, callback: updateNote })
     },
   })
 
@@ -89,7 +125,7 @@ const TiptapEditor = ({
     <>
       <div className='tiptap-editor-wrapper'>
         {withToolbar ? <Toolbar editor={editor} /> : null}
-        <EditorContent editor={editor} />
+        <EditorContent placeholder='Start typing here' editor={editor} />
       </div>
     </>
   )

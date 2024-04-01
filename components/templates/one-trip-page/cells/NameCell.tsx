@@ -19,6 +19,12 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
     setNameInInput(name)
   })
 
+  const onSave = () => {
+    setEditMode(false)
+    setNameInInput(name)
+    onUpdate(nameInInput ?? '')
+  }
+
   return (
     <div className='flex items-center relative cell-editable min-w-[170px]'>
       {!editMode ? (
@@ -38,10 +44,7 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
           />
           <button
             className='bg-transparent border-0 text-green-600 font-bold'
-            onClick={() => {
-              setEditMode(false)
-              onUpdate(nameInInput ?? '')
-            }}
+            onClick={() => onSave()}
           >
             <FiCheck />
           </button>

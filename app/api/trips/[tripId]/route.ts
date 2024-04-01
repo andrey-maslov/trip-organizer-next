@@ -1,16 +1,16 @@
-import TripSchema from '@/lib/db/schemas/Trip.scheme'
+import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { tripId: string } }
 ) {
-  const { id } = params
+  const { tripId } = params
   await connectMongo()
 
   // Get one trip
   try {
-    const trip = await TripSchema.findById(id).lean()
+    const trip = await TripSchema.findById(tripId).lean()
     return Response.json({ ...trip })
   } catch (e) {
     return new Response(`Get all error`, {

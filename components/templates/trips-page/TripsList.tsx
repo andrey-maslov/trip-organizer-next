@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
-import { getAllTrips } from '@/apiRequests/apiRequests'
+import { getAllTrips } from '@/apiRequests/apiDB'
 import { FiPlus } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
 import { defaultCoverImage } from '@/constants/defaultEntities'

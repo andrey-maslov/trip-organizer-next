@@ -12,6 +12,7 @@ export type DateType = Date | string | undefined
 export type Trip = {
   _id: string
   name: string
+  slug: string
   sections: SectionBE[]
   dateTimeStart?: DateType
   dateTimeEnd?: DateType
@@ -37,7 +38,7 @@ export type Section = {
     url?: string
   }
   payments?: Payment[]
-  note: Types.ObjectId | string
+  note?: Types.ObjectId | string
 }
 
 export type SectionBE = Section & { _id?: string }
@@ -149,7 +150,11 @@ export type Note = {
   _id: string
   id: string
   sectionId: Types.ObjectId | string
-  content: JSON | undefined
-  createdAt?: DateType
+  content?: JSON | undefined
+  createdAt: DateType
   updatedAt?: DateType
+}
+
+export type SearchParams = {
+  note: string
 }

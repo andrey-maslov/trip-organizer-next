@@ -1,11 +1,7 @@
 'use client'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  deleteOneTrip,
-  getOneTrip,
-  updateTrip,
-} from '@/apiRequests/apiRequests'
+import { deleteOneTrip, getOneTrip, updateTrip } from '@/apiRequests/apiDB'
 import { useParams, useRouter } from 'next/navigation'
 import { OneTripTable } from '@/components/templates/one-trip-page/OneTripTable'
 import { Divider } from '@nextui-org/react'
@@ -52,6 +48,8 @@ export const OneTrip = () => {
     }
   }
 
+  // TODO add corresponding inputs
+  // Only when need update high level of the trip or add a new section(???)
   const onUpdateTrip = (newSections?: Section[]) => {
     const newTripDto = { ...trip }
 
@@ -76,10 +74,7 @@ export const OneTrip = () => {
         {trip?.dateTimeStart ? `From ${format(trip.dateTimeStart, 'PP')}` : ''}{' '}
         {trip?.dateTimeEnd ? `to ${format(trip.dateTimeEnd, 'PP')}` : ''}
       </h2>
-      <OneTripTable
-        sections={trip?.sections ?? []}
-        onUpdateTripSections={(sections) => onUpdateTrip(sections)}
-      />
+      <OneTripTable sections={trip?.sections ?? []} />
       <Divider className='my-8' />
       <div className='flex justify-end'>
         <Button onClick={onDeleteTrip} color='danger'>

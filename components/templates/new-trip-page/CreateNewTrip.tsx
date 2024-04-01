@@ -1,7 +1,7 @@
 'use client'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { createTrip, searchPictures } from '@/apiRequests/apiRequests'
+import { createTrip } from '@/apiRequests/apiDB'
 import { defaultCoverImage, defaultTrip } from '@/constants/defaultEntities'
 import {
   Input,
@@ -18,6 +18,7 @@ import { Button } from '@nextui-org/button'
 import { format } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
 import { ButtonEdit } from '@/components/ButtonEdit'
+import { searchPictures } from '@/apiRequests/apiExternal'
 
 export const CreateNewTrip = () => {
   const router = useRouter()

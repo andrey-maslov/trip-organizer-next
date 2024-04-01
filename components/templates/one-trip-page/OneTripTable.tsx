@@ -25,7 +25,7 @@ import { capitalize, createNewSection } from '@/lib/utils'
 import { Section, SectionBE } from '@/types/models'
 import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
 import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
-import { DEFAULT_SECTION_STATUS, statusTypes } from '@/constants/constants'
+import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
 import { DateTimeCell } from '@/components/templates/one-trip-page/cells/DateTimeCell'
 import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
@@ -34,6 +34,10 @@ import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
 import { toast } from 'react-toastify'
 import { CellElement } from '@react-types/table'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
+import { useQueryParams } from '@/hooks/useQueryParams'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateSection } from '@/apiRequests/apiDB'
+import { useParams } from 'next/navigation'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
@@ -56,13 +60,15 @@ const simpleTableCells = [
 
 interface OneTripTableProps {
   sections: SectionBE[]
-  onUpdateTripSections: (sections: Section[]) => void
+  // onUpdateTripSections: (sections: Section[]) => void
 }
 
 export const OneTripTable = ({
   sections,
-  onUpdateTripSections,
+  // onUpdateTripSections,
 }: OneTripTableProps) => {
+  const queryClient = useQueryClient()
+  const { id: tripId } = useParams()
   const [filterValue, setFilterValue] = useState('')
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
@@ -73,9 +79,9 @@ export const OneTripTable = ({
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>(
     sections.map((section) => ({ ...section, id: section._id ?? '' }))
   )
-  const [isNotesDrawerOpen, setNotesDrawerOpen] = useState(false)
+  // const [isNotesDrawerOpen, setNotesDrawerOpen] = useState(false)
 
-  const [refresh, setRefresh] = useState(false)
+  const { searchObj } = useQueryParams()
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -86,6 +92,26 @@ export const OneTripTable = ({
       Array.from(visibleColumns).includes(column.uid)
     )
   }, [visibleColumns])
+
+  // useEffect(() => {
+  //   if (searchObj.note) {
+  //     setNotesDrawerOpen(true)
+  //   }
+  // }, [searchObj.note])
+
+  // Update Trip Section
+  const { mutate: updateSectionMutation } = useMutation({
+    mutationFn: (data: { tripId: string; sectionData: Partial<Section> }) =>
+      updateSection(data.tripId, data.sectionData),
+    onSuccess: async () => {
+      toast.success('Section successfully updated')
+      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+    },
+    onError: (err) => {
+      console.error(err)
+      toast.error('Section updating failed')
+    },
+  })
 
   // const filteredItems = useMemo(() => {
   //   let filteredUsers = [...sectionsToDisplay]
@@ -136,41 +162,34 @@ export const OneTripTable = ({
     sectionId: string,
     columnKey: string
   ) => {
-    console.log('NV', newValue, sectionId, columnKey)
-    if (!newValue) {
+    if (!newValue || typeof tripId !== 'string') {
       return
     }
 
-    const newSections = [...sectionsToDisplay]
+    const targetSection = sectionsToDisplay.find(
+      (section) => sectionId === section.id
+    )
+
+    if (!targetSection) {
+      return
+    }
+
+    let newSectionData: Section = { ...targetSection }
 
     if (simpleTableCells.includes(columnKey)) {
-      newSections.forEach((section) => {
-        if (section.id === sectionId) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          section[columnKey] = newValue
-        }
-      })
+      newSectionData = { ...newSectionData, [columnKey]: newValue }
     }
+
     if ((columnKey = 'transportType')) {
       // think about cell
     }
 
-    // Applying filter we remove new sections created on FE without name
-    const newSectionsSignificant = newSections.filter(
-      (section) => section.name && section.name?.length > 0
-    )
+    // TODO what about new section creating when we don't have a section ID?
 
-    console.log('sectionsDTO', newSectionsSignificant)
-    onUpdateTripSections(newSectionsSignificant)
+    updateSectionMutation({ tripId, sectionData: newSectionData })
   }
 
-  useEffect(() => {
-    if (refresh) {
-      setRefresh(false)
-    }
-  }, [refresh])
-
+  // TODO only for Frontend...
   const onAddNewSection = () => {
     setSectionsToDisplay((prevSections) => [
       ...prevSections,
@@ -257,10 +276,7 @@ export const OneTripTable = ({
     if (columnKey === 'note') {
       return (
         <TableCell>
-          <NotesCell
-            hasNote={true}
-            onOpenNote={() => setNotesDrawerOpen(true)}
-          />
+          <NotesCell noteId={section.note as string} sectionId={section.id} />
         </TableCell>
       )
     }
@@ -390,12 +406,6 @@ export const OneTripTable = ({
         // sortDescriptor={sortDescriptor}
         // onSortChange={setSortDescriptor}
       >
-        {/*<TableHeader>*/}
-        {/*  {columns.map((column) => (*/}
-        {/*    <TableColumn key={column.uid}>{column.name}</TableColumn>*/}
-        {/*  ))}*/}
-        {/*</TableHeader>*/}
-
         <TableHeader columns={headerColumns}>
           {(column) => (
             <TableColumn
@@ -416,13 +426,7 @@ export const OneTripTable = ({
         </TableBody>
       </Table>
 
-      {isNotesDrawerOpen && (
-        <NotesDrawer
-          section={sectionsToDisplay[0]}
-          isOpen={isNotesDrawerOpen}
-          onClose={() => setNotesDrawerOpen(false)}
-        />
-      )}
+      <NotesDrawer section={sectionsToDisplay[0]} />
     </>
   )
 }

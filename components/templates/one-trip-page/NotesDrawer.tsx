@@ -1,14 +1,15 @@
 'use client'
 
+import { FC, useEffect, useState } from 'react'
 import Drawer from 'react-modern-drawer'
+import { useQueryParams } from '@/hooks/useQueryParams'
 import 'react-modern-drawer/dist/index.css'
-
 import dynamic from 'next/dynamic'
 import { Section } from '@/types/models'
 import { title, subtitle } from '@/components/primitives'
 import { Divider } from '@nextui-org/divider'
-import { useQuery } from '@tanstack/react-query'
-import { getOneNote, getOneTrip } from '@/apiRequests/apiRequests'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { createNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
 
 const DynamicTiptapEditor = dynamic(
@@ -21,31 +22,44 @@ const DynamicTiptapEditor = dynamic(
 
 type NotesProps = {
   section: Section
-  isOpen: boolean
-  onClose: () => void
 }
 
-export const NotesDrawer: React.FC<NotesProps> = ({
-  section,
-  isOpen,
-  onClose,
-}) => {
-  const params = useParams()
+export const NotesDrawer: FC<NotesProps> = ({ section }) => {
+  const { id: tripId } = useParams()
+
+  const { removeQueryParams, searchObj } = useQueryParams()
+
+  const [isOpen, setOpen] = useState(false)
+
+  useEffect(() => {
+    setOpen(Boolean(searchObj.note))
+  }, [searchObj.note])
+
+  // TODO check why the fetch is doubled
   const { data: trip } = useQuery({
-    queryKey: ['trip', params.id],
-    queryFn: () => getOneTrip(params.id as string),
+    queryKey: ['trip', tripId],
+    queryFn: () => getOneTrip(tripId as string),
+    enabled: Boolean(searchObj.note),
   })
 
+  // Fetch note
   const { data: note } = useQuery({
-    queryKey: ['note', section.note],
-    queryFn: () => getOneNote(section.note as string),
-    enabled: Boolean(section.note),
+    queryKey: ['note', searchObj.note],
+    queryFn: () => getOneNote(searchObj.note as string),
+    enabled: Boolean(searchObj.note),
   })
+
+  if (!section || !note) {
+    return null
+  }
 
   return (
     <Drawer
       open={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        setOpen(false)
+        removeQueryParams()
+      }}
       direction='right'
       className='notes-drawer'
       size={'40vw'}
@@ -53,10 +67,10 @@ export const NotesDrawer: React.FC<NotesProps> = ({
       <div className='bg-background p-20'>
         <h1 className={title({ class: 'mb-10' })}>{trip?.name}</h1>
         <h2 className={subtitle({ class: 'mb-10' })}>
-          Section: {section.name}
+          Section: {section?.name}
         </h2>
         <Divider />
-        <DynamicTiptapEditor content={note?.content} />
+        <DynamicTiptapEditor note={note} />
       </div>
     </Drawer>
   )

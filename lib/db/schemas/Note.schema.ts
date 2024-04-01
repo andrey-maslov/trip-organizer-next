@@ -1,7 +1,7 @@
 import { Schema, model, models } from 'mongoose'
 import { Note } from '@/types/models'
 
-export const NoteSchema = new Schema<Note>({
+const NoteSchema = new Schema<Note>({
   sectionId: {
     type: Schema.Types.ObjectId,
     ref: 'Section',
@@ -12,6 +12,6 @@ export const NoteSchema = new Schema<Note>({
   updatedAt: { type: Date, required: false, default: Date.now },
 })
 
-const NoteModel = models.NoteModel || model('NoteModel', NoteSchema)
+const NoteModel = models.NoteModel || model('NoteModel', NoteSchema, 'notes')
 
 export default NoteModel
