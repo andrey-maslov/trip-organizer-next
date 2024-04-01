@@ -6,7 +6,7 @@ export const defaultTrip: Partial<Trip> = {
   sections: [],
 }
 
-export const defaultSection: Omit<Section, 'id' | '_id'> = {
+export const defaultSection: Omit<Section, 'id' | '_id' | 'note'> = {
   name: 'New section',
   status: DEFAULT_SECTION_STATUS,
 }
@@ -14,8 +14,7 @@ export const defaultSection: Omit<Section, 'id' | '_id'> = {
 export const defaultCoverImage =
   'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400'
 
-export const defaultNote: Note = {
-  id: '',
-  sectionId: '',
-  content: undefined,
-}
+// export const defaultNote: Note = {
+//   id: '',
+//   sectionId: '',
+// }
