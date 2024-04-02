@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { throttle } from 'lodash'
 import StarterKit from '@tiptap/starter-kit'
@@ -19,8 +19,10 @@ import { Toolbar } from './Toolbar'
 import './tiptap.scss'
 import './content.scss'
 import { Note } from '@/types/models'
-import { updateNote } from '@/apiRequests/apiDB'
+import { updateNote, updateTrip } from '@/apiRequests/apiDB'
 import { Divider } from '@nextui-org/divider'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 type TiptapProps = {
   note: Note
@@ -39,11 +41,23 @@ type TiptapProps = {
   withHexColorsDecorator?: boolean
 }
 
-const throttleOnUpdate = throttle((editor: any, noteId: string) => {
-  const json = editor.getJSON()
-  // send the content to an API
-  void updateNote({ _id: noteId, updatedAt: new Date(), content: json })
-}, 3000)
+const getDocumentStatus = (isSaved: boolean): string => {
+  if (!isSaved) {
+    return 'Saving...'
+  } else if (isSaved) {
+    return 'Saved'
+  }
+  return ''
+}
+
+const throttleOnUpdate = throttle(
+  (editor: any, noteId: string, callback: (data: any) => void) => {
+    const json = editor.getJSON()
+    // send the content to an API
+    void callback({ _id: noteId, updatedAt: new Date(), content: json })
+  },
+  3000
+)
 
 const TiptapEditor = ({
   note,
@@ -56,6 +70,19 @@ const TiptapEditor = ({
   withLinkExtension = true,
 }: TiptapProps) => {
   const extensions: Extensions = [StarterKit]
+
+  const [isSaved, setSaved] = useState(true)
+
+  // Update Note
+  const { mutate: updateNoteMutation, isPending } = useMutation({
+    mutationFn: (data: any) => updateNote(data),
+    onSuccess: async () => {
+      setSaved(true)
+    },
+    onError: (err) => {
+      setSaved(false)
+    },
+  })
 
   if (withTypographyExtension) {
     extensions.push(Typography)
@@ -88,7 +115,9 @@ const TiptapEditor = ({
     editable,
     autofocus: true,
     onUpdate: ({ editor }) => {
-      throttleOnUpdate(editor, note._id)
+      // add callback
+      setSaved(false)
+      throttleOnUpdate(editor, note._id, updateNoteMutation)
     },
   })
 
@@ -98,7 +127,9 @@ const TiptapEditor = ({
 
   return (
     <>
-      <div className='mb-8'>Saved</div>
+      <div className='mb-8 text-sm text-foreground-400'>
+        {getDocumentStatus(isSaved)}
+      </div>
       <Divider />
       <div className='tiptap-editor-wrapper'>
         {withToolbar ? <Toolbar editor={editor} /> : null}
