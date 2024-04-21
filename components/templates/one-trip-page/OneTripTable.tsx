@@ -74,9 +74,10 @@ export const OneTripTable = ({
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
-  // const [sortDescriptor, setSortDescriptor] =
-  //   useState<SortDescriptor>(sortingDefault)
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
+  const [currentSection, setCurrentSection] = useState<Section | null>(null)
+
+  // const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>(sortingDefault)
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -272,7 +273,15 @@ export const OneTripTable = ({
     if (columnKey === 'note') {
       return (
         <TableCell>
-          <NoteCell noteId={section.note as string} sectionId={section.id} />
+          <NoteCell
+            noteId={section.note as string}
+            sectionId={section.id}
+            onClick={() => {
+              setCurrentSection(
+                sectionsToDisplay.find((item) => item.id === section.id) ?? null
+              )
+            }}
+          />
         </TableCell>
       )
     }
@@ -426,7 +435,7 @@ export const OneTripTable = ({
         </TableBody>
       </Table>
 
-      <NotesDrawer section={sectionsToDisplay[0]} />
+      <NotesDrawer section={currentSection} />
     </>
   )
 }

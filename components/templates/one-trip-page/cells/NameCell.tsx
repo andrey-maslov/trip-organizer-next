@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { FiCheck } from 'react-icons/fi'
 import clsx from 'clsx'
+import { Input } from '@nextui-org/react'
 
 type NameCellProps = {
   name: string
@@ -32,10 +33,7 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
       {!editMode ? (
         <>
           <div
-            className={clsx(
-              'text-nowrap',
-              name ? 'font-bold' : 'text-foreground-400'
-            )}
+            className={clsx('text-nowrap', name ? '' : 'text-foreground-400')}
           >
             {name || placeholder}
           </div>
@@ -43,7 +41,7 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
         </>
       ) : (
         <div className='flex items-center' ref={ref}>
-          <input
+          <Input
             type='text'
             className='block w-full'
             value={nameInInput ?? ''}

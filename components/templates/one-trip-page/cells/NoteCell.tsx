@@ -1,5 +1,3 @@
-'use client'
-
 import { FC } from 'react'
 import { Button } from '@nextui-org/button'
 import { useQueryParams } from '@/hooks/useQueryParams'
@@ -10,9 +8,10 @@ import { useParams } from 'next/navigation'
 type NoteCellProps = {
   noteId: string | undefined
   sectionId: string
+  onClick: () => void
 }
 
-export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId }) => {
+export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId, onClick }) => {
   const { setQueryParams } = useQueryParams()
   const { id: tripId } = useParams()
 
@@ -26,6 +25,7 @@ export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId }) => {
 
   const setCurrentNote = () => {
     if (noteId) {
+      onClick()
       setQueryParams({ note: noteId })
     } else {
       // create note and set noteId as query param

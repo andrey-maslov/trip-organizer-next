@@ -14,7 +14,7 @@ export async function PUT(
   try {
     // update only Note id of the whole section
     const update =
-      typeof payload['noteId'] === 'string'
+      typeof payload['noteId'] === 'string' || payload['noteId'] === null
         ? { $set: { 'sections.$.note': payload.noteId } }
         : { $set: { 'sections.$': payload } }
 

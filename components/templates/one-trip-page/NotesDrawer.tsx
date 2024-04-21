@@ -21,7 +21,7 @@ const DynamicTiptapEditor = dynamic(
 )
 
 type NotesProps = {
-  section: Section
+  section: Section | null
 }
 
 export const NotesDrawer: FC<NotesProps> = ({ section }) => {
@@ -55,7 +55,7 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
     mutationFn: () =>
       deleteOneNote({
         noteId: searchObj.note,
-        sectionId: section.id,
+        sectionId: section?.id ?? '',
         tripId,
       }),
     onSuccess: async () => {

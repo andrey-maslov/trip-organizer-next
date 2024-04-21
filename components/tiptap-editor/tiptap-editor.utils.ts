@@ -15,5 +15,5 @@ export const throttleOnUpdate = throttle(
     // send the content to an API
     void callback({ _id: noteId, updatedAt: Date.now(), content: json })
   },
-  3000
+  2000
 )
