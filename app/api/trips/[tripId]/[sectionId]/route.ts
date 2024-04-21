@@ -13,10 +13,12 @@ export async function PUT(
   // Update Section with data
   try {
     // update only Note id of the whole section
-    const update =
-      typeof payload['noteId'] === 'string' || payload['noteId'] === null
-        ? { $set: { 'sections.$.note': payload.noteId } }
-        : { $set: { 'sections.$': payload } }
+    let update = {}
+    if (typeof payload['noteId'] === 'string' || payload['noteId'] === null) {
+      update = { $set: { 'sections.$.note': payload.noteId } }
+    } else if (payload._id) {
+      update = { $set: { 'sections.$': payload } }
+    }
 
     const response = await TripSchema.updateOne(
       {
