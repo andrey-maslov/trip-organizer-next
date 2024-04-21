@@ -14,8 +14,8 @@ export async function PUT(
   try {
     // update only Note id of the whole section
     const update =
-      typeof payload['createdNoteID'] === 'string'
-        ? { $set: { 'sections.$.note': payload.createdNoteID } }
+      typeof payload['noteId'] === 'string'
+        ? { $set: { 'sections.$.note': payload.noteId } }
         : { $set: { 'sections.$': payload } }
 
     const response = await TripSchema.updateOne(

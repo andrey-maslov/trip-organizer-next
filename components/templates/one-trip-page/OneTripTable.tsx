@@ -26,18 +26,18 @@ import { Section, SectionBE } from '@/types/models'
 import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
 import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
-import { DateTimeCell } from '@/components/templates/one-trip-page/cells/DateTimeCell'
 import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
-import { NotesCell } from '@/components/templates/one-trip-page/cells/NotesCell'
+import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
 import { toast } from 'react-toastify'
 import { CellElement } from '@react-types/table'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
-import { useQueryParams } from '@/hooks/useQueryParams'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateSection } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
+import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
+import { fakeStartPoint } from '@/constants/defaultEntities'
 
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
@@ -76,12 +76,7 @@ export const OneTripTable = ({
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
   // const [sortDescriptor, setSortDescriptor] =
   //   useState<SortDescriptor>(sortingDefault)
-  const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>(
-    sections.map((section) => ({ ...section, id: section._id ?? '' }))
-  )
-  // const [isNotesDrawerOpen, setNotesDrawerOpen] = useState(false)
-
-  const { searchObj } = useQueryParams()
+  const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -93,11 +88,11 @@ export const OneTripTable = ({
     )
   }, [visibleColumns])
 
-  // useEffect(() => {
-  //   if (searchObj.note) {
-  //     setNotesDrawerOpen(true)
-  //   }
-  // }, [searchObj.note])
+  useEffect(() => {
+    setSectionsToDisplay(
+      sections.map((section) => ({ ...section, id: section._id ?? '' }))
+    )
+  }, [sections])
 
   // Update Trip Section
   const { mutate: updateSectionMutation } = useMutation({
@@ -239,11 +234,11 @@ export const OneTripTable = ({
         </TableCell>
       )
     }
-    if (columnKey === 'dateTimeStart' || columnKey === 'dateTimeEnd') {
+    if (columnKey === 'startingPoint' || columnKey === 'endPoint') {
       return (
         <TableCell>
-          <DateTimeCell
-            dateTime={section.dateTimeStart}
+          <TripPointCell
+            data={section.startingPoint ?? fakeStartPoint}
             onUpdate={(newValue) =>
               onSaveTableCell(newValue, section.id, columnKey)
             }
@@ -276,7 +271,7 @@ export const OneTripTable = ({
     if (columnKey === 'note') {
       return (
         <TableCell>
-          <NotesCell noteId={section.note as string} sectionId={section.id} />
+          <NoteCell noteId={section.note as string} sectionId={section.id} />
         </TableCell>
       )
     }

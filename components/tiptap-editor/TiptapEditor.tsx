@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
-import { throttle } from 'lodash'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Link from '@tiptap/extension-link'
@@ -11,6 +10,7 @@ import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 
 // TODO https://tiptap.dev/docs/editor/examples/savvy
+// TODO activate task list ext https://tiptap.dev/docs/editor/api/nodes/task-list
 
 import type { Extensions } from '@tiptap/react'
 
@@ -19,13 +19,19 @@ import { Toolbar } from './Toolbar'
 import './tiptap.scss'
 import './content.scss'
 import { Note } from '@/types/models'
-import { updateNote, updateTrip } from '@/apiRequests/apiDB'
+import { updateNote } from '@/apiRequests/apiDB'
 import { Divider } from '@nextui-org/divider'
 import { useMutation } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import clsx from 'clsx'
+import { Button } from '@nextui-org/react'
+import {
+  getDocumentStatus,
+  throttleOnUpdate,
+} from '@/components/tiptap-editor/tiptap-editor.utils'
 
 type TiptapProps = {
-  note: Note
+  note: Note | null | undefined
+  deleteNote?: () => void
   editable?: boolean
   placeholder?: string
   withToolbar?: boolean
@@ -41,27 +47,10 @@ type TiptapProps = {
   withHexColorsDecorator?: boolean
 }
 
-const getDocumentStatus = (isSaved: boolean): string => {
-  if (!isSaved) {
-    return 'Saving...'
-  } else if (isSaved) {
-    return 'Saved'
-  }
-  return ''
-}
-
-const throttleOnUpdate = throttle(
-  (editor: any, noteId: string, callback: (data: any) => void) => {
-    const json = editor.getJSON()
-    // send the content to an API
-    void callback({ _id: noteId, updatedAt: new Date(), content: json })
-  },
-  3000
-)
-
 const TiptapEditor = ({
   note,
   editable = true,
+  deleteNote,
   // placeholder = "Type '/' for actions…",
   withToolbar = true,
   withTypographyExtension = false,
@@ -72,15 +61,19 @@ const TiptapEditor = ({
   const extensions: Extensions = [StarterKit]
 
   const [isSaved, setSaved] = useState(true)
+  const [isRecentlySaved, setRecentlySaved] = React.useState(false)
+  const [isError, setError] = React.useState(false)
 
   // Update Note
-  const { mutate: updateNoteMutation, isPending } = useMutation({
+  const { mutate: updateNoteMutation } = useMutation({
     mutationFn: (data: any) => updateNote(data),
     onSuccess: async () => {
       setSaved(true)
+      setError(false)
     },
     onError: (err) => {
       setSaved(false)
+      setError(true)
     },
   })
 
@@ -97,10 +90,6 @@ const TiptapEditor = ({
     )
   }
 
-  // if (withTaskListExtension) {
-  //   extensions.push(TaskList, TaskItem)
-  // }
-
   if (withPlaceholderExtension) {
     extensions.push(
       Placeholder.configure({
@@ -109,17 +98,43 @@ const TiptapEditor = ({
     )
   }
 
+  // if (withTaskListExtension) {
+  //   extensions.push(TaskList, TaskItem)
+  // }
+
   const editor = useEditor({
     content: note?.content,
     extensions,
     editable,
     autofocus: true,
     onUpdate: ({ editor }) => {
+      if (!note?._id) {
+        return
+      }
       // add callback
       setSaved(false)
       throttleOnUpdate(editor, note._id, updateNoteMutation)
     },
   })
+
+  useEffect(() => {
+    if (isError) {
+      return
+    }
+    setRecentlySaved(isSaved)
+  }, [isSaved, isError])
+
+  useEffect(() => {
+    if (!isRecentlySaved) {
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      setRecentlySaved(false)
+    }, 3000)
+
+    return () => clearTimeout(timeout)
+  }, [isRecentlySaved])
 
   if (!editor) {
     return null
@@ -127,8 +142,33 @@ const TiptapEditor = ({
 
   return (
     <>
-      <div className='mb-8 text-sm text-foreground-400'>
-        {getDocumentStatus(isSaved)}
+      <div className='flex items-center justify-between mb-2'>
+        {isError ? (
+          <div className='mb-2 text-sm text-red-500'>Saving error!</div>
+        ) : (
+          <div
+            className={clsx(
+              'text-sm text-foreground-400',
+              isRecentlySaved && isSaved ? 'text-green-600' : ''
+            )}
+          >
+            {getDocumentStatus(isSaved)}
+          </div>
+        )}
+        {typeof deleteNote !== 'undefined' && (
+          <Button
+            onClick={() => {
+              if (confirm('Do you really want to delete your note?')) {
+                deleteNote()
+              }
+            }}
+            size='sm'
+            color='danger'
+            variant='flat'
+          >
+            Delete note
+          </Button>
+        )}
       </div>
       <Divider />
       <div className='tiptap-editor-wrapper'>

@@ -7,9 +7,10 @@ import 'react-modern-drawer/dist/index.css'
 import dynamic from 'next/dynamic'
 import { Section } from '@/types/models'
 import { title, subtitle } from '@/components/primitives'
-import { useQuery } from '@tanstack/react-query'
-import { getOneNote, getOneTrip } from '@/apiRequests/apiDB'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { deleteOneNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 const DynamicTiptapEditor = dynamic(
   () => import('../../tiptap-editor/TiptapEditor'),
@@ -25,6 +26,7 @@ type NotesProps = {
 
 export const NotesDrawer: FC<NotesProps> = ({ section }) => {
   const { id: tripId } = useParams()
+  const queryClient = useQueryClient()
 
   const { removeQueryParams, searchObj } = useQueryParams()
 
@@ -32,7 +34,7 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
 
   useEffect(() => {
     setOpen(Boolean(searchObj.note))
-  }, [searchObj.note])
+  }, [searchObj, searchObj.note])
 
   // TODO check why the fetch is doubled
   const { data: trip } = useQuery({
@@ -48,7 +50,25 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
     enabled: Boolean(searchObj.note),
   })
 
-  if (!section || !note) {
+  // Delete Note
+  const { mutate: deleteNoteMutation, isPending } = useMutation({
+    mutationFn: () =>
+      deleteOneNote({
+        noteId: searchObj.note,
+        sectionId: section.id,
+        tripId,
+      }),
+    onSuccess: async () => {
+      toast.success('Note successfully deleted')
+      removeQueryParams()
+      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+    },
+    onError: (err) => {
+      toast.error("Note wasn't deleted")
+    },
+  })
+
+  if (!isOpen) {
     return null
   }
 
@@ -68,7 +88,10 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
         <h2 className={subtitle({ class: 'mb-2' })}>
           Section: {section?.name}
         </h2>
-        <DynamicTiptapEditor note={note} />
+        <DynamicTiptapEditor
+          deleteNote={() => deleteNoteMutation()}
+          note={note}
+        />
       </div>
     </Drawer>
   )

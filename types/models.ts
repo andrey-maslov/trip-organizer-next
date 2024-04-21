@@ -26,10 +26,10 @@ export type Section = {
   name: string
   status: Status
   type?: SectionType
-  dateTimeStart?: DateType
-  dateTimeEnd?: DateType
-  // startingPoint: Point
-  // endPoint: Point
+  dateTimeStart?: DateType // TODO Remove after the TripPoint implementation
+  dateTimeEnd?: DateType // TODO Remove after the TripPoint implementation
+  startingPoint?: TripPoint
+  endPoint?: TripPoint
   transportType?: TransportType
   placementType?: PlacementType
   serviceProvider?: {
@@ -49,14 +49,6 @@ export type SectionType = (typeof sectionTypes)[number]
 export type PlacementType = (typeof placementTypes)[number]
 export type CurrencyISOName = (typeof currencyISONames)[number]
 
-// TODO fix it keeping in mind geo coordinates etc
-export type Point = {
-  point: string
-  staringDate: string
-  startingTime: string
-  timeZone: any
-}
-
 export type Payment = {
   _id: string
   name?: string
@@ -71,6 +63,17 @@ export type CurrencyRates = {
   base: string
   date: string
   rates: Record<Exclude<CurrencyISOName, string>, number>
+}
+
+export type TripPoint = {
+  place?: {
+    name?: string
+    address?: string
+    coordinates?: string
+  }
+  date?: Date
+  time?: string
+  timezone?: string
 }
 
 export type AllCurrencyRates = Record<CurrencyISOName, CurrencyRates>

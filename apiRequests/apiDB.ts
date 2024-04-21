@@ -41,3 +41,14 @@ export const createNote = async (
 
 export const updateNote = async (data: Partial<Note>): Promise<Note> =>
   api.put(`notes/${data._id}`, { json: data }).json()
+
+export const deleteOneNote = async ({
+  noteId,
+  sectionId,
+  tripId,
+}: {
+  noteId: string
+  sectionId: string
+  tripId: string | string[]
+}): Promise<any> =>
+  api.delete('notes', { json: { noteId, sectionId, tripId } }).text()

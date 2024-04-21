@@ -2,11 +2,14 @@ import { ButtonEdit } from '@/components/ButtonEdit'
 import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnClickOutside'
 import { FiCheck } from 'react-icons/fi'
+import clsx from 'clsx'
 
 type NameCellProps = {
   name: string
   onUpdate: (value: string) => void
 }
+
+const placeholder = 'Enter section name'
 
 export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
   const [editMode, setEditMode] = useState(false)
@@ -21,7 +24,6 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
 
   const onSave = () => {
     setEditMode(false)
-    setNameInInput(name)
     onUpdate(nameInInput ?? '')
   }
 
@@ -29,8 +31,13 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
     <div className='flex items-center relative cell-editable min-w-[170px]'>
       {!editMode ? (
         <>
-          <div className='text-nowrap font-bold'>
-            {name ?? 'Enter section name'}
+          <div
+            className={clsx(
+              'text-nowrap',
+              name ? 'font-bold' : 'text-foreground-400'
+            )}
+          >
+            {name || placeholder}
           </div>
           <ButtonEdit onClick={() => setEditMode(true)} />
         </>

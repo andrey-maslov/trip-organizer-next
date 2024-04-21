@@ -7,12 +7,12 @@ import { useMutation } from '@tanstack/react-query'
 import { createNote } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
 
-type NotesCellProps = {
+type NoteCellProps = {
   noteId: string | undefined
   sectionId: string
 }
 
-export const NotesCell: FC<NotesCellProps> = ({ noteId, sectionId }) => {
+export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId }) => {
   const { setQueryParams } = useQueryParams()
   const { id: tripId } = useParams()
 

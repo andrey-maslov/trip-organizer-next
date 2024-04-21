@@ -1,4 +1,4 @@
-import { Note, Section, Trip } from '@/types/models'
+import { DateType, Note, Section, Trip, TripPoint } from '@/types/models'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
 
 export const defaultTrip: Partial<Trip> = {
@@ -18,3 +18,18 @@ export const defaultCoverImage =
 //   id: '',
 //   sectionId: '',
 // }
+
+export const fakeStartPoint: TripPoint = {
+  place: {
+    name: 'Wroclaw',
+    address: 'ul. Sucha 1, 50-086 Wrocław, Polska',
+    // coordinates: ''
+  },
+  date: new Date(
+    'Thu Apr 04 2024 18:45:39 GMT+0200 (Central European Summer Time)'
+  ), // YYYY-MM-DD
+  time: '19:05', // "HH:MM"
+  timezone: 'Europe/Warsaw',
+}
+
+export const fakeAddresses = [{ label: 'Address 1', value: 'address_1' }]

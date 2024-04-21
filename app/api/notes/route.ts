@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
     await ky
       .put(`http://localhost:3000/api/trips/${tripId}/${sectionId}`, {
-        json: { createdNoteID: newNote._id },
+        json: { noteId: newNote._id },
       })
       .json()
 
@@ -29,13 +29,20 @@ export async function DELETE(request: Request) {
   await connectMongo()
 
   try {
-    const payload = await request.json()
-    await NoteSchema.deleteOne({ _id: payload.id })
-    return new Response(`deleted`, {
+    const { tripId, sectionId, noteId } = await request.json()
+    // await NoteSchema.deleteOne({ _id: noteId })
+
+    await ky
+      .put(`http://localhost:3000/api/trips/${tripId}/${sectionId}`, {
+        json: { noteId: null },
+      })
+      .json()
+
+    return new Response(`Note deleted`, {
       status: 200,
     })
   } catch (e) {
-    return new Response(`Get all error`, {
+    return new Response(`Delete note error`, {
       status: 500,
     })
   }

@@ -8,10 +8,11 @@ const NoteSchema = new Schema<Note>({
     required: true,
   },
   content: { type: JSON, required: false },
-  createdAt: { type: Date, required: true, default: Date.now },
+  createdAt: { type: Date, required: false, default: Date.now },
   updatedAt: { type: Date, required: false, default: Date.now },
 })
 
-const NoteModel = models.NoteModel || model('NoteModel', NoteSchema, 'notes')
+const NoteModel =
+  models.NoteModel || model('NoteModel', NoteSchema, 'documentation.md')
 
 export default NoteModel
