@@ -196,7 +196,8 @@ export const OneTripTable = ({
   }
 
   const renderCell = (columnKey: Key, section: Section): CellElement => {
-    const cellValue = getKeyValue(section, columnKey)
+    // assertion is here because of types of the function 'getKeyValue'
+    const cellValue = getKeyValue(section, columnKey as string | number)
 
     if (columnKey === 'name') {
       return (
@@ -295,7 +296,11 @@ export const OneTripTable = ({
         </TableCell>
       )
     }
-    return <TableCell>{getKeyValue(section, columnKey)}</TableCell>
+    return (
+      <TableCell>
+        {getKeyValue(section, columnKey as string | number)}
+      </TableCell>
+    )
   }
 
   const topContent = useMemo(

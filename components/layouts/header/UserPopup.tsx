@@ -8,6 +8,7 @@ import { useEarthoOne } from '@eartho/one-client-react'
 export const UserPopup = () => {
   const { isConnected, user, connectWithPopup, logout } = useEarthoOne()
 
+  // TODO fix all callbacks
   const EARTHO_ACCESS_POINT = process.env.NEXT_PUBLIC_EARTHO_ACCESS_POINT ?? ''
 
   return (
@@ -21,7 +22,7 @@ export const UserPopup = () => {
             className='text-sm font-normal text-default-600 bg-default-100'
             startContent={<FiLogOut className='text-danger' />}
             variant='flat'
-            onClick={() => logout({ returnTo: window.location.origin })}
+            // onClick={() => logout({ returnTo: window.location.origin })}
           >
             Log Out
           </Button>
@@ -31,7 +32,7 @@ export const UserPopup = () => {
           className='text-sm font-normal text-default-600 bg-default-100'
           startContent={<FiLogIn className='text-yellow-600' />}
           variant='flat'
-          onClick={() => connectWithPopup({ access_id: EARTHO_ACCESS_POINT })}
+          // onClick={() => connectWithPopup({ access_id: EARTHO_ACCESS_POINT })}
         >
           Log In
         </Button>

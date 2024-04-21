@@ -29,6 +29,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
+## Dependencies update
+Hard update all deps ``yarn upgrade``
+!!! Eslint 9 and later is incompatible yet. Need to check everytime.
+To avoid upgrading Eslint - ``yarn upgrade eslint@8.57.0``
 
 ## TipTap editor
 - Example: [Codepen](https://codesandbox.io/p/sandbox/tiptap-0sqm3i?file=%2Fsrc%2Fcomponents%2FToolbar.tsx%3A45%2C1-48%2C7) 
