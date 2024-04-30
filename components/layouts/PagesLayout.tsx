@@ -4,6 +4,7 @@ import { Providers } from '@/app/providers'
 import { Navbar } from '@/components/layouts/header/Navbar'
 import { useEffect, useState } from 'react'
 import { Divider } from '@nextui-org/divider'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 type PagesLayoutProps = {
   children: React.ReactNode
@@ -23,7 +24,7 @@ export const PagesLayout = ({ children }: PagesLayoutProps) => {
           <div className='relative flex flex-col h-screen'>
             <Navbar />
             <main className='container mx-auto max-w-7xl pt-16 px-6 flex-grow'>
-              {children}
+              <ErrorBoundary>{children}</ErrorBoundary>
             </main>
             <Divider />
             <footer className='w-full flex items-center justify-center py-4'>
