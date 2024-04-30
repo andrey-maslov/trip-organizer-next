@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json()
     const newTrip: Trip = await TripSchema.create(data)
-    return Response.json({ id: newTrip._id })
+    return Response.json({ id: newTrip._id, slug: newTrip.slug })
   } catch (error: any) {
     return new Response(`error!!!: ${error?.message}`, {
       status: 500,

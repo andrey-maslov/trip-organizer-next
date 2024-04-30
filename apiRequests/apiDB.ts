@@ -14,7 +14,8 @@ export const getOneTrip = async (id: string): Promise<Trip> =>
 
 export const createTrip = async (
   data: Partial<Trip>
-): Promise<{ id: string }> => api.post('trips', { json: data }).json()
+): Promise<{ id: string; slug: string }> =>
+  api.post('trips', { json: data }).json()
 
 export const deleteOneTrip = async (id: string): Promise<any> =>
   api.delete(`trips`, { json: { id } }).text()

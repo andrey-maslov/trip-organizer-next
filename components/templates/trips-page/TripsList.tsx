@@ -33,7 +33,7 @@ export default function TripsList() {
             shadow='sm'
             key={trip._id}
             isPressable
-            onPress={() => router.push(`/trips/${trip._id}`)}
+            onPress={() => router.push(`/trips/${trip.slug || trip._id}`)}
           >
             <CardBody className='overflow-visible p-0'>
               <Image

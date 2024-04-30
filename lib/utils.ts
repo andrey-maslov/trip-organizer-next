@@ -140,3 +140,13 @@ export const safelyStringifyJSON = <T>(data: T): string => {
     return '{}'
   }
 }
+
+export const isEmptyObject = (object: unknown) => {
+  if (!object) {
+    return true
+  }
+  for (const property in object) {
+    return false
+  }
+  return true
+}

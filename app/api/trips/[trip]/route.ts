@@ -1,16 +1,24 @@
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
+import { isValidObjectId, Types } from 'mongoose'
 
 export async function GET(
   request: Request,
-  { params }: { params: { tripId: string } }
+  { params }: { params: { trip: string } }
 ) {
-  const { tripId } = params
+  const { trip: slug } = params
   await connectMongo()
 
   // Get one trip
   try {
-    const trip = await TripSchema.findById(tripId).lean()
+    const trip = await TripSchema.findOne({
+      $or: [
+        {
+          _id: isValidObjectId(slug) ? new Types.ObjectId(slug) : undefined,
+        },
+        { slug },
+      ],
+    }).lean()
     return Response.json({ ...trip })
   } catch (e) {
     return new Response(`Get all error`, {

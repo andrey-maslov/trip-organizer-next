@@ -19,11 +19,14 @@ import { format } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
 import { ButtonEdit } from '@/components/ButtonEdit'
 import { searchPictures } from '@/apiRequests/apiExternal'
+import { isEmptyObject } from '@/lib/utils'
 
 export const CreateNewTrip = () => {
   const router = useRouter()
 
   const [name, setName] = useState('')
+  const [slug, setSlug] = useState('')
+  const [slugChanged, setSlugChanged] = useState(false)
   const [description, setDescription] = useState('')
   const [selectedDateStart, setSelectedDateStart] = useState<Date | undefined>()
   const [selectedDateEnd, setSelectedDateEnd] = useState<Date | undefined>()
@@ -43,8 +46,8 @@ export const CreateNewTrip = () => {
   const { mutate: createTripMutation, isPending } = useMutation({
     mutationFn: createTrip,
     onSuccess: (res) => {
-      if (res.id) {
-        router.push(`/trips/${res.id}`)
+      if (!isEmptyObject(res)) {
+        router.push(`/trips/${res.slug || res.id}`)
       }
     },
   })
@@ -53,6 +56,7 @@ export const CreateNewTrip = () => {
     createTripMutation({
       ...defaultTrip,
       name,
+      slug,
       description,
       cover,
       dateTimeStart: selectedDateStart,
@@ -125,14 +129,48 @@ export const CreateNewTrip = () => {
             {selectedDateEnd ? `to ${format(selectedDateEnd, 'PP')}` : ''}
           </h2>
           <div className='mb-8'>
-            <Input
-              type='text'
-              placeholder='Enter name of your trip here'
-              labelPlacement='outside'
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              className='mb-8'
-            />
+            <div className='flex gap-4'>
+              <div className='w-full'>
+                <Input
+                  label='Name'
+                  type='text'
+                  placeholder='Enter name of your trip here'
+                  labelPlacement='outside'
+                  value={name}
+                  onChange={(event) => {
+                    // TODO improve - sanitize
+                    setName(event.target.value)
+                    if (!slugChanged) {
+                      setSlug(
+                        event.target.value
+                          .replaceAll(/ +|\./gi, '-')
+                          .toLowerCase()
+                          .trim()
+                      )
+                    }
+                  }}
+                  className='mb-4'
+                />
+              </div>
+              <div className='w-full'>
+                <Input
+                  label='Slug'
+                  type='text'
+                  labelPlacement='outside'
+                  value={slug}
+                  onChange={(event) => {
+                    if (!slugChanged) {
+                      setSlugChanged(true)
+                    }
+                    // TODO improve - sanitize, use slugify or create the same ???
+                    setSlug(
+                      event.target.value.replaceAll(/ /gi, '-').toLowerCase()
+                    )
+                  }}
+                  className='mb-4'
+                />
+              </div>
+            </div>
             <Textarea
               label='Description'
               placeholder='Enter your description'
