@@ -45,7 +45,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
   }
 
   return (
-    <div className='flex items-center cell-editable relative'>
+    <div className='flex items-center editable-elemenet relative'>
       <div className='mr-3 text-2xl text-foreground-400'>
         {typeIcons[serviceProvider?.type ?? 'unknown']}
       </div>

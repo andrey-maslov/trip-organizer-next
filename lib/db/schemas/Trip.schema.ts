@@ -4,7 +4,7 @@ import { Trip } from '@/types/models'
 
 const TripSchema = new Schema<Trip>({
   name: { type: String, required: true },
-  slug: { type: String, required: true },
+  slug: { type: String, required: true, unique: true },
   dateTimeStart: { type: Date, required: false },
   dateTimeEnd: { type: Date, required: false },
   description: { type: String, required: false },

@@ -16,6 +16,10 @@
   }
 }
 
+[contenteditable] {
+  outline: 0 solid transparent;
+}
+
 /*body {*/
 /*  color: rgb(var(--foreground-rgb));*/
 /*  background: linear-gradient(*/
@@ -39,7 +43,7 @@
     /*}*/
 }
 
-.cell-editable {
+.editable-elemenet {
   @apply relative;
 
   .btn-edit {

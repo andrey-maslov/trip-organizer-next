@@ -20,6 +20,7 @@ import { DayPicker } from 'react-day-picker'
 import { ButtonEdit } from '@/components/ButtonEdit'
 import { searchPictures } from '@/apiRequests/apiExternal'
 import { isEmptyObject } from '@/lib/utils'
+import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 
 export const CreateNewTrip = () => {
   const router = useRouter()
@@ -31,16 +32,6 @@ export const CreateNewTrip = () => {
   const [selectedDateStart, setSelectedDateStart] = useState<Date | undefined>()
   const [selectedDateEnd, setSelectedDateEnd] = useState<Date | undefined>()
   const [cover, setCover] = useState('')
-
-  const [picsListOpen, setPicsListOpen] = useState(false)
-
-  const canFetchPics = picsListOpen && name.length >= 5
-
-  const { data: pictures, isLoading: picturesLoading } = useQuery({
-    queryKey: ['pictures', name],
-    queryFn: () => searchPictures(name),
-    enabled: canFetchPics,
-  })
 
   // Create New Trip
   const { mutate: createTripMutation, isPending } = useMutation({
@@ -67,56 +58,12 @@ export const CreateNewTrip = () => {
   return (
     <div className='max-w-[800px] m-auto'>
       <div className='flex gap-8'>
-        <div className='w-[200px] h-[200px] relative cell-editable'>
-          <Image
-            width={200}
-            height={200}
-            alt='Trip cover'
-            src={cover}
-            fallbackSrc={defaultCoverImage}
+        <div className='w-[200px] h-[200px]'>
+          <TripCoverEditable
+            coverSrc={cover}
+            setCoverSrc={setCover}
+            tripName={name}
           />
-          {name.length >= 5 && (
-            <ButtonEdit onClick={() => setPicsListOpen(true)} />
-          )}
-
-          <Modal
-            backdrop='opaque'
-            size='3xl'
-            isOpen={picsListOpen}
-            onOpenChange={setPicsListOpen}
-          >
-            <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader className='flex flex-col gap-1'>
-                    Choose you cover image
-                  </ModalHeader>
-                  <ModalBody>
-                    {picturesLoading ? (
-                      <div>loading...</div>
-                    ) : (
-                      <div className='grid grid-cols-4 gap-4'>
-                        {pictures?.results.map((picture) => (
-                          <Image
-                            className='cursor-pointer'
-                            key={picture.id}
-                            width={300}
-                            height={300}
-                            alt='Trip cover'
-                            src={picture.urls.small}
-                            onClick={() => {
-                              setCover(picture.urls.small)
-                              onClose()
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </ModalBody>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
         </div>
 
         <div className='flex-grow'>

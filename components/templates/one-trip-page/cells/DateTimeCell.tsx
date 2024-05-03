@@ -22,7 +22,7 @@ export const DateTimeCell: React.FC<DateTimeCellProps> = ({
   }
 
   return (
-    <div className='flex items-center relative cell-editable'>
+    <div className='flex items-center relative editable-elemenet'>
       <div className='flex flex-col'>
         <p className='text-bold text-small capitalize'>
           {getFormattedDate(dateTime)}

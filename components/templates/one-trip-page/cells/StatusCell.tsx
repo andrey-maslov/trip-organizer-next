@@ -24,7 +24,7 @@ export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => {
   })
 
   return (
-    <div className='flex items-center relative cell-editable max-h-[43px]'>
+    <div className='flex items-center relative editable-elemenet max-h-[43px]'>
       {!editMode ? (
         <>
           <Chip

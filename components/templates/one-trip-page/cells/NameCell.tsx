@@ -1,9 +1,5 @@
-import { ButtonEdit } from '@/components/ButtonEdit'
-import React, { useRef, useState } from 'react'
-import { useOnClickOutside } from '@/hooks/useOnClickOutside'
-import { FiCheck } from 'react-icons/fi'
 import clsx from 'clsx'
-import { Input } from '@nextui-org/react'
+import { Editable } from '@/components/Editable'
 
 type NameCellProps = {
   name: string
@@ -12,49 +8,12 @@ type NameCellProps = {
 
 const placeholder = 'Enter section name'
 
-export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => {
-  const [editMode, setEditMode] = useState(false)
-  const [nameInInput, setNameInInput] = useState<string>(name)
-
-  const ref = useRef(null)
-
-  useOnClickOutside(ref, () => {
-    setEditMode(false)
-    setNameInInput(name)
-  })
-
-  const onSave = () => {
-    setEditMode(false)
-    onUpdate(nameInInput ?? '')
-  }
-
-  return (
-    <div className='flex items-center relative cell-editable min-w-[170px]'>
-      {!editMode ? (
-        <>
-          <div
-            className={clsx('text-nowrap', name ? '' : 'text-foreground-400')}
-          >
-            {name || placeholder}
-          </div>
-          <ButtonEdit onClick={() => setEditMode(true)} />
-        </>
-      ) : (
-        <div className='flex items-center' ref={ref}>
-          <Input
-            type='text'
-            className='block w-full'
-            value={nameInInput ?? ''}
-            onChange={(event) => setNameInInput(event.target.value)}
-          />
-          <button
-            className='bg-transparent border-0 text-green-600 font-bold'
-            onClick={() => onSave()}
-          >
-            <FiCheck />
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
+export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => (
+  <div className='flex items-center relative editable-elemenet min-w-[170px]'>
+    <Editable
+      content={name || placeholder}
+      className={clsx('text-nowrap', name ? '' : 'text-foreground-400')}
+      setContent={onUpdate}
+    />
+  </div>
+)

@@ -67,7 +67,7 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
       hours,
       minutes
     )
-    console.log(date.getTimezoneOffset())
+    // console.log(date.getTimezoneOffset())
     setSelectedDate(newDate)
     setCalendarOpened(false)
   }
@@ -88,7 +88,12 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
         {data?.date ? format(data?.date, 'PP') : '-'} {data?.time}
       </Button>
 
-      <Modal backdrop='opaque' size='md' isOpen={isOpen}>
+      <Modal
+        backdrop='opaque'
+        size='md'
+        isOpen={isOpen}
+        onOpenChange={() => setOpen(false)}
+      >
         <ModalContent>
           {(onClose) => (
             <>
