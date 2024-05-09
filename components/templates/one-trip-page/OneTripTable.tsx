@@ -420,7 +420,6 @@ export const OneTripTable = ({
             <TableColumn
               key={column.uid}
               align={column.uid === 'actions' ? 'center' : 'start'}
-              allowsSorting={column.sortable}
             >
               {column.name}
             </TableColumn>

@@ -1,17 +1,23 @@
 import { ChipProps } from '@nextui-org/react'
 import { Status } from '@/types/models'
 
-export const columns = [
-  { name: 'Name', uid: 'name', sortable: true },
-  { name: 'Status', uid: 'status', sortable: true },
-  { name: 'Provider', uid: 'serviceProvider', sortable: true },
+export type Column = {
+  name: string
+  uid: string
+  width?: number
+}
+
+export const columns: Column[] = [
+  { name: 'Name', uid: 'name', width: 150 },
+  { name: 'Status', uid: 'status', width: 100 },
+  { name: 'Provider', uid: 'serviceProvider', width: 100 },
   // { name: 'Placement', uid: 'placementType', sortable: true },
-  { name: 'Start', uid: 'startingPoint' },
-  { name: 'End', uid: 'endPoint' },
-  { name: 'Duration', uid: 'duration' },
-  { name: 'Price', uid: 'price' },
-  { name: 'Notes', uid: 'note' },
-  { name: 'Actions', uid: 'actions' },
+  { name: 'Start', uid: 'startingPoint', width: 130 },
+  { name: 'End', uid: 'endPoint', width: 130 },
+  { name: 'Duration', uid: 'duration', width: 100 },
+  { name: 'Price', uid: 'price', width: 100 },
+  { name: 'Notes', uid: 'note', width: 100 },
+  { name: 'Actions', uid: 'actions', width: 60 },
 ]
 
 export const INITIAL_VISIBLE_COLUMNS = [
@@ -43,3 +49,19 @@ export const statusOptionsMap: Record<Status, string> = {
   in_progress: 'In progress',
   passed: 'Passed',
 }
+
+export const statusOptions = Object.entries(statusOptionsMap).map(
+  ([uid, name]) => ({
+    uid,
+    name,
+  })
+)
+
+// Section fields thad may be updated directly as one field has one string value
+export const simpleTableCells = [
+  'name',
+  'status',
+  'dateTimeStart',
+  'dateTimeEnd',
+  'serviceProvider',
+]
