@@ -25,12 +25,12 @@ export const Editable = ({
       }
 
       if (evt.currentTarget.innerHTML !== content) {
-        console.log()
-        setText(sanitizeHtml(evt.currentTarget.innerHTML, sanitizeConf))
-        setContent(text ?? '')
+        const newValue = sanitizeHtml(evt.currentTarget.innerHTML, sanitizeConf)
+        setText(newValue)
+        setContent(newValue)
       }
     },
-    [content, setContent, text]
+    [content, setContent]
   )
 
   return createElement(tag, {

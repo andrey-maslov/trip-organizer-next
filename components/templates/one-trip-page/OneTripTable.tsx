@@ -39,6 +39,8 @@ import { useParams } from 'next/navigation'
 import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
 import { fakeStartPoint } from '@/constants/defaultEntities'
 
+// TODO DEPRECATED
+
 const statusOptions = Object.entries(statusOptionsMap).map(([uid, name]) => ({
   uid,
   name,

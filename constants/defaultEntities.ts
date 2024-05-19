@@ -12,7 +12,7 @@ export const defaultSection: Omit<Section, 'id' | '_id' | 'note'> = {
 }
 
 export const defaultCoverImage =
-  'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400'
+  'https://images.unsplash.com/photo-1541665728259-94dc0f5964d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzY5NzB8MHwxfHNlYXJjaHw1fHxqb3VybmV5JTIwM3xlbnwwfHx8fDE3MTYxMzYwNzh8MA&ixlib=rb-4.0.3&q=80&w=400'
 
 // export const defaultNote: Note = {
 //   id: '',

@@ -3,7 +3,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteOneTrip, getOneTrip, updateTrip } from '@/apiRequests/apiDB'
 import { useParams, useRouter } from 'next/navigation'
-import { OneTripTable } from '@/components/templates/one-trip-page/OneTripTable'
 import { Divider } from '@nextui-org/react'
 import { Button } from '@nextui-org/button'
 import { format } from 'date-fns'

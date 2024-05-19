@@ -1,7 +1,7 @@
-import { Link } from '@nextui-org/link'
 import { button as buttonStyles } from '@nextui-org/theme'
 import { mainSubtitle } from '@/config/site'
 import { title, subtitle } from '@/components/primitives'
+import NextLink from 'next/link'
 
 export default function Home() {
   return (
@@ -19,7 +19,7 @@ export default function Home() {
       </div>
 
       <div className='flex gap-3'>
-        <Link
+        <NextLink
           href={'/trips'}
           className={buttonStyles({
             color: 'primary',
@@ -28,7 +28,7 @@ export default function Home() {
           })}
         >
           Start organizing
-        </Link>
+        </NextLink>
       </div>
     </section>
   )
