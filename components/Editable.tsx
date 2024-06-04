@@ -38,6 +38,6 @@ export const Editable = ({
     contentEditable: true,
     onBlur: onContentBlur,
     dangerouslySetInnerHTML: { __html: text },
-    tabIndex: -1,
+    tabIndex: 0,
   })
 }

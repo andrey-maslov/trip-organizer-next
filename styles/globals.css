@@ -20,6 +20,10 @@
   outline: 0 solid transparent;
 }
 
+:focus-visible {
+  outline: hsl(var(--nextui-focus) / var(--nextui-focus-opacity, 1)) solid 2px;
+}
+
 /*body {*/
 /*  color: rgb(var(--foreground-rgb));*/
 /*  background: linear-gradient(*/

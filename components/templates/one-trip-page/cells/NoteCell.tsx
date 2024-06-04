@@ -36,7 +36,7 @@ export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId, onClick }) => {
     }
   }
   return (
-    <div className='flex items-center relative max-w-[140px] overflow-hidden'>
+    <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
       <Button
         color='default'
         size='sm'
