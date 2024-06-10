@@ -1,24 +1,14 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { createTrip } from '@/apiRequests/apiDB'
-import { defaultCoverImage, defaultTrip } from '@/constants/defaultEntities'
-import {
-  Input,
-  Textarea,
-  Image,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-} from '@nextui-org/react'
+import { defaultTrip } from '@/constants/defaultEntities'
+import { Input, Textarea } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/button'
 import { format } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
-import { ButtonEdit } from '@/components/ButtonEdit'
-import { searchPictures } from '@/apiRequests/apiExternal'
 import { isEmptyObject } from '@/lib/utils'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 
@@ -130,7 +120,6 @@ export const CreateNewTrip = () => {
       </div>
       <div className='flex justify-center gap-4 mb-8'>
         <div>
-          {/*<h3 className='font-bold text-lg mb-8'>Date Start</h3>*/}
           <DayPicker
             mode='single'
             selected={selectedDateStart}
@@ -144,7 +133,6 @@ export const CreateNewTrip = () => {
           />
         </div>
         <div>
-          {/*<h3 className='font-bold text-xl mb-8'>Date End</h3>*/}
           <DayPicker
             mode='single'
             selected={selectedDateEnd}

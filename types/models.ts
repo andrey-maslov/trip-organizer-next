@@ -37,7 +37,7 @@ export type Section = {
     name?: string
     url?: string
   }
-  payments?: Payment[]
+  payments?: Payment[] // TODO replace 'price' and 'payment' to one name: Expense/expenses
   note?: Types.ObjectId | string
 }
 

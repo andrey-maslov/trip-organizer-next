@@ -255,9 +255,7 @@ export const OneTripTable = ({
         <TableCell>
           <PriceCell
             data={section.payments}
-            onEditClick={() =>
-              onSaveTableCell('newValue', section.id, columnKey)
-            }
+            onSave={() => onSaveTableCell('newValue', section.id, columnKey)}
           />
         </TableCell>
       )
