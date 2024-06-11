@@ -8,6 +8,7 @@ export type Column = {
 }
 
 export const columns: Column[] = [
+  { name: 'Type', uid: 'type', width: 40 },
   { name: 'Name', uid: 'name', width: 150 },
   { name: 'Status', uid: 'status', width: 100 },
   { name: 'Provider', uid: 'serviceProvider', width: 100 },
@@ -15,7 +16,7 @@ export const columns: Column[] = [
   { name: 'Start', uid: 'startingPoint', width: 130 },
   { name: 'End', uid: 'endPoint', width: 130 },
   { name: 'Duration', uid: 'duration', width: 100 },
-  { name: 'Price', uid: 'price', width: 100 },
+  { name: 'Payments', uid: 'payments', width: 100 },
   { name: 'Notes', uid: 'note', width: 100 },
   { name: 'Actions', uid: 'actions', width: 60 },
 ]
@@ -27,7 +28,7 @@ export const INITIAL_VISIBLE_COLUMNS = [
   'startingPoint',
   // 'endPoint',
   'duration',
-  'price',
+  'payments',
   'note',
   'actions',
 ]
@@ -64,4 +65,5 @@ export const simpleTableCells = [
   'dateTimeStart',
   'dateTimeEnd',
   'serviceProvider',
+  'payments',
 ]

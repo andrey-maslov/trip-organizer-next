@@ -1,6 +1,4 @@
 import React, { ReactNode, useState } from 'react'
-import { FaBus, FaCarSide, FaHotel, FaQuestion, FaTrain } from 'react-icons/fa'
-import { ImAirplane } from 'react-icons/im'
 import { Section } from '@/types/models'
 import {
   Button,
@@ -13,17 +11,6 @@ import {
 } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
 import { serviceProviderTypes } from '@/constants/constants'
-
-const typeIcons: Record<string, ReactNode> = {
-  bus: <FaBus />,
-  flight: <ImAirplane />,
-  aircraft: <ImAirplane />,
-  train: <FaTrain />,
-  car: <FaCarSide />,
-  hotel: <FaHotel />,
-  flat: <FaHotel />,
-  unknown: <FaQuestion />,
-}
 
 type Props = {
   serviceProvider: Section['serviceProvider']
@@ -46,11 +33,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
 
   return (
     <div className='flex items-center editable-elemenet relative'>
-      <div className='mr-3 text-2xl text-foreground-400'>
-        {typeIcons[serviceProvider?.type ?? 'unknown']}
-      </div>
       <div>
-        {/*<div>{serviceProvider?.type}</div>*/}
         {serviceProvider?.url ? (
           <a
             href={serviceProvider.url}
@@ -64,13 +47,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
           <div>{serviceProvider?.name ?? '-'}</div>
         )}
       </div>
-      <Popover
-        placement='right'
-        isOpen={editMode}
-        showArrow
-        // shouldCloseOnInteractOutside={(e) => setEditMode(false)}
-      >
-        {/*<ButtonEdit onClick={() => setEditMode(true)} />*/}
+      <Popover placement='right' isOpen={editMode} showArrow>
         <PopoverTrigger>
           <Button
             isIconOnly
@@ -86,7 +63,6 @@ export const ServiceProviderCell: React.FC<Props> = ({
         </PopoverTrigger>
         <PopoverContent>
           <div className='px-1 py-2'>
-            {/* type - select */}
             <Select
               label='Select type'
               className='max-w-xs min-w-[100px] mb-1'
@@ -95,9 +71,6 @@ export const ServiceProviderCell: React.FC<Props> = ({
                 setData((data) => ({ ...data, type: event.target.value }))
               }}
               selectedKeys={[data?.type ?? '']}
-              // classNames={{
-              //   trigger: 'h-4 min-h-unit-6',
-              // }}
             >
               {serviceProviderTypes.map((type) => (
                 <SelectItem key={type} textValue={type}>

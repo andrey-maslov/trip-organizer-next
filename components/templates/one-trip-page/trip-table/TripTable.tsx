@@ -32,6 +32,7 @@ import {
   simpleTableCells,
   statusOptions,
 } from '@/components/templates/one-trip-page/trip-table.config'
+import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
 
 interface OneTripTableProps {
   sections: SectionBE[]
@@ -198,6 +199,22 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
   const renderCell = (columnKey: Key, section: Section): CellElement => {
     // assertion is here because of types of the function 'getKeyValue'
     const cellValue = getKeyValue(section, columnKey as string | number)
+    if (columnKey === 'type') {
+      return (
+        <TypeCell
+          type={
+            section.serviceProvider?.type ??
+            section.transportType ??
+            section.placementType ??
+            section.type ??
+            ''
+          }
+          onUpdate={(newValue) =>
+            onSaveTableCell(newValue, section.id, columnKey)
+          }
+        />
+      )
+    }
     if (columnKey === 'name') {
       return (
         <NameCell
@@ -238,7 +255,7 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
         />
       )
     }
-    if (columnKey === 'price') {
+    if (columnKey === 'payments') {
       return (
         <PriceCell
           data={section.payments}

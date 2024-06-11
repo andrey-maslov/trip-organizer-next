@@ -250,7 +250,7 @@ export const OneTripTable = ({
         </TableCell>
       )
     }
-    if (columnKey === 'price') {
+    if (columnKey === 'payments') {
       return (
         <TableCell>
           <PriceCell

@@ -9,7 +9,7 @@ type NameCellProps = {
 const placeholder = 'Enter section name'
 
 export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => (
-  <div className='flex items-center relative editable-elemenet min-w-[170px]'>
+  <div className='flex items-center relative editable-elemenet min-w-[170px] font-bold'>
     <Editable
       content={name || placeholder}
       className={clsx('text-nowrap', name ? '' : 'text-foreground-400')}
