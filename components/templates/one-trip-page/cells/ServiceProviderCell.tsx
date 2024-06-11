@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 import { Section } from '@/types/models'
 import {
   Button,
@@ -6,11 +6,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Select,
-  SelectItem,
 } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
-import { serviceProviderTypes } from '@/constants/constants'
 
 type Props = {
   serviceProvider: Section['serviceProvider']
@@ -63,21 +60,6 @@ export const ServiceProviderCell: React.FC<Props> = ({
         </PopoverTrigger>
         <PopoverContent>
           <div className='px-1 py-2'>
-            <Select
-              label='Select type'
-              className='max-w-xs min-w-[100px] mb-1'
-              size='sm'
-              onChange={(event) => {
-                setData((data) => ({ ...data, type: event.target.value }))
-              }}
-              selectedKeys={[data?.type ?? '']}
-            >
-              {serviceProviderTypes.map((type) => (
-                <SelectItem key={type} textValue={type}>
-                  <span className='text-xs'>{type}</span>
-                </SelectItem>
-              ))}
-            </Select>
             <Input
               size='sm'
               placeholder='Provider name'
