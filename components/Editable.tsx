@@ -26,6 +26,7 @@ export const Editable = ({
 
       if (evt.currentTarget.innerHTML !== content) {
         const newValue = sanitizeHtml(evt.currentTarget.innerHTML, sanitizeConf)
+
         setText(newValue)
         setContent(newValue)
       }

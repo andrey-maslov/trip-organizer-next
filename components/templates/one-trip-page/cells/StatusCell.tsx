@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react'
+
 import {
   statusColorMap,
   statusOptionsMap,
@@ -36,15 +37,15 @@ export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => (
         </Button>
       </DropdownTrigger>
       <DropdownMenu
-        onAction={(value) => onUpdate(value as string)}
-        selectedKeys={['bought']}
         aria-label='Dynamic Actions'
         items={items}
+        selectedKeys={['bought']}
+        onAction={(value) => onUpdate(value as string)}
       >
         {(item) => (
           <DropdownItem
-            className='outline-0'
             key={item.key}
+            className='outline-0'
             color={statusColorMap[item.key]}
             variant='flat'
           >

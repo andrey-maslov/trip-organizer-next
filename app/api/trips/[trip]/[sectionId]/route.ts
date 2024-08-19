@@ -1,6 +1,7 @@
+import { isValidObjectId, Types } from 'mongoose'
+
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
-import { isValidObjectId, Types } from 'mongoose'
 
 // Update One Section
 export async function PUT(
@@ -16,12 +17,14 @@ export async function PUT(
 ) {
   const payload = await request.json()
   const { trip, sectionId } = params
+
   await connectMongo()
 
   // Update Section with data
   try {
     // update only Note id of the whole section
     let update = {}
+
     if (typeof payload['noteId'] === 'string' || payload['noteId'] === null) {
       update = { $set: { 'sections.$.note': payload.noteId } }
     } else if (payload._id) {
@@ -41,14 +44,14 @@ export async function PUT(
     ).lean()
 
     if (response.modifiedCount === 0) {
-      return new Response(`Update trip error: no matched section !!`, {
+      return new Response('Update trip error: no matched section !!', {
         status: 404,
       })
     }
 
     return Response.json(response)
   } catch (e) {
-    return new Response(`Update trip error`, {
+    return new Response('Update trip error', {
       // TODO add 500 and 404 separation
       status: 500,
     })

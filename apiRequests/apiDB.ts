@@ -1,5 +1,6 @@
-import { Note, Section, Trip } from '@/types/models'
 import ky from 'ky'
+
+import { Note, Section, Trip } from '@/types/models'
 
 const api = ky.create({
   prefixUrl: '/api',
@@ -18,7 +19,7 @@ export const createTrip = async (
   api.post('trips', { json: data }).json()
 
 export const deleteOneTrip = async (id: string): Promise<any> =>
-  api.delete(`trips`, { json: { id } }).text()
+  api.delete('trips', { json: { id } }).text()
 
 export const updateTrip = async (
   data: Partial<Trip>

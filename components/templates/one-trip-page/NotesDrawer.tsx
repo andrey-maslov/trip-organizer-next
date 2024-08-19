@@ -2,15 +2,18 @@
 
 import { FC, useEffect, useState } from 'react'
 import Drawer from 'react-modern-drawer'
-import { useQueryParams } from '@/hooks/useQueryParams'
-import 'react-modern-drawer/dist/index.css'
-import dynamic from 'next/dynamic'
-import { Section } from '@/types/models'
-import { title, subtitle } from '@/components/primitives'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { deleteOneNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+import { useQueryParams } from '@/hooks/useQueryParams'
+
+import 'react-modern-drawer/dist/index.css'
+import dynamic from 'next/dynamic'
+
+import { Section } from '@/types/models'
+import { title, subtitle } from '@/components/primitives'
+import { deleteOneNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
 
 const DynamicTiptapEditor = dynamic(
   () => import('../../tiptap-editor/TiptapEditor'),
@@ -74,14 +77,14 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
 
   return (
     <Drawer
+      className='notes-drawer'
+      direction='right'
       open={isOpen}
+      size={'40vw'}
       onClose={() => {
         setOpen(false)
         removeQueryParams()
       }}
-      direction='right'
-      className='notes-drawer'
-      size={'40vw'}
     >
       <div className='bg-background p-20'>
         <h1 className={title({ class: 'mb-10' })}>{trip?.name}</h1>

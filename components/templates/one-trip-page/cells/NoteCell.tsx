@@ -1,9 +1,10 @@
 import { FC } from 'react'
 import { Button } from '@nextui-org/button'
-import { useQueryParams } from '@/hooks/useQueryParams'
 import { useMutation } from '@tanstack/react-query'
-import { createNote } from '@/apiRequests/apiDB'
 import { useParams } from 'next/navigation'
+
+import { useQueryParams } from '@/hooks/useQueryParams'
+import { createNote } from '@/apiRequests/apiDB'
 
 type NoteCellProps = {
   noteId: string | undefined
@@ -35,14 +36,15 @@ export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId, onClick }) => {
       })
     }
   }
+
   return (
     <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
       <Button
         color='default'
+        isLoading={isPending}
         size='sm'
         variant='light'
         onClick={() => setCurrentNote()}
-        isLoading={isPending}
       >
         {noteId ? 'Note' : 'Add note'}
       </Button>

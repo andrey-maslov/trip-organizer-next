@@ -1,5 +1,6 @@
-import { UnsplashApiResponse } from '@/types/models'
 import ky from 'ky'
+
+import { UnsplashApiResponse } from '@/types/models'
 
 const unsplashUrl = 'https://api.unsplash.com/search/photos'
 const unsplashKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY

@@ -1,4 +1,4 @@
-import { DateType, Note, Section, Trip, TripPoint } from '@/types/models'
+import { Section, Trip, TripPoint } from '@/types/models'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
 
 export const defaultTrip: Partial<Trip> = {

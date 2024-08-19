@@ -2,9 +2,10 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
-import { getAllTrips } from '@/apiRequests/apiDB'
 import { FiPlus } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
+
+import { getAllTrips } from '@/apiRequests/apiDB'
 import { defaultCoverImage } from '@/constants/defaultEntities'
 
 export default function TripsList() {
@@ -30,20 +31,20 @@ export default function TripsList() {
       <div className='gap-2 grid grid-cols-2 sm:grid-cols-4'>
         {trips?.trips.map((trip) => (
           <Card
-            shadow='sm'
             key={trip._id}
             isPressable
+            shadow='sm'
             onPress={() => router.push(`/trips/${trip.slug || trip._id}`)}
           >
             <CardBody className='overflow-visible p-0'>
               <Image
-                shadow='sm'
-                radius='lg'
-                width='100%'
                 alt={trip.name}
                 className='w-full object-cover h-[240px]'
-                src={trip.cover ?? undefined}
                 fallbackSrc={defaultCoverImage}
+                radius='lg'
+                shadow='sm'
+                src={trip.cover ?? undefined}
+                width='100%'
               />
             </CardBody>
             <CardFooter className='text-small justify-between'>
@@ -53,9 +54,9 @@ export default function TripsList() {
           </Card>
         ))}
         <Card
-          shadow='sm'
           key='new'
           isPressable
+          shadow='sm'
           onPress={() => router.push('/trips/new-trip')}
         >
           <CardBody className='overflow-visible p-20 flex flex-col justify-center items-center'>

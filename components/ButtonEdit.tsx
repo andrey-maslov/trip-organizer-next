@@ -8,12 +8,12 @@ type ButtonEditProps = {
 export const ButtonEdit = ({ onClick }: ButtonEditProps) => (
   <Button
     isIconOnly
-    size='sm'
-    color='warning'
-    variant='faded'
     aria-label='edit'
-    onClick={onClick}
     className='btn-edit'
+    color='warning'
+    size='sm'
+    variant='faded'
+    onClick={onClick}
   >
     <FiEdit2 />
   </Button>

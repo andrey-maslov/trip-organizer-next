@@ -1,7 +1,7 @@
 export const THEME = {
-  Table: ``,
-  Header: ``,
-  Body: ``,
+  Table: '',
+  Header: '',
+  Body: '',
   BaseRow: `
     background-color: var(--theme-ui-colors-background);
 
@@ -41,6 +41,6 @@ export const THEME = {
       fill: var(--theme-ui-colors-text);
     }
   `,
-  HeaderCell: ``,
-  Cell: ``,
+  HeaderCell: '',
+  Cell: '',
 }

@@ -1,5 +1,7 @@
 'use client'
 
+import type { Extensions } from '@tiptap/react'
+
 import React, { useEffect, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -12,7 +14,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 // TODO https://tiptap.dev/docs/editor/examples/savvy
 // TODO activate task list ext https://tiptap.dev/docs/editor/api/nodes/task-list
 
-import type { Extensions } from '@tiptap/react'
+import { Divider } from '@nextui-org/divider'
+import { useMutation } from '@tanstack/react-query'
 
 import { Toolbar } from './Toolbar'
 
@@ -20,10 +23,10 @@ import './tiptap.scss'
 import './content.scss'
 import { Note } from '@/types/models'
 import { updateNote } from '@/apiRequests/apiDB'
-import { Divider } from '@nextui-org/divider'
-import { useMutation } from '@tanstack/react-query'
+
 import clsx from 'clsx'
 import { Button } from '@nextui-org/react'
+
 import {
   getDocumentStatus,
   throttleOnUpdate,
@@ -157,14 +160,14 @@ const TiptapEditor = ({
         )}
         {typeof deleteNote !== 'undefined' && (
           <Button
+            color='danger'
+            size='sm'
+            variant='flat'
             onClick={() => {
               if (confirm('Do you really want to delete your note?')) {
                 deleteNote()
               }
             }}
-            size='sm'
-            color='danger'
-            variant='flat'
           >
             Delete note
           </Button>
@@ -173,7 +176,7 @@ const TiptapEditor = ({
       <Divider />
       <div className='tiptap-editor-wrapper'>
         {withToolbar ? <Toolbar editor={editor} /> : null}
-        <EditorContent placeholder='Start typing here' editor={editor} />
+        <EditorContent editor={editor} placeholder='Start typing here' />
       </div>
     </>
   )

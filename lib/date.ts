@@ -1,6 +1,7 @@
 import { format } from '@formkit/tempo'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+
 import { DateType } from '@/types/models'
 
 dayjs.extend(duration)
@@ -18,6 +19,7 @@ export const getFormattedDate = (
     // TODO add correct rule
     return ''
   }
+
   return format(date, 'full')
 }
 
@@ -32,6 +34,7 @@ export const getFormattedTime = (
     // TODO add correct rule
     return ''
   }
+
   return format(date, { time: 'short' })
 }
 
@@ -62,6 +65,7 @@ export const getHumanizedTimeDuration = (
   const humanizedDur = dayjs
     .duration(diff, 'millisecond')
     .format('D[d] H[h] m[m]')
+
   // remove such parts as 0h 0m 0s if it exists
   return humanizedDur.replace(/\b0+[a-z]+\s*/gi, '').trim()
 }

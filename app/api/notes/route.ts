@@ -1,7 +1,8 @@
+import ky from 'ky-universal'
+
 import connectMongo from '@/lib/db/connectMongo'
 import NoteSchema from '@/lib/db/schemas/Note.schema'
 import { Note } from '@/types/models'
-import ky from 'ky-universal'
 
 // Create new Note
 export async function POST(request: Request) {
@@ -38,11 +39,11 @@ export async function DELETE(request: Request) {
       })
       .json()
 
-    return new Response(`Note deleted`, {
+    return new Response('Note deleted', {
       status: 200,
     })
   } catch (e) {
-    return new Response(`Delete note error`, {
+    return new Response('Delete note error', {
       status: 500,
     })
   }

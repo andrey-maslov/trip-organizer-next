@@ -42,9 +42,9 @@
 
 /* Sections table */
 .trip-table {
-    /*td:hover {*/
-    /*  @apply bg-foreground-200;*/
-    /*}*/
+  /*td:hover {*/
+  /*  @apply bg-foreground-200;*/
+  /*}*/
 }
 
 .editable-elemenet {
@@ -61,10 +61,9 @@
   }
 }
 
-
 /* CUSTOM TABLE */
 .table-wrapper {
-  @apply p-4 z-0 flex flex-col relative justify-between gap-4 bg-content1 overflow-auto rounded-large shadow-small w-full
+  @apply p-4 z-0 flex flex-col relative justify-between gap-4 bg-content1 overflow-auto rounded-large shadow-small w-full;
 }
 
 .table {
@@ -87,7 +86,6 @@
   display: flex;
   align-items: center;
   flex-grow: 1;
-
 }
 
 .td {

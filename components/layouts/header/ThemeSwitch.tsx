@@ -6,7 +6,6 @@ import { SwitchProps, useSwitch } from '@nextui-org/switch'
 import { useTheme } from 'next-themes'
 import { useIsSSR } from '@react-aria/ssr'
 import clsx from 'clsx'
-
 import { FiMoon, FiSun } from 'react-icons/fi'
 
 export interface ThemeSwitchProps {

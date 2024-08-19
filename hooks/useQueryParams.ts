@@ -4,7 +4,7 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation'
-import { safelyParseJSON } from '@/lib/utils'
+
 import { SearchParams } from '@/types/models'
 
 type UseQueryParamsReturn = {
@@ -25,6 +25,7 @@ export const useQueryParams = (): UseQueryParamsReturn => {
     newSearchParamsObject: Record<string, string | number>
   ) => {
     const newSearchParams = new URLSearchParams(searchParams)
+
     Object.entries(newSearchParamsObject).forEach(([name, value]) =>
       newSearchParams.set(name, value.toString())
     )
@@ -36,10 +37,12 @@ export const useQueryParams = (): UseQueryParamsReturn => {
     if (!paramNames) {
       // clear all query
       router.push(pathname ?? '/')
+
       return
     }
 
     const newSearchParams = new URLSearchParams(searchParams)
+
     router.push(pathname + '?' + newSearchParams.toString())
   }
 

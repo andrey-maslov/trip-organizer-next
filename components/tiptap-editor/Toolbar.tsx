@@ -26,8 +26,9 @@ import {
 } from 'react-icons/ri'
 
 import './toolbar.scss'
-import { setLink } from '@/components/tiptap-editor/set-link'
 import { Button } from '@nextui-org/button'
+
+import { setLink } from '@/components/tiptap-editor/set-link'
 
 type ToolbarProps = {
   editor: Editor
@@ -45,15 +46,15 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
 
   return (
     <div
-      className={classNames('ToolbarContainer', { sticky: !inView })}
       ref={ref}
+      className={classNames('ToolbarContainer', { sticky: !inView })}
     >
       <div className='Toolbar'>
         <div
-          onClick={() => editor.chain().focus().toggleBold().run()}
           className={classNames('icon', {
             'is-active': editor.isActive('bold'),
           })}
+          onClick={() => editor.chain().focus().toggleBold().run()}
         >
           <RiBold />
         </div>
@@ -204,23 +205,23 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
         <div className='divider' />
         <Button
           isIconOnly
-          size='sm'
-          variant='light'
           aria-label='undo'
-          title='undo'
-          onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
+          size='sm'
+          title='undo'
+          variant='light'
+          onClick={() => editor.chain().focus().undo().run()}
         >
           <RiArrowGoBackLine />
         </Button>
         <Button
           isIconOnly
-          size='sm'
-          variant='light'
           aria-label='redo'
-          title='redo'
-          onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().chain().focus().redo().run()}
+          size='sm'
+          title='redo'
+          variant='light'
+          onClick={() => editor.chain().focus().redo().run()}
         >
           <RiArrowGoForwardLine />
         </Button>

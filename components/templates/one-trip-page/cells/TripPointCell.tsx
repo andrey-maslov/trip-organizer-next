@@ -1,7 +1,6 @@
 'use client'
 
 import React, { FC, useState } from 'react'
-import { DateType, TripPoint } from '@/types/models'
 import {
   Autocomplete,
   AutocompleteItem,
@@ -11,7 +10,6 @@ import {
   ModalContent,
   ModalHeader,
 } from '@nextui-org/react'
-import { fakeAddresses } from '@/constants/defaultEntities'
 import { format } from 'date-fns'
 import {
   Popover,
@@ -19,8 +17,11 @@ import {
   PopoverContent,
   Button,
 } from '@nextui-org/react'
-import { timeZones } from '@/constants/timezones'
 import { DayPicker } from 'react-day-picker'
+
+import { timeZones } from '@/constants/timezones'
+import { fakeAddresses } from '@/constants/defaultEntities'
+import { TripPoint } from '@/types/models'
 
 type PointCellProps = {
   data: TripPoint | undefined
@@ -36,8 +37,10 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
 
   const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const time = e.target.value
+
     if (!selectedDate) {
       setSelectedTime(time)
+
       return
     }
     const [hours, minutes] = time.split(':').map((str) => parseInt(str, 10))
@@ -48,6 +51,7 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
       hours,
       minutes
     )
+
     setSelectedDate(newSelectedDate)
     setSelectedTime(time)
   }
@@ -55,6 +59,7 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
   const handleDaySelect = (date: Date | undefined) => {
     if (!selectedTime || !date) {
       setSelectedDate(date)
+
       return
     }
     const [hours, minutes] = selectedTime
@@ -67,6 +72,7 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
       hours,
       minutes
     )
+
     // console.log(date.getTimezoneOffset())
     setSelectedDate(newDate)
     setCalendarOpened(false)
@@ -90,8 +96,8 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
 
       <Modal
         backdrop='opaque'
-        size='md'
         isOpen={isOpen}
+        size='md'
         onOpenChange={() => setOpen(false)}
       >
         <ModalContent>
@@ -102,18 +108,18 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
               </ModalHeader>
               <ModalBody>
                 <Input
+                  placeholder='Enter starting place'
                   size='sm'
                   type='text'
                   variant='underlined'
-                  placeholder='Enter starting place'
                 />
                 <Autocomplete
+                  shouldCloseOnBlur
+                  defaultItems={fakeAddresses}
+                  variant='underlined'
                   size='sm'
                   // label='Address'
                   placeholder='Search an address'
-                  defaultItems={fakeAddresses}
-                  variant='underlined'
-                  shouldCloseOnBlur
                 >
                   {(item) => (
                     <AutocompleteItem key={item.value}>
@@ -123,12 +129,12 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
                 </Autocomplete>
                 <div className='flex w-full flex-wrap md:flex-nowrap items-center gap-2 mt-4'>
                   <Popover
-                    placement='top'
                     isOpen={isCalendarOpened}
+                    placement='top'
                     onOpenChange={(open) => setCalendarOpened(open)}
                   >
                     <PopoverTrigger>
-                      <Button size='md' className='min-w-[150px]'>
+                      <Button className='min-w-[150px]' size='md'>
                         {format(Date(), 'PP')}
                       </Button>
                     </PopoverTrigger>
@@ -142,24 +148,24 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
                   </Popover>
 
                   <Input
-                    type='time'
+                    className='max-w-[200px]'
                     size='sm'
+                    type='time'
                     value={selectedTime}
                     onChange={handleTimeChange}
-                    className='max-w-[200px]'
                   />
                 </div>
                 <Autocomplete
-                  size='sm'
-                  label='Time zone'
-                  placeholder='Search an address'
+                  shouldCloseOnBlur
+                  className='max-w-[14rem]'
                   defaultItems={timeZones.map((value) => ({
                     label: value,
                     value,
                   }))}
-                  shouldCloseOnBlur
+                  label='Time zone'
+                  placeholder='Search an address'
+                  size='sm'
                   variant='underlined'
-                  className='max-w-[14rem]'
                 >
                   {(item) => (
                     <AutocompleteItem key={item.label}>

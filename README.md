@@ -34,6 +34,14 @@ Hard update all deps ``yarn upgrade``
 !!! Eslint 9 and later is incompatible yet. Need to check everytime.
 To avoid upgrading Eslint - ``yarn upgrade eslint@8.57.0``
 
+## Update dependencies
+    !!! be careful with eslint and dependent packages
+- install **npm-check-updates** globally ``npm install -g npm-check-updates``
+- check updates ``ncu`` or with grouping ``ncu --format group``
+- upgrade package.json ``ncu -u``
+- install new versions ``yarn``
+  [Documentation](https://github.com/raineorshine/npm-check-updates)
+
 ## TipTap editor
 - Example: [Codepen](https://codesandbox.io/p/sandbox/tiptap-0sqm3i?file=%2Fsrc%2Fcomponents%2FToolbar.tsx%3A45%2C1-48%2C7) 
 

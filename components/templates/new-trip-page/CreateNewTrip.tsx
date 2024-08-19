@@ -1,14 +1,15 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { createTrip } from '@/apiRequests/apiDB'
-import { defaultTrip } from '@/constants/defaultEntities'
 import { Input, Textarea } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/button'
 import { format } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
+
+import { defaultTrip } from '@/constants/defaultEntities'
+import { createTrip } from '@/apiRequests/apiDB'
 import { isEmptyObject } from '@/lib/utils'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 
@@ -69,10 +70,11 @@ export const CreateNewTrip = () => {
             <div className='flex gap-4'>
               <div className='w-full'>
                 <Input
+                  className='mb-4'
                   label='Name'
-                  type='text'
-                  placeholder='Enter name of your trip here'
                   labelPlacement='outside'
+                  placeholder='Enter name of your trip here'
+                  type='text'
                   value={name}
                   onChange={(event) => {
                     // TODO improve - sanitize
@@ -86,14 +88,14 @@ export const CreateNewTrip = () => {
                       )
                     }
                   }}
-                  className='mb-4'
                 />
               </div>
               <div className='w-full'>
                 <Input
+                  className='mb-4'
                   label='Slug'
-                  type='text'
                   labelPlacement='outside'
+                  type='text'
                   value={slug}
                   onChange={(event) => {
                     if (!slugChanged) {
@@ -104,16 +106,15 @@ export const CreateNewTrip = () => {
                       event.target.value.replaceAll(/ /gi, '-').toLowerCase()
                     )
                   }}
-                  className='mb-4'
                 />
               </div>
             </div>
             <Textarea
+              fullWidth
               label='Description'
               placeholder='Enter your description'
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              fullWidth
             />
           </div>
         </div>
@@ -121,39 +122,39 @@ export const CreateNewTrip = () => {
       <div className='flex justify-center gap-4 mb-8'>
         <div>
           <DayPicker
-            mode='single'
-            selected={selectedDateStart}
-            onSelect={setSelectedDateStart}
-            fromDate={selectedDateEnd}
             footer={
               <Button size='sm' onClick={() => setSelectedDateStart(undefined)}>
                 Reset
               </Button>
             }
+            fromDate={selectedDateEnd}
+            mode='single'
+            selected={selectedDateStart}
+            onSelect={setSelectedDateStart}
           />
         </div>
         <div>
           <DayPicker
-            mode='single'
-            selected={selectedDateEnd}
-            onSelect={setSelectedDateEnd}
-            fromDate={selectedDateStart}
             footer={
               <Button size='sm' onClick={() => setSelectedDateEnd(undefined)}>
                 Reset
               </Button>
             }
+            fromDate={selectedDateStart}
+            mode='single'
+            selected={selectedDateEnd}
+            onSelect={setSelectedDateEnd}
           />
         </div>
       </div>
 
       <div className='flex justify-center'>
         <Button
-          radius='full'
           className='bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg uppercase'
-          onClick={() => onCreateNewTrip()}
           isLoading={isPending}
+          radius='full'
           size='lg'
+          onClick={() => onCreateNewTrip()}
         >
           Create trip
         </Button>

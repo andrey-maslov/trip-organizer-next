@@ -32,7 +32,7 @@ export function Providers({
 
   return (
     <NextUIProvider navigate={router.push}>
-      <EarthoOneProvider domain={''} clientId={EARTHO_CLIENT_ID}>
+      <EarthoOneProvider clientId={EARTHO_CLIENT_ID} domain={''}>
         <QueryClientProvider client={queryClient}>
           <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
         </QueryClientProvider>

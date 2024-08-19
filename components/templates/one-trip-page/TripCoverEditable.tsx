@@ -5,10 +5,11 @@ import {
   ModalContent,
   ModalHeader,
 } from '@nextui-org/react'
-import { defaultCoverImage } from '@/constants/defaultEntities'
-import { ButtonEdit } from '@/components/ButtonEdit'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+
+import { defaultCoverImage } from '@/constants/defaultEntities'
+import { ButtonEdit } from '@/components/ButtonEdit'
 import { searchPictures } from '@/apiRequests/apiExternal'
 
 type Props = {
@@ -35,12 +36,12 @@ export const TripCoverEditable = ({
   return (
     <div className='relative editable-elemenet'>
       <Image
-        width={200}
-        height={200}
-        className='max-h-[200px] object-cover'
         alt='Trip cover'
-        src={coverSrc}
+        className='max-h-[200px] object-cover'
         fallbackSrc={defaultCoverImage}
+        height={200}
+        src={coverSrc}
+        width={200}
       />
       {tripName.length >= 5 && (
         <ButtonEdit onClick={() => setPicsListOpen(true)} />
@@ -48,8 +49,8 @@ export const TripCoverEditable = ({
 
       <Modal
         backdrop='opaque'
-        size='3xl'
         isOpen={picsListOpen}
+        size='3xl'
         onOpenChange={setPicsListOpen}
       >
         <ModalContent>
@@ -65,12 +66,12 @@ export const TripCoverEditable = ({
                   <div className='grid grid-cols-4 gap-4'>
                     {pictures?.results.map((picture) => (
                       <Image
-                        className='cursor-pointer'
                         key={picture.id}
-                        width={300}
-                        height={300}
                         alt='Trip cover'
+                        className='cursor-pointer'
+                        height={300}
                         src={picture.urls.small}
+                        width={300}
                         onClick={() => {
                           setCoverSrc(picture.urls.small)
                           onClose()

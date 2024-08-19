@@ -8,9 +8,10 @@ export async function GET() {
   // Get many teams
   try {
     const trips = await TripSchema.find().lean()
+
     return Response.json({ trips })
   } catch (e) {
-    return new Response(`Get all error`, {
+    return new Response('Get all error', {
       status: 500,
     })
   }
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json()
     const newTrip: Trip = await TripSchema.create(data)
+
     return Response.json({ id: newTrip._id, slug: newTrip.slug })
   } catch (error: any) {
     return new Response(`error!!!: ${error?.message}`, {
@@ -36,12 +38,14 @@ export async function DELETE(request: Request) {
 
   try {
     const payload = await request.json()
+
     await TripSchema.deleteOne({ _id: payload.id })
-    return new Response(`deleted`, {
+
+    return new Response('deleted', {
       status: 200,
     })
   } catch (e) {
-    return new Response(`Get all error`, {
+    return new Response('Get all error', {
       status: 500,
     })
   }

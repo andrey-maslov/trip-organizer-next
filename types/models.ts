@@ -1,3 +1,5 @@
+import { Types } from 'mongoose'
+
 import {
   currencyISONames,
   placementTypes,
@@ -5,7 +7,6 @@ import {
   statusTypes,
   transportTypes,
 } from '@/constants/constants'
-import { Types } from 'mongoose'
 
 export type DateType = Date | string | undefined
 

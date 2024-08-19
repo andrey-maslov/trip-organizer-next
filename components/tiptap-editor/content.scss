@@ -1,14 +1,14 @@
 /* COMMON STYLES primarily for the articles and content pages */
 
 .ProseMirror {
-
   /* Paragraphs */
   p {
     display: block;
     margin-bottom: 1em;
   }
 
-  p:only-child, p:last-of-type {
+  p:only-child,
+  p:last-of-type {
     margin-bottom: 0;
   }
 
@@ -82,7 +82,12 @@
     margin-bottom: 1em;
   }
 
-  h1,h2,h3,h4,h5,h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold;
     line-height: 1.6;
   }
@@ -93,5 +98,4 @@
     color: #0969da;
     cursor: pointer;
   }
-
 }

@@ -10,9 +10,10 @@ export async function GET(
   // Get one Note
   try {
     const note = await NoteSchema.findById(params.id).lean()
+
     return Response.json(note)
   } catch (e) {
-    return new Response(`Get all error`, {
+    return new Response('Get all error', {
       // TODO add 500 and 404 separation
       status: 404,
     })
@@ -21,6 +22,7 @@ export async function GET(
 
 export async function PUT(request: Request) {
   const payload = await request.json()
+
   await connectMongo()
 
   // Update one trip
@@ -28,9 +30,10 @@ export async function PUT(request: Request) {
     const note = await NoteSchema.findByIdAndUpdate(payload._id, payload, {
       new: true,
     }).lean()
+
     return Response.json({ ...note })
   } catch (e) {
-    return new Response(`Update trip error`, {
+    return new Response('Update trip error', {
       // TODO add 500 and 404 separation
       status: 404,
     })

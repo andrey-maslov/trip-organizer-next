@@ -1,4 +1,5 @@
 import { ChipProps } from '@nextui-org/react'
+
 import { Status } from '@/types/models'
 
 export type Column = {

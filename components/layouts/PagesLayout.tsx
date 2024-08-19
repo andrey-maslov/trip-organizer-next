@@ -1,9 +1,10 @@
 'use client'
 
-import { Providers } from '@/app/providers'
-import { Navbar } from '@/components/layouts/header/Navbar'
 import { useEffect, useState } from 'react'
 import { Divider } from '@nextui-org/divider'
+
+import { Providers } from '@/app/providers'
+import { Navbar } from '@/components/layouts/header/Navbar'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
 type PagesLayoutProps = {

@@ -1,5 +1,7 @@
 import { Schema, model, models } from 'mongoose'
+
 import { SectionSchema } from './Section.schema'
+
 import { Trip } from '@/types/models'
 
 const TripSchema = new Schema<Trip>({

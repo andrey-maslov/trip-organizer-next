@@ -2,7 +2,6 @@
 
 import { Button } from '@nextui-org/button'
 import { FiLogIn, FiLogOut } from 'react-icons/fi'
-
 import { useEarthoOne } from '@eartho/one-client-react'
 
 export const UserPopup = () => {

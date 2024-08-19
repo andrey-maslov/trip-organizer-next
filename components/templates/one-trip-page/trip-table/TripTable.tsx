@@ -8,7 +8,12 @@ import {
   Selection,
 } from '@nextui-org/react'
 import { FiPlus, FiMoreVertical, FiChevronDown } from 'react-icons/fi'
-import { Key, useCallback, useEffect, useMemo, useState } from 'react'
+import { Key, useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-toastify'
+import { CellElement } from '@react-types/table'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'next/navigation'
+
 import { capitalize, createNewSection } from '@/lib/utils'
 import { Section, SectionBE } from '@/types/models'
 import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
@@ -18,12 +23,8 @@ import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
 import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
-import { toast } from 'react-toastify'
-import { CellElement } from '@react-types/table'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateSection } from '@/apiRequests/apiDB'
-import { useParams } from 'next/navigation'
 import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
 import { fakeStartPoint } from '@/constants/defaultEntities'
 import {
@@ -199,6 +200,7 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
   const renderCell = (columnKey: Key, section: Section): CellElement => {
     // assertion is here because of types of the function 'getKeyValue'
     const cellValue = getKeyValue(section, columnKey as string | number)
+
     if (columnKey === 'type') {
       return (
         <TypeCell
@@ -268,8 +270,8 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
     if (columnKey === 'duration') {
       return (
         <DurationCell
-          dateTimeStart={section.dateTimeStart}
           dateTimeEnd={section.dateTimeEnd}
+          dateTimeStart={section.dateTimeStart}
         />
       )
     }
@@ -304,8 +306,10 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
         </div>
       )
     }
+
     return getKeyValue(section, columnKey as string | number)
   }
+
   return (
     <>
       <div className='table-wrapper'>

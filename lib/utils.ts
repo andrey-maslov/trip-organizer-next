@@ -15,6 +15,7 @@ export const convertArrayToObject = <T>(
   // }
 
   const initialValue = {}
+
   return array.reduce(
     (obj, item) => ({
       ...obj,
@@ -148,5 +149,6 @@ export const isEmptyObject = (object: unknown) => {
   for (const property in object) {
     return false
   }
+
   return true
 }

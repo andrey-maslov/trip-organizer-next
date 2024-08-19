@@ -12,6 +12,7 @@ const useLocalStorage = <T>(
   useEffect(() => {
     // Retrieve from localStorage
     const item = window.localStorage.getItem(key)
+
     if (item) {
       setStoredValue(JSON.parse(item))
     }
@@ -23,6 +24,7 @@ const useLocalStorage = <T>(
     // Save to localStorage
     window.localStorage.setItem(key, JSON.stringify(value))
   }
+
   return [storedValue, setValue]
 }
 

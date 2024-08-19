@@ -8,15 +8,13 @@ import {
   NavbarMenuItem,
 } from '@nextui-org/navbar'
 import { Link } from '@nextui-org/link'
-
 import { link as linkStyles } from '@nextui-org/theme'
-
-import { siteConfig } from '@/config/site'
 import NextLink from 'next/link'
 import clsx from 'clsx'
+import { FiTwitter } from 'react-icons/fi'
 
 import { ThemeSwitch } from '@/components/layouts/header/ThemeSwitch'
-import { FiTwitter } from 'react-icons/fi'
+import { siteConfig } from '@/config/site'
 import { UserPopup } from '@/components/layouts/header/UserPopup'
 
 export const Navbar = () => (
@@ -61,7 +59,7 @@ export const Navbar = () => (
     </NavbarContent>
 
     <NavbarContent className='sm:hidden basis-1 pl-4' justify='end'>
-      <Link isExternal href={siteConfig.links.github} aria-label='Github'>
+      <Link isExternal aria-label='Github' href={siteConfig.links.github}>
         <FiTwitter className='text-default-500' />
       </Link>
       <ThemeSwitch />

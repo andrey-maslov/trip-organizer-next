@@ -1,5 +1,3 @@
-import { Payment } from '@/types/models'
-import { getTotalPriceFromSection } from '@/lib/utils'
 import { Button } from '@nextui-org/button'
 import {
   Input,
@@ -10,6 +8,9 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 import React, { useState } from 'react'
+
+import { getTotalPriceFromSection } from '@/lib/utils'
+import { Payment } from '@/types/models'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
 
 type PriceCellProps = {
@@ -38,6 +39,7 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
     value: string | number
   ) => {
     const newExpenses = [...expenses]
+
     newExpenses[index] = { ...expenses[index], [fieldName]: value }
     setExpenses(newExpenses)
   }
@@ -59,8 +61,8 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
 
       <Modal
         backdrop='opaque'
-        size='md'
         isOpen={isOpen}
+        size='md'
         onOpenChange={() => setOpen(false)}
       >
         <ModalContent>
@@ -71,45 +73,30 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
               </ModalHeader>
               <ModalBody>
                 {expenses.map((payment, index) => (
-                  <div className='flex gap-1 items-end' key={index}>
+                  <div key={index} className='flex gap-1 items-end'>
                     <Input
                       name={`name-${index}`}
-                      variant='underlined'
                       placeholder='Expense name'
                       size='sm'
                       type='text'
                       value={payment.name}
+                      variant='underlined'
                       onChange={(e) =>
                         onDataChange(index, 'name', e.target.value)
                       }
                     />
                     <Input
                       name={`link-${index}`}
-                      variant='underlined'
                       placeholder='Link to website'
                       size='sm'
                       type='text'
                       value={payment.link}
+                      variant='underlined'
                       onChange={(e) =>
                         onDataChange(index, 'link', e.target.value)
                       }
                     />
                     <Input
-                      size='sm'
-                      name={`amount-${index}`}
-                      variant='underlined'
-                      placeholder='0.00'
-                      value={payment.amount?.toString()}
-                      startContent={
-                        <div className='pointer-events-none flex items-center'>
-                          <span className='text-default-400 text-small'>
-                            {
-                              currencies[payment.currency ?? DEFAULT_CURRENCY]
-                                .symbol
-                            }
-                          </span>
-                        </div>
-                      }
                       endContent={
                         <div className='flex items-center'>
                           <label className='sr-only' htmlFor='currency'>
@@ -117,9 +104,9 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
                           </label>
                           <select
                             className='outline-none border-0 bg-transparent text-default-400 text-small'
+                            defaultValue={DEFAULT_CURRENCY}
                             id='currency'
                             name={`currency-${index}`}
-                            defaultValue={DEFAULT_CURRENCY}
                             value={payment.currency}
                             onChange={(e) =>
                               onDataChange(index, 'currency', e.target.value)
@@ -131,7 +118,22 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
                           </select>
                         </div>
                       }
+                      name={`amount-${index}`}
+                      placeholder='0.00'
+                      size='sm'
+                      startContent={
+                        <div className='pointer-events-none flex items-center'>
+                          <span className='text-default-400 text-small'>
+                            {
+                              currencies[payment.currency ?? DEFAULT_CURRENCY]
+                                .symbol
+                            }
+                          </span>
+                        </div>
+                      }
                       type='number'
+                      value={payment.amount?.toString()}
+                      variant='underlined'
                       onChange={(e) =>
                         onDataChange(
                           index,
@@ -144,11 +146,11 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
                 ))}
 
                 <Button
-                  size='sm'
                   isIconOnly
-                  color='default'
                   aria-label='Add expense'
+                  color='default'
                   radius='full'
+                  size='sm'
                   onClick={() => {
                     setExpenses((prev) => [defaultExpense, ...prev])
                   }}

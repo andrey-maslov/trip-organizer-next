@@ -1,10 +1,11 @@
-import { getFormattedDate, getFormattedTime } from '@/lib/date'
-import { DateType } from '@/types/models'
 import { DayPicker } from 'react-day-picker'
 import { Button } from '@nextui-org/button'
 import React, { useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
+
+import { DateType } from '@/types/models'
+import { getFormattedDate, getFormattedTime } from '@/lib/date'
 
 type DateTimeCellProps = {
   dateTime: DateType
@@ -31,15 +32,15 @@ export const DateTimeCell: React.FC<DateTimeCellProps> = ({
           {getFormattedTime(dateTime)}
         </p>
       </div>
-      <Popover placement='right' showArrow>
+      <Popover showArrow placement='right'>
         <PopoverTrigger>
           <Button
             isIconOnly
-            size='sm'
-            color='warning'
-            variant='faded'
             aria-label='edit'
             className='btn-edit'
+            color='warning'
+            size='sm'
+            variant='faded'
           >
             <FiEdit2 />
           </Button>
@@ -47,9 +48,6 @@ export const DateTimeCell: React.FC<DateTimeCellProps> = ({
         <PopoverContent>
           <div className='px-1 py-2'>
             <DayPicker
-              mode='single'
-              selected={selectedDateStart as Date}
-              onSelect={setSelectedDateStart}
               footer={
                 <div className='flex gap-2 justify-items-end'>
                   <Button
@@ -69,6 +67,9 @@ export const DateTimeCell: React.FC<DateTimeCellProps> = ({
                   </Button>
                 </div>
               }
+              mode='single'
+              selected={selectedDateStart as Date}
+              onSelect={setSelectedDateStart}
             />
           </div>
         </PopoverContent>

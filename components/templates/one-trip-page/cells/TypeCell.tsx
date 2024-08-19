@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react'
+
 import { serviceProviderTypes } from '@/constants/constants'
 
 type TypeCellProps = {
@@ -47,16 +48,16 @@ export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
         </DropdownTrigger>
         <DropdownMenu
           // onAction={(value) => onUpdate(value as string)}
-          variant='faded'
-          selectedKeys={['unknown']}
           aria-label='Dynamic Actions'
           items={serviceProviderTypes.map((label) => ({ label, value: label }))}
+          selectedKeys={['unknown']}
+          variant='faded'
         >
           {(item) => (
             <DropdownItem
-              startContent={typeIcons[item.value]}
-              className='outline-0'
               key={item.label}
+              className='outline-0'
+              startContent={typeIcons[item.value]}
               variant='flat'
             >
               {item.label}
