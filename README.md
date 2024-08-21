@@ -30,11 +30,6 @@ To learn more about Next.js, take a look at the following resources:
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
 ## Dependencies update
-Hard update all deps ``yarn upgrade``
-!!! Eslint 9 and later is incompatible yet. Need to check everytime.
-To avoid upgrading Eslint - ``yarn upgrade eslint@8.57.0``
-
-## Update dependencies
     !!! be careful with eslint and dependent packages
 - install **npm-check-updates** globally ``npm install -g npm-check-updates``
 - check updates ``ncu`` or with grouping ``ncu --format group``
@@ -47,3 +42,6 @@ To avoid upgrading Eslint - ``yarn upgrade eslint@8.57.0``
 
 ## Date Time picker
 - [Documentation](https://react-day-picker.js.org/start)
+
+## Date formatting
+- [Tempo](https://tempo.formkit.com/)

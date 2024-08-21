@@ -10,7 +10,6 @@ import {
   ModalContent,
   ModalHeader,
 } from '@nextui-org/react'
-import { format } from 'date-fns'
 import {
   Popover,
   PopoverTrigger,
@@ -22,6 +21,7 @@ import { DayPicker } from 'react-day-picker'
 import { timeZones } from '@/constants/timezones'
 import { fakeAddresses } from '@/constants/defaultEntities'
 import { TripPoint } from '@/types/models'
+import { getFormattedDate } from '@/lib/date'
 
 type PointCellProps = {
   data: TripPoint | undefined
@@ -91,7 +91,7 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
       >
         {data?.place?.name ?? 'n/d'}
         <br />
-        {data?.date ? format(data?.date, 'PP') : '-'} {data?.time}
+        {data?.date ? getFormattedDate(data?.date) : '-'} {data?.time}
       </Button>
 
       <Modal
@@ -135,7 +135,7 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
                   >
                     <PopoverTrigger>
                       <Button className='min-w-[150px]' size='md'>
-                        {format(Date(), 'PP')}
+                        {getFormattedDate(Date())}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent>

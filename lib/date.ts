@@ -1,70 +1,49 @@
-import { format } from '@formkit/tempo'
+import { Format, format, FormatStyle, diffMinutes } from '@formkit/tempo'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
-import { DateType } from '@/types/models'
-
 dayjs.extend(duration)
 
-type Time = DateType | dayjs.Dayjs
-
 export const getFormattedDate = (
-  date: Date | string | null,
-  dateFormat?: string
+  date: Date | string | null | undefined,
+  dateFormat: Format = 'full',
+  locale?: string
 ): string => {
   if (!date) {
     return ''
   }
-  if (dateFormat) {
-    // TODO add correct rule
-    return ''
-  }
 
-  return format(date, 'full')
+  return format(date, dateFormat, locale)
 }
 
 export const getFormattedTime = (
   date: Date | string | null,
-  timeFormat?: string
+  timeFormat: FormatStyle = 'short'
 ): string => {
   if (!date) {
     return ''
   }
-  if (timeFormat) {
-    // TODO add correct rule
-    return ''
-  }
 
-  return format(date, { time: 'short' })
+  return format(date, { time: timeFormat })
 }
 
 /**
- * Returns duration between two timestamps or convert duration in ms to string
- * @param time1 - dayjs object or time in ms,
- * @param time2 - dayjs object or time in ms
+ * Returns duration between two timestamps or convert duration in to string
+ * @param time1
+ * @param time2
  */
 export const getHumanizedTimeDuration = (
-  time1: Time,
-  time2?: Time | undefined
-): string => {
-  const _time1 = dayjs(time1)
-  const _time2 = time2 ? dayjs(time2) : null
-
-  if (!_time1.isValid()) {
-    return ''
+  time1: Date | string | null | undefined,
+  time2?: Date | string | null | undefined
+): string | null => {
+  if (!time1 || !time2) {
+    return null
   }
 
-  let diff = 0
+  let diff = diffMinutes(time2, time1)
 
-  if (typeof time1 === 'number' && !_time2) {
-    diff = time1
-  } else if (_time1 && _time2) {
-    diff = _time2.diff(_time1)
-  }
-
-  const humanizedDur = dayjs
-    .duration(diff, 'millisecond')
-    .format('D[d] H[h] m[m]')
+  // TODO watch https://github.com/formkit/tempo/pull/66s
+  const humanizedDur = dayjs.duration(diff, 'minutes').format('D[d] H[h] m[m]')
 
   // remove such parts as 0h 0m 0s if it exists
   return humanizedDur.replace(/\b0+[a-z]+\s*/gi, '').trim()

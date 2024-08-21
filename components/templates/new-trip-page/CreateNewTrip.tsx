@@ -5,13 +5,13 @@ import { Input, Textarea } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/button'
-import { format } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
 
 import { defaultTrip } from '@/constants/defaultEntities'
 import { createTrip } from '@/apiRequests/apiDB'
 import { isEmptyObject } from '@/lib/utils'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
+import { getFormattedDate } from '@/lib/date'
 
 export const CreateNewTrip = () => {
   const router = useRouter()
@@ -62,10 +62,11 @@ export const CreateNewTrip = () => {
           {description.length > 5 ? (
             <h2 className='text-2xl mb-4 text-foreground-500'>{description}</h2>
           ) : null}
-          <h2 className='text-2xl mb-8 text-foreground'>
-            {selectedDateStart ? `From ${format(selectedDateStart, 'PP')}` : ''}{' '}
-            {selectedDateEnd ? `to ${format(selectedDateEnd, 'PP')}` : ''}
-          </h2>
+          {(selectedDateStart || selectedDateEnd) && (
+            <h2 className='text-2xl mb-8 text-foreground'>
+              {`From ${selectedDateStart ? getFormattedDate(selectedDateStart) : ' ? '} to ${selectedDateEnd ? getFormattedDate(selectedDateEnd) : ' ? '}`}
+            </h2>
+          )}
           <div className='mb-8'>
             <div className='flex gap-4'>
               <div className='w-full'>

@@ -4,13 +4,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import { Divider } from '@nextui-org/react'
 import { Button } from '@nextui-org/button'
-import { format } from 'date-fns'
 import { toast } from 'react-toastify'
 
 import { deleteOneTrip, getOneTrip, updateTrip } from '@/apiRequests/apiDB'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 import { Editable } from '@/components/Editable'
 import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripTable'
+import { getFormattedDate } from '@/lib/date'
 
 export const OneTrip = () => {
   const { id } = useParams()
@@ -98,9 +98,11 @@ export const OneTrip = () => {
           />
           <h2 className='text-xl mb-8 text-foreground'>
             {trip?.dateTimeStart
-              ? `From ${format(trip.dateTimeStart, 'PP')}`
+              ? `From ${getFormattedDate(trip.dateTimeStart)}`
               : ''}{' '}
-            {trip?.dateTimeEnd ? `to ${format(trip.dateTimeEnd, 'PP')}` : ''}
+            {trip?.dateTimeEnd
+              ? `to ${getFormattedDate(trip.dateTimeEnd)}`
+              : ''}
           </h2>
         </div>
       </div>

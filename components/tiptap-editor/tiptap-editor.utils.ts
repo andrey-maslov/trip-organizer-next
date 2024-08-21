@@ -1,4 +1,4 @@
-import { throttle } from 'lodash'
+import { throttle } from 'throttle-debounce'
 
 export const getDocumentStatus = (isSaved: boolean): string => {
   if (!isSaved) {
@@ -11,11 +11,12 @@ export const getDocumentStatus = (isSaved: boolean): string => {
 }
 
 export const throttleOnUpdate = throttle(
+  2000,
   (editor: any, noteId: string, callback: (data: any) => void) => {
     const json = editor.getJSON()
 
     // send the content to an API
     void callback({ _id: noteId, updatedAt: Date.now(), content: json })
   },
-  2000
+  { noLeading: true }
 )
