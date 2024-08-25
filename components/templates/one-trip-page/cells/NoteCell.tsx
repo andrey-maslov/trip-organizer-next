@@ -44,7 +44,7 @@ export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId, onClick }) => {
         isLoading={isPending}
         size='sm'
         variant='light'
-        onClick={() => setCurrentNote()}
+        onPress={() => setCurrentNote()}
       >
         {noteId ? 'Note' : 'Add note'}
       </Button>

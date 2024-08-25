@@ -1,38 +1,19 @@
-import {
-  Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  getKeyValue,
-  Selection,
-} from '@nextui-org/react'
-import { FiPlus, FiMoreVertical, FiChevronDown } from 'react-icons/fi'
-import { Key, useEffect, useMemo, useState } from 'react'
+import { Button, Selection } from '@nextui-org/react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { CellElement } from '@react-types/table'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 
-import { capitalize, createNewSection } from '@/lib/utils'
+import { createNewSection } from '@/lib/utils'
 import { Section, Trip } from '@/types/models'
-import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
-import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
-import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
-import { PaymentsCell } from '@/components/templates/one-trip-page/cells/PaymentsCell'
-import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
-import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
-import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 import { updateSection, updateTrip } from '@/apiRequests/apiDB'
-import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
 import {
   columns,
-  defaultSection,
   INITIAL_VISIBLE_COLUMNS,
-  statusOptions,
 } from '@/components/templates/one-trip-page/trip-table.config'
-import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
+import { RenderCell } from '@/components/templates/one-trip-page/trip-table/RenderCell'
+import { defaultSection } from '@/constants/defaultEntities'
 
 type Props = {
   trip: Trip
@@ -43,7 +24,6 @@ export const TripTable = ({ trip }: Props) => {
   const { id: slug } = useParams()
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
   const [currentSection, setCurrentSection] = useState<Section | null>(null)
-  const [statusFilter, setStatusFilter] = useState<Selection>('all')
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
@@ -57,7 +37,7 @@ export const TripTable = ({ trip }: Props) => {
     )
   }, [trip.sections])
 
-  // Update Trip Section
+  // Update Section
   const { mutate: updateSectionMutation } = useMutation({
     mutationFn: (data: { tripId: string; sectionData: Partial<Section> }) =>
       updateSection(data.tripId, data.sectionData),
@@ -128,205 +108,6 @@ export const TripTable = ({ trip }: Props) => {
     })
   }
 
-  const topContent = useMemo(
-    () => (
-      <div className='flex flex-col gap-4'>
-        <div className='flex justify-between gap-3 items-end'>
-          <div className='w-full' />
-          <div className='flex gap-3'>
-            <Dropdown>
-              <DropdownTrigger className='hidden sm:flex'>
-                <Button
-                  endContent={<FiChevronDown className='text-small' />}
-                  size='sm'
-                  variant='flat'
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label='Table Columns'
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode='multiple'
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className='capitalize'>
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className='hidden sm:flex'>
-                <Button
-                  endContent={<FiChevronDown className='text-small' />}
-                  size='sm'
-                  variant='flat'
-                >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label='Table Columns'
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode='multiple'
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className='capitalize'>
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Button
-              endContent={<FiPlus />}
-              size='sm'
-              onClick={() => onAddNewSection()}
-            >
-              Add New
-            </Button>
-          </div>
-        </div>
-        <div className='flex justify-between items-center'>
-          <span className='text-default-400 text-small'>
-            Total {sectionsToDisplay.length} sections
-          </span>
-        </div>
-      </div>
-    ),
-    [statusFilter, visibleColumns, sectionsToDisplay.length]
-  )
-
-  const renderCell = (columnKey: Key, section: Section): CellElement => {
-    // assertion is here because of types of the function 'getKeyValue'
-    const cellValue = getKeyValue(section, columnKey as string | number)
-
-    if (columnKey === 'type') {
-      return (
-        <TypeCell
-          type={section.type ?? ''}
-          onUpdate={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'name') {
-      return (
-        <NameCell
-          name={section?.name ?? ''}
-          onUpdate={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'status') {
-      return (
-        <StatusCell
-          status={cellValue || DEFAULT_SECTION_STATUS}
-          onUpdate={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'serviceProvider') {
-      return (
-        <ServiceProviderCell
-          serviceProvider={section.serviceProvider}
-          onUpdate={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'startingPoint') {
-      const data = section.startingPoint?.dateTime
-        ? section.startingPoint
-        : { ...section.startingPoint, dateTime: section.dateTimeStart }
-
-      return (
-        <TripPointCell
-          point={data}
-          title='Set your starting point'
-          onUpdate={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'endPoint') {
-      const data = section.endPoint?.dateTime
-        ? section.endPoint
-        : { ...section.endPoint, dateTime: section.dateTimeStart }
-
-      return (
-        <TripPointCell
-          point={data}
-          title='Set your finishing point'
-          onUpdate={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'payments') {
-      return (
-        <PaymentsCell
-          data={section.payments}
-          onSave={(newValue) =>
-            onSaveTableCell(newValue, section.id, columnKey)
-          }
-        />
-      )
-    }
-    if (columnKey === 'duration') {
-      return (
-        <DurationCell end={section.endPoint} start={section.startingPoint} />
-      )
-    }
-    if (columnKey === 'note') {
-      return (
-        <NoteCell
-          noteId={section.note as string}
-          sectionId={section.id}
-          onClick={() => {
-            setCurrentSection(
-              sectionsToDisplay.find((item) => item.id === section.id) ?? null
-            )
-          }}
-        />
-      )
-    }
-    if (columnKey === 'actions') {
-      return (
-        <div className='relative flex justify-end items-center gap-2'>
-          <Dropdown className='bg-background border-1 border-default-200'>
-            <DropdownTrigger>
-              <Button isIconOnly radius='full' size='sm' variant='light'>
-                <FiMoreVertical className='text-default-400' />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem>View</DropdownItem>
-              <DropdownItem>Edit</DropdownItem>
-              <DropdownItem>Delete</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
-      )
-    }
-
-    return getKeyValue(section, columnKey as string | number)
-  }
-
   return (
     <>
       <div className='table-wrapper'>
@@ -352,7 +133,26 @@ export const TripTable = ({ trip }: Props) => {
                       className='td'
                       style={{ width: `${column.width}px` }}
                     >
-                      {renderCell(column.uid, section)}
+                      <RenderCell
+                        columnKey={column.uid}
+                        section={section}
+                        onDeleteSection={() => {
+                          updateTripMutation({
+                            _id: trip._id,
+                            sections: sectionsToDisplay.filter(
+                              (item) => item.id !== section.id
+                            ),
+                          })
+                        }}
+                        onNoteClick={() => {
+                          setCurrentSection(
+                            sectionsToDisplay.find(
+                              (item) => item.id === section.id
+                            ) ?? null
+                          )
+                        }}
+                        onSaveTableCell={onSaveTableCell}
+                      />
                     </div>
                   ))}
                 </div>

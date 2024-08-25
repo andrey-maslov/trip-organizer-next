@@ -163,7 +163,7 @@ const TiptapEditor = ({
             color='danger'
             size='sm'
             variant='flat'
-            onClick={() => {
+            onPress={() => {
               if (confirm('Do you really want to delete your note?')) {
                 deleteNote()
               }

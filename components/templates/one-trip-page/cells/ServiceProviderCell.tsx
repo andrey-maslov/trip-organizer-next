@@ -29,7 +29,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
         color='default'
         size='sm'
         variant='light'
-        onClick={() => setOpen(true)}
+        onPress={() => setOpen(true)}
       >
         {serviceProvider?.name ?? '+'}
       </Button>
@@ -68,7 +68,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
                 <div className='flex justify-end'>
                   <Button
                     color='primary'
-                    onClick={() => {
+                    onPress={() => {
                       onUpdate(data)
                       onClose()
                     }}

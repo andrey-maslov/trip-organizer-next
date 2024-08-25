@@ -52,14 +52,14 @@ export const DateTimeCell: React.FC<DateTimeCellProps> = ({
                 <div className='flex gap-2 justify-items-end'>
                   <Button
                     size='sm'
-                    onClick={() => setSelectedDateStart(undefined)}
+                    onPress={() => setSelectedDateStart(undefined)}
                   >
                     Reset
                   </Button>
                   <Button
                     color='primary'
                     size='sm'
-                    onClick={() => {
+                    onPress={() => {
                       onUpdate(selectedDateStart)
                     }}
                   >

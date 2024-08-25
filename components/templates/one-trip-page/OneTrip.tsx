@@ -109,7 +109,7 @@ export const OneTrip = () => {
       <TripTable trip={trip} />
       <Divider className='my-8' />
       <div className='flex justify-end'>
-        <Button color='danger' onClick={onDeleteTrip}>
+        <Button color='danger' onPress={onDeleteTrip}>
           Delete trip
         </Button>
       </div>

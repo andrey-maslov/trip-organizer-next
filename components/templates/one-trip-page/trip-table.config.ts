@@ -1,6 +1,6 @@
 import { ChipProps } from '@nextui-org/react'
 
-import { Section, Status } from '@/types/models'
+import { Status } from '@/types/models'
 
 export type Column = {
   name: string
@@ -58,24 +58,3 @@ export const statusOptions = Object.entries(statusOptionsMap).map(
     name,
   })
 )
-
-// Section fields thad may be updated directly as one field has one string value
-export const simpleTableCells = [
-  'type',
-  'name',
-  'status',
-  'dateTimeStart',
-  'dateTimeEnd',
-  'serviceProvider',
-  'startingPoint',
-  'endPoint',
-  'payments',
-]
-
-export const defaultSection: Section = {
-  id: 'default',
-  name: 'Default',
-  status: 'to_find',
-  startingPoint: {},
-  endPoint: {},
-}

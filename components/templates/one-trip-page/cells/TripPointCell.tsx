@@ -70,7 +70,7 @@ export const TripPointCell: FC<PointCellProps> = ({
         color='default'
         size='sm'
         variant='light'
-        onClick={() => setOpen(true)}
+        onPress={() => setOpen(true)}
       >
         {point?.name ?? '-'}
         <br />
@@ -143,7 +143,7 @@ export const TripPointCell: FC<PointCellProps> = ({
                 <div className='flex justify-end'>
                   <Button
                     color='primary'
-                    onClick={() => {
+                    onPress={() => {
                       savePoint()
                       onClose()
                     }}

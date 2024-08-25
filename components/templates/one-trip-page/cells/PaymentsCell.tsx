@@ -50,7 +50,7 @@ export const PaymentsCell: React.FC<Props> = ({ data, onSave }) => {
         color='default'
         size='sm'
         variant='light'
-        onClick={() => setOpen(true)}
+        onPress={() => setOpen(true)}
       >
         {getTotalPriceFromSection(data)}
       </Button>
@@ -147,7 +147,7 @@ export const PaymentsCell: React.FC<Props> = ({ data, onSave }) => {
                   color='default'
                   radius='full'
                   size='sm'
-                  onClick={() => {
+                  onPress={() => {
                     setExpenses((prev) => [defaultExpense, ...prev])
                   }}
                 >

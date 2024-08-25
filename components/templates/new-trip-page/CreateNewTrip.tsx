@@ -136,7 +136,7 @@ export const CreateNewTrip = () => {
           isLoading={isPending}
           radius='full'
           size='lg'
-          onClick={() => onCreateNewTrip()}
+          onPress={() => onCreateNewTrip()}
         >
           Create trip
         </Button>

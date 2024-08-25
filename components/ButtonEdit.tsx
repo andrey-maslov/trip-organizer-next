@@ -13,7 +13,7 @@ export const ButtonEdit = ({ onClick }: ButtonEditProps) => (
     color='warning'
     size='sm'
     variant='faded'
-    onClick={onClick}
+    onPress={onClick}
   >
     <FiEdit2 />
   </Button>
