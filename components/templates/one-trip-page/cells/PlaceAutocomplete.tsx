@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps'
+import { useMapsLibrary } from '@vis.gl/react-google-maps'
 import { Input } from '@nextui-org/react'
-
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
 
 interface PlaceAutocompleteProps {
   onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void
@@ -35,13 +33,8 @@ export const PlaceAutocomplete = ({
   }, [onPlaceSelect, placeAutocomplete])
 
   return (
-    <APIProvider
-      apiKey={API_KEY}
-      solutionChannel='GMP_devsite_samples_v3_rgmautocomplete'
-    >
-      <div className='autocomplete-container'>
-        <Input ref={inputRef} />
-      </div>
-    </APIProvider>
+    <div className='autocomplete-container'>
+      <Input ref={inputRef} />
+    </div>
   )
 }
