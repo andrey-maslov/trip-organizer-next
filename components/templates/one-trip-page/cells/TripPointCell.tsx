@@ -4,7 +4,6 @@ import React, { FC, Key, useState } from 'react'
 import {
   Autocomplete,
   AutocompleteItem,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -42,6 +41,7 @@ export const TripPointCell: FC<PointCellProps> = ({
 
   const [isOpen, setOpen] = useState(false)
   const [name, setName] = useState(point.name)
+  // const [place, setPlace] = useState<PlaceAutocomplete>()
   const [address, setAddress] = useState(point.address)
   const [timeZone, setTimeZone] = useState<Key>(getTimeZone())
   const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
@@ -89,17 +89,22 @@ export const TripPointCell: FC<PointCellProps> = ({
             <>
               <ModalHeader className='flex flex-col gap-1'>{title}</ModalHeader>
               <ModalBody>
-                <Input
-                  placeholder='Enter starting place'
-                  size='sm'
-                  type='text'
-                  value={name}
-                  variant='underlined'
-                  onValueChange={setName}
-                />
                 <PlaceAutocomplete
-                  onPlaceSelect={(value) => console.log(value)}
+                  value={address}
+                  onPlaceSelect={(value) => {
+                    setName(value?.name)
+                    setAddress(value?.formatted_address)
+                  }}
                 />
+
+                {/*<Input*/}
+                {/*  placeholder='Enter starting place'*/}
+                {/*  size='sm'*/}
+                {/*  type='text'*/}
+                {/*  value={name}*/}
+                {/*  variant='underlined'*/}
+                {/*  onValueChange={setName}*/}
+                {/*/>*/}
                 {/*<Autocomplete*/}
                 {/*  shouldCloseOnBlur*/}
                 {/*  defaultItems={fakeAddresses}*/}

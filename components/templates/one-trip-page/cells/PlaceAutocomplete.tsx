@@ -4,13 +4,15 @@ import { Input } from '@nextui-org/react'
 
 interface PlaceAutocompleteProps {
   onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void
+  value: any
 }
 
 export const PlaceAutocomplete = ({
   onPlaceSelect,
+  value,
 }: PlaceAutocompleteProps) => {
   const [placeAutocomplete, setPlaceAutocomplete] =
-    useState<google.maps.places.Autocomplete | null>(null)
+    useState<google.maps.places.Autocomplete | null>()
   const inputRef = useRef<HTMLInputElement>(null)
   const places = useMapsLibrary('places')
 
@@ -18,7 +20,7 @@ export const PlaceAutocomplete = ({
     if (!places || !inputRef.current) return
 
     const options = {
-      fields: ['geometry', 'name', 'formatted_address'],
+      fields: ['name', 'formatted_address'],
     }
 
     setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options))
@@ -34,7 +36,7 @@ export const PlaceAutocomplete = ({
 
   return (
     <div className='autocomplete-container'>
-      <Input ref={inputRef} />
+      <Input ref={inputRef} defaultValue={value} />
     </div>
   )
 }
