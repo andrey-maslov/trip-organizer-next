@@ -21,7 +21,7 @@ type Props = {
 
 export const TripTable = ({ trip }: Props) => {
   const queryClient = useQueryClient()
-  const { id: slug } = useParams()
+  const { slug } = useParams()
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
   const [currentSection, setCurrentSection] = useState<Section | null>(null)
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -55,7 +55,8 @@ export const TripTable = ({ trip }: Props) => {
   const { mutate: updateTripMutation } = useMutation({
     mutationFn: updateTrip,
     onSuccess: async () => {
-      toast.success('Trip successfully updated')
+      toast.success('Trip successfully updated!!')
+      console.log(slug)
       await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
     },
     onError: (err) => {

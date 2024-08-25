@@ -8,6 +8,7 @@ import {
   getKeyValue,
 } from '@nextui-org/react'
 import { FiMoreVertical } from 'react-icons/fi'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { Section } from '@/types/models'
 import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
@@ -37,6 +38,7 @@ export const RenderCell = ({
 }: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
   const cellValue = getKeyValue(section, columnKey as string | number)
+  const queryClient = useQueryClient()
 
   if (columnKey === 'type') {
     return (

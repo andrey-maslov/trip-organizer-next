@@ -31,7 +31,7 @@ export const OneTrip = () => {
   const { mutate: updateTripMutation } = useMutation({
     mutationFn: updateTrip,
     onSuccess: async () => {
-      toast.success('Trip successfully updated')
+      toast.success('Trip successfully updated!')
       await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
     },
     onError: (err) => {

@@ -28,7 +28,7 @@ type NotesProps = {
 }
 
 export const NotesDrawer: FC<NotesProps> = ({ section }) => {
-  const { id: tripId } = useParams()
+  const { slug } = useParams()
   const queryClient = useQueryClient()
 
   const { removeQueryParams, searchObj } = useQueryParams()
@@ -41,8 +41,8 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
 
   // TODO check why the fetch is doubled
   const { data: trip } = useQuery({
-    queryKey: ['trip', tripId],
-    queryFn: () => getOneTrip(tripId as string),
+    queryKey: ['trip', slug],
+    queryFn: () => getOneTrip(slug as string),
     enabled: Boolean(searchObj.note),
   })
 
@@ -59,12 +59,12 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
       deleteOneNote({
         noteId: searchObj.note,
         sectionId: section?.id ?? '',
-        tripId,
+        tripId: trip?._id as string,
       }),
     onSuccess: async () => {
       toast.success('Note successfully deleted')
       removeQueryParams()
-      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
     },
     onError: (err) => {
       toast.error("Note wasn't deleted")

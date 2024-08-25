@@ -1,20 +1,26 @@
 import { FC } from 'react'
 import { Button } from '@nextui-org/button'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 
 import { useQueryParams } from '@/hooks/useQueryParams'
-import { createNote } from '@/apiRequests/apiDB'
+import { createNote, getOneTrip } from '@/apiRequests/apiDB'
 
-type NoteCellProps = {
+type Props = {
   noteId: string | undefined
   sectionId: string
   onClick: () => void
 }
 
-export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId, onClick }) => {
+export const NoteCell: FC<Props> = ({ noteId, sectionId, onClick }) => {
   const { setQueryParams } = useQueryParams()
-  const { id: tripId } = useParams()
+  const { slug } = useParams()
+
+  // Fetch Trip
+  const { data: trip } = useQuery({
+    queryKey: ['trip', slug],
+    queryFn: () => getOneTrip(slug as string),
+  })
 
   // Create new Note
   const { mutate: createNoteMutation, isPending } = useMutation({
@@ -32,7 +38,7 @@ export const NoteCell: FC<NoteCellProps> = ({ noteId, sectionId, onClick }) => {
       // create note and set noteId as query param
       createNoteMutation({
         sectionId,
-        tripId: tripId as string,
+        tripId: trip?._id as string,
       })
     }
   }
