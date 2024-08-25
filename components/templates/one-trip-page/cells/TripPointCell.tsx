@@ -14,13 +14,13 @@ import { Button } from '@nextui-org/react'
 import { parseAbsolute, toTimeZone } from '@internationalized/date'
 
 import { timeZones } from '@/constants/timezones'
-import { fakeAddresses } from '@/constants/defaultEntities'
 import { TripPoint } from '@/types/models'
 import {
   CustomData,
   CustomDateTimePicker,
 } from '@/components/CustomDateTimePicker'
 import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
+import { PlaceAutocomplete } from '@/components/templates/one-trip-page/cells/PlaceAutocomplete'
 
 type PointCellProps = {
   point: TripPoint
@@ -97,19 +97,22 @@ export const TripPointCell: FC<PointCellProps> = ({
                   variant='underlined'
                   onValueChange={setName}
                 />
-                <Autocomplete
-                  shouldCloseOnBlur
-                  defaultItems={fakeAddresses}
-                  placeholder='Search an address'
-                  size='sm'
-                  variant='underlined'
-                >
-                  {(item) => (
-                    <AutocompleteItem key={item.value}>
-                      {item.label}
-                    </AutocompleteItem>
-                  )}
-                </Autocomplete>
+                <PlaceAutocomplete
+                  onPlaceSelect={(value) => console.log(value)}
+                />
+                {/*<Autocomplete*/}
+                {/*  shouldCloseOnBlur*/}
+                {/*  defaultItems={fakeAddresses}*/}
+                {/*  placeholder='Search an address'*/}
+                {/*  size='sm'*/}
+                {/*  variant='underlined'*/}
+                {/*>*/}
+                {/*  {(item) => (*/}
+                {/*    <AutocompleteItem key={item.value}>*/}
+                {/*      {item.label}*/}
+                {/*    </AutocompleteItem>*/}
+                {/*  )}*/}
+                {/*</Autocomplete>*/}
                 <div className='flex w-full flex-wrap md:flex-nowrap items-center gap-2 mt-4'>
                   <CustomDateTimePicker
                     label='Date and time'

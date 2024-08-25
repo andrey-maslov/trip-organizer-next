@@ -21,6 +21,7 @@
     "@tiptap/react": "^2.6.4",
     "@tiptap/starter-kit": "^2.6.4",
     "@types/sanitize-html": "^2.13.0",
+    "@vis.gl/react-google-maps": "^1.1.0",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.12",
     "framer-motion": "^11.3.28",
