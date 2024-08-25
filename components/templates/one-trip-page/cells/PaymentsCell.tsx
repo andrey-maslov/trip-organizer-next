@@ -13,7 +13,7 @@ import { getTotalPriceFromSection } from '@/lib/utils'
 import { Payment } from '@/types/models'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
 
-type PriceCellProps = {
+type Props = {
   data: Payment[] | null | undefined
   onSave: (data: Partial<Payment>[]) => void
 }
@@ -27,7 +27,7 @@ const defaultExpense: Partial<Payment> = {
 
 const currenciesList = Object.values(currencies)
 
-export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
+export const PaymentsCell: React.FC<Props> = ({ data, onSave }) => {
   const [isOpen, setOpen] = useState(false)
   const [expenses, setExpenses] = useState<Partial<Payment>[]>(
     data ?? [defaultExpense]
@@ -42,10 +42,6 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
 
     newExpenses[index] = { ...expenses[index], [fieldName]: value }
     setExpenses(newExpenses)
-  }
-
-  const saveExpenses = () => {
-    onSave(expenses)
   }
 
   return (
@@ -162,7 +158,13 @@ export const PriceCell: React.FC<PriceCellProps> = ({ data, onSave }) => {
                 <Button color='danger' variant='light' onPress={onClose}>
                   Close
                 </Button>
-                <Button color='primary' onPress={() => saveExpenses()}>
+                <Button
+                  color='primary'
+                  onPress={() => {
+                    onSave(expenses)
+                    onClose()
+                  }}
+                >
                   Save
                 </Button>
               </ModalFooter>

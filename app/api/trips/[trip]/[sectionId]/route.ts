@@ -43,7 +43,9 @@ export async function PUT(
       update
     ).lean()
 
-    if (response.modifiedCount === 0) {
+    console.log(response)
+
+    if (response.matchedCount === 0) {
       return new Response('Update trip error: no matched section !!', {
         status: 404,
       })
@@ -51,6 +53,8 @@ export async function PUT(
 
     return Response.json(response)
   } catch (e) {
+    console.log('E', e)
+
     return new Response('Update trip error', {
       // TODO add 500 and 404 separation
       status: 500,

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useState } from 'react'
+import React, { FC, Key, useState } from 'react'
 import {
   Autocomplete,
   AutocompleteItem,
@@ -10,88 +10,72 @@ import {
   ModalContent,
   ModalHeader,
 } from '@nextui-org/react'
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Button,
-} from '@nextui-org/react'
-import { DayPicker } from 'react-day-picker'
+import { Button } from '@nextui-org/react'
+import { parseAbsolute, toTimeZone } from '@internationalized/date'
 
 import { timeZones } from '@/constants/timezones'
 import { fakeAddresses } from '@/constants/defaultEntities'
 import { TripPoint } from '@/types/models'
-import { getFormattedDate } from '@/lib/date'
+import {
+  CustomData,
+  CustomDateTimePicker,
+} from '@/components/CustomDateTimePicker'
+import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
 
 type PointCellProps = {
-  data: TripPoint | undefined
+  point: TripPoint
   onUpdate: (value: TripPoint) => void
+  title: string
 }
 
-export const TripPointCell: FC<PointCellProps> = ({ data }) => {
+export const TripPointCell: FC<PointCellProps> = ({
+  point = {},
+  onUpdate,
+  title,
+}) => {
+  // we have ISO string with time zone shift
+  // we'd like to extract this timezone
+  // We can save here date in ISO 8601 with Time Zone Extension, e.g. 2024-04-04T18:45:39+02:00[Europe/Warsaw]
+
+  // dateTime: '2023-08-29T15:36:32.807Z',
+  // timeZone: 'Europe/Warsaw',
+
   const [isOpen, setOpen] = useState(false)
-  const [isCalendarOpened, setCalendarOpened] = useState(false)
+  const [name, setName] = useState(point.name)
+  const [address, setAddress] = useState(point.address)
+  const [timeZone, setTimeZone] = useState<Key>(getTimeZone())
+  const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
+    const currentDate = new Date()
+    const dateISOString = point?.dateTime ?? currentDate.toISOString()
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(data?.date)
-  const [selectedTime, setSelectedTime] = useState<string>('00:00')
+    return parseAbsolute(dateISOString, point?.timeZone ?? getTimeZone())
+  })
 
-  const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value
-
-    if (!selectedDate) {
-      setSelectedTime(time)
-
-      return
+  const savePoint = () => {
+    const pointDto: TripPoint = {
+      ...point,
+      address,
+      name,
+      dateTime: zonedDateTime.toAbsoluteString(),
+      timeZone: timeZone as string,
     }
-    const [hours, minutes] = time.split(':').map((str) => parseInt(str, 10))
-    const newSelectedDate = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate(),
-      hours,
-      minutes
-    )
 
-    setSelectedDate(newSelectedDate)
-    setSelectedTime(time)
+    onUpdate(pointDto)
   }
-
-  const handleDaySelect = (date: Date | undefined) => {
-    if (!selectedTime || !date) {
-      setSelectedDate(date)
-
-      return
-    }
-    const [hours, minutes] = selectedTime
-      .split(':')
-      .map((str) => parseInt(str, 10))
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      hours,
-      minutes
-    )
-
-    // console.log(date.getTimezoneOffset())
-    setSelectedDate(newDate)
-    setCalendarOpened(false)
-  }
-
-  // console.log(selectedDate)
-  // console.log(selectedTime)
 
   return (
     <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
       <Button
+        className='h-auto'
         color='default'
         size='sm'
         variant='light'
         onClick={() => setOpen(true)}
       >
-        {data?.place?.name ?? 'n/d'}
+        {point?.name ?? '-'}
         <br />
-        {data?.date ? getFormattedDate(data?.date) : '-'} {data?.time}
+        {getFormattedDate(point?.dateTime, 'medium')} <br />
+        {getFormattedTime(point?.dateTime, 'short', 'ru')}
       </Button>
 
       <Modal
@@ -103,23 +87,22 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className='flex flex-col gap-1'>
-                Set your starting place
-              </ModalHeader>
+              <ModalHeader className='flex flex-col gap-1'>{title}</ModalHeader>
               <ModalBody>
                 <Input
                   placeholder='Enter starting place'
                   size='sm'
                   type='text'
+                  value={name}
                   variant='underlined'
+                  onValueChange={setName}
                 />
                 <Autocomplete
                   shouldCloseOnBlur
                   defaultItems={fakeAddresses}
-                  variant='underlined'
-                  size='sm'
-                  // label='Address'
                   placeholder='Search an address'
+                  size='sm'
+                  variant='underlined'
                 >
                   {(item) => (
                     <AutocompleteItem key={item.value}>
@@ -128,31 +111,10 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
                   )}
                 </Autocomplete>
                 <div className='flex w-full flex-wrap md:flex-nowrap items-center gap-2 mt-4'>
-                  <Popover
-                    isOpen={isCalendarOpened}
-                    placement='top'
-                    onOpenChange={(open) => setCalendarOpened(open)}
-                  >
-                    <PopoverTrigger>
-                      <Button className='min-w-[150px]' size='md'>
-                        {getFormattedDate(Date())}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <DayPicker
-                        mode='single'
-                        selected={selectedDate}
-                        onSelect={handleDaySelect}
-                      />
-                    </PopoverContent>
-                  </Popover>
-
-                  <Input
-                    className='max-w-[200px]'
-                    size='sm'
-                    type='time'
-                    value={selectedTime}
-                    onChange={handleTimeChange}
+                  <CustomDateTimePicker
+                    label='Date and time'
+                    value={zonedDateTime}
+                    onChange={setZonedDateTime}
                   />
                 </div>
                 <Autocomplete
@@ -163,9 +125,14 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
                     value,
                   }))}
                   label='Time zone'
-                  placeholder='Search an address'
+                  placeholder='Select time zone'
+                  selectedKey={timeZone as string}
                   size='sm'
                   variant='underlined'
+                  onSelectionChange={(value) => {
+                    setTimeZone(value as string)
+                    setZonedDateTime(toTimeZone(zonedDateTime, value as string))
+                  }}
                 >
                   {(item) => (
                     <AutocompleteItem key={item.label}>
@@ -173,6 +140,17 @@ export const TripPointCell: FC<PointCellProps> = ({ data }) => {
                     </AutocompleteItem>
                   )}
                 </Autocomplete>
+                <div className='flex justify-end'>
+                  <Button
+                    color='primary'
+                    onClick={() => {
+                      savePoint()
+                      onClose()
+                    }}
+                  >
+                    Save
+                  </Button>
+                </div>
               </ModalBody>
             </>
           )}

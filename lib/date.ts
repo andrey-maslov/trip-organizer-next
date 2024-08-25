@@ -1,6 +1,7 @@
 import { Format, format, FormatStyle, diffMinutes } from '@formkit/tempo'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { getLocalTimeZone } from '@internationalized/date'
 
 dayjs.extend(duration)
 
@@ -17,14 +18,15 @@ export const getFormattedDate = (
 }
 
 export const getFormattedTime = (
-  date: Date | string | null,
-  timeFormat: FormatStyle = 'short'
+  date: Date | string | null | undefined,
+  timeFormat: FormatStyle = 'short',
+  locale?: string
 ): string => {
   if (!date) {
     return ''
   }
 
-  return format(date, { time: timeFormat })
+  return format(date, { time: timeFormat }, locale)
 }
 
 /**
@@ -48,3 +50,9 @@ export const getHumanizedTimeDuration = (
   // remove such parts as 0h 0m 0s if it exists
   return humanizedDur.replace(/\b0+[a-z]+\s*/gi, '').trim()
 }
+
+export const getTimeZone = () => {
+  return getLocalTimeZone() ?? 'UTC'
+}
+
+export const parseDateTimeToZoned = () => {}

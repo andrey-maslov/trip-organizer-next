@@ -13,7 +13,7 @@ import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripT
 import { getFormattedDate } from '@/lib/date'
 
 export const OneTrip = () => {
-  const { id } = useParams()
+  const { slug } = useParams()
   const router = useRouter()
   const queryClient = useQueryClient()
 
@@ -23,8 +23,8 @@ export const OneTrip = () => {
     error,
     data: trip,
   } = useQuery({
-    queryKey: ['trip', id],
-    queryFn: () => getOneTrip(id as string),
+    queryKey: ['trip', slug],
+    queryFn: () => getOneTrip(slug as string),
   })
 
   // Update Trip
@@ -32,7 +32,7 @@ export const OneTrip = () => {
     mutationFn: updateTrip,
     onSuccess: async () => {
       toast.success('Trip successfully updated')
-      await queryClient.invalidateQueries({ queryKey: ['trip', id] })
+      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
     },
     onError: (err) => {
       console.error(err)
@@ -42,7 +42,7 @@ export const OneTrip = () => {
 
   const onDeleteTrip = () => {
     if (confirm('Do you really want to delete your trip data?')) {
-      deleteOneTrip(id as string)
+      deleteOneTrip(slug as string)
         .then(() => {
           router.push('/trips')
         })
@@ -106,8 +106,7 @@ export const OneTrip = () => {
           </h2>
         </div>
       </div>
-      {/*<OneTripTable sections={trip?.sections ?? []} />*/}
-      <TripTable sections={trip?.sections ?? []} />
+      <TripTable trip={trip} />
       <Divider className='my-8' />
       <div className='flex justify-end'>
         <Button color='danger' onClick={onDeleteTrip}>

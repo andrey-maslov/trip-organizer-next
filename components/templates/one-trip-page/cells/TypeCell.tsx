@@ -47,11 +47,13 @@ export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
           </Button>
         </DropdownTrigger>
         <DropdownMenu
-          // onAction={(value) => onUpdate(value as string)}
           aria-label='Dynamic Actions'
           items={serviceProviderTypes.map((label) => ({ label, value: label }))}
           selectedKeys={['unknown']}
           variant='faded'
+          onAction={(value) => {
+            onUpdate(value as string)
+          }}
         >
           {(item) => (
             <DropdownItem

@@ -45,3 +45,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Date formatting
 - [Tempo](https://tempo.formkit.com/)
+- [Adobe internationalized](https://react-spectrum.adobe.com/internationalized/date/ZonedDateTime.html) to work with NextUI calendars

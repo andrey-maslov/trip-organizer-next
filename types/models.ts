@@ -27,10 +27,10 @@ export type Section = {
   name: string
   status: Status
   type?: SectionType
-  dateTimeStart?: DateType // TODO Remove after the TripPoint implementation
-  dateTimeEnd?: DateType // TODO Remove after the TripPoint implementation
-  startingPoint?: TripPoint
-  endPoint?: TripPoint
+  dateTimeStart?: string // TODO Remove after the TripPoint implementation
+  dateTimeEnd?: string // TODO Remove after the TripPoint implementation
+  startingPoint: TripPoint
+  endPoint: TripPoint
   transportType?: TransportType
   placementType?: PlacementType
   serviceProvider?: {
@@ -67,14 +67,10 @@ export type CurrencyRates = {
 }
 
 export type TripPoint = {
-  place?: {
-    name?: string
-    address?: string
-    coordinates?: string
-  }
-  date?: Date
-  time?: string
-  timezone?: string
+  name?: string
+  address?: string
+  dateTime?: string
+  timeZone?: string
 }
 
 export type AllCurrencyRates = Record<CurrencyISOName, CurrencyRates>

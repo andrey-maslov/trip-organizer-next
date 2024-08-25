@@ -1,11 +1,11 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { Input, Textarea } from '@nextui-org/react'
+import { DateRangePicker, Input, RangeValue, Textarea } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/button'
-import { DayPicker } from 'react-day-picker'
+import { DateValue } from '@internationalized/date'
 
 import { defaultTrip } from '@/constants/defaultEntities'
 import { createTrip } from '@/apiRequests/apiDB'
@@ -20,9 +20,8 @@ export const CreateNewTrip = () => {
   const [slug, setSlug] = useState('')
   const [slugChanged, setSlugChanged] = useState(false)
   const [description, setDescription] = useState('')
-  const [selectedDateStart, setSelectedDateStart] = useState<Date | undefined>()
-  const [selectedDateEnd, setSelectedDateEnd] = useState<Date | undefined>()
   const [cover, setCover] = useState('')
+  const [date, setDate] = React.useState<RangeValue<DateValue> | null>(null)
 
   // Create New Trip
   const { mutate: createTripMutation, isPending } = useMutation({
@@ -41,8 +40,8 @@ export const CreateNewTrip = () => {
       slug,
       description,
       cover,
-      dateTimeStart: selectedDateStart,
-      dateTimeEnd: selectedDateEnd,
+      dateTimeStart: date?.start ? date.start.toString() : '',
+      dateTimeEnd: date?.end ? date.end.toString() : '',
     })
   }
 
@@ -62,9 +61,9 @@ export const CreateNewTrip = () => {
           {description.length > 5 ? (
             <h2 className='text-2xl mb-4 text-foreground-500'>{description}</h2>
           ) : null}
-          {(selectedDateStart || selectedDateEnd) && (
+          {(date?.start || date?.end) && (
             <h2 className='text-2xl mb-8 text-foreground'>
-              {`From ${selectedDateStart ? getFormattedDate(selectedDateStart) : ' ? '} to ${selectedDateEnd ? getFormattedDate(selectedDateEnd) : ' ? '}`}
+              {`From ${date?.start ? getFormattedDate(date?.start.toString()) : ' ? '} to ${date.end ? getFormattedDate(date.end.toString()) : ' ? '}`}
             </h2>
           )}
           <div className='mb-8'>
@@ -120,33 +119,15 @@ export const CreateNewTrip = () => {
           </div>
         </div>
       </div>
-      <div className='flex justify-center gap-4 mb-8'>
-        <div>
-          <DayPicker
-            footer={
-              <Button size='sm' onClick={() => setSelectedDateStart(undefined)}>
-                Reset
-              </Button>
-            }
-            fromDate={selectedDateEnd}
-            mode='single'
-            selected={selectedDateStart}
-            onSelect={setSelectedDateStart}
-          />
-        </div>
-        <div>
-          <DayPicker
-            footer={
-              <Button size='sm' onClick={() => setSelectedDateEnd(undefined)}>
-                Reset
-              </Button>
-            }
-            fromDate={selectedDateStart}
-            mode='single'
-            selected={selectedDateEnd}
-            onSelect={setSelectedDateEnd}
-          />
-        </div>
+
+      <div className='mb-14'>
+        <DateRangePicker
+          label='Trip duration'
+          labelPlacement='outside'
+          value={date}
+          visibleMonths={2}
+          onChange={setDate}
+        />
       </div>
 
       <div className='flex justify-center'>

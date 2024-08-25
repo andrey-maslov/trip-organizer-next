@@ -1,20 +1,22 @@
 import { getHumanizedTimeDuration } from '@/lib/date'
-import { DateType } from '@/types/models'
+import { TripPoint } from '@/types/models'
 
 type DurationCellProps = {
-  dateTimeStart: DateType
-  dateTimeEnd: DateType
+  start: TripPoint
+  end: TripPoint
 }
 
-export const DurationCell: React.FC<DurationCellProps> = ({
-  dateTimeStart,
-  dateTimeEnd,
-}) => (
-  <div className='flex items-center relative'>
-    <div className='text-nowrap'>
-      {dateTimeStart && dateTimeEnd
-        ? getHumanizedTimeDuration(dateTimeStart, dateTimeEnd)
-        : '-'}
+export const DurationCell: React.FC<DurationCellProps> = ({ start, end }) => {
+  const dateTimeStart = start?.dateTime
+  const dateTimeEnd = end?.dateTime
+
+  return (
+    <div className='flex items-center relative'>
+      <div className='text-nowrap'>
+        {dateTimeStart && dateTimeEnd
+          ? getHumanizedTimeDuration(dateTimeStart, dateTimeEnd)
+          : '-'}
+      </div>
     </div>
-  </div>
-)
+  )
+}

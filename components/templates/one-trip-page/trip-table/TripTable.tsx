@@ -15,46 +15,47 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 
 import { capitalize, createNewSection } from '@/lib/utils'
-import { Section, SectionBE } from '@/types/models'
+import { Section, Trip } from '@/types/models'
 import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
 import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
-import { PriceCell } from '@/components/templates/one-trip-page/cells/PriceCell'
+import { PaymentsCell } from '@/components/templates/one-trip-page/cells/PaymentsCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
 import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
-import { updateSection } from '@/apiRequests/apiDB'
+import { updateSection, updateTrip } from '@/apiRequests/apiDB'
 import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
-import { fakeStartPoint } from '@/constants/defaultEntities'
 import {
   columns,
+  defaultSection,
   INITIAL_VISIBLE_COLUMNS,
-  simpleTableCells,
   statusOptions,
 } from '@/components/templates/one-trip-page/trip-table.config'
 import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
 
-interface OneTripTableProps {
-  sections: SectionBE[]
+type Props = {
+  trip: Trip
 }
 
-export const TripTable = ({ sections }: OneTripTableProps) => {
+export const TripTable = ({ trip }: Props) => {
   const queryClient = useQueryClient()
-  const { id: tripId } = useParams()
+  const { id: slug } = useParams()
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
   const [currentSection, setCurrentSection] = useState<Section | null>(null)
   const [statusFilter, setStatusFilter] = useState<Selection>('all')
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
-  const [filterValue, setFilterValue] = useState('')
 
   useEffect(() => {
     setSectionsToDisplay(
-      (sections ?? []).map((section) => ({ ...section, id: section._id ?? '' }))
+      (trip.sections ?? []).map((section) => ({
+        ...section,
+        id: section._id ?? '',
+      }))
     )
-  }, [sections])
+  }, [trip.sections])
 
   // Update Trip Section
   const { mutate: updateSectionMutation } = useMutation({
@@ -62,11 +63,24 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
       updateSection(data.tripId, data.sectionData),
     onSuccess: async () => {
       toast.success('Section successfully updated')
-      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
     },
     onError: (err) => {
       console.error(err)
       toast.error('Section updating failed')
+    },
+  })
+
+  // Update Trip
+  const { mutate: updateTripMutation } = useMutation({
+    mutationFn: updateTrip,
+    onSuccess: async () => {
+      toast.success('Trip successfully updated')
+      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
+    },
+    onError: (err) => {
+      console.error(err)
+      toast.error('Trip updating failed')
     },
   })
 
@@ -75,10 +89,11 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
     sectionId: string,
     columnKey: string
   ) => {
-    if (!newValue || typeof tripId !== 'string') {
+    if (!newValue || typeof slug !== 'string') {
       return
     }
 
+    // Old section data
     const targetSection = sectionsToDisplay.find(
       (section) => sectionId === section.id
     )
@@ -87,19 +102,19 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
       return
     }
 
-    let newSectionData: Section = { ...targetSection }
+    const newSectionData = { ...targetSection, [columnKey]: newValue }
 
-    if (simpleTableCells.includes(columnKey)) {
-      newSectionData = { ...newSectionData, [columnKey]: newValue }
+    if (JSON.stringify(newSectionData) === JSON.stringify(targetSection)) {
+      return
     }
 
-    if ((columnKey = 'transportType')) {
-      // think about cell
-    }
+    // if ((columnKey = 'transportType')) {
+    //   // think about cell
+    // }
 
     // TODO what about new section creating when we don't have a section ID?
 
-    updateSectionMutation({ tripId, sectionData: newSectionData })
+    updateSectionMutation({ tripId: slug, sectionData: newSectionData })
   }
 
   // TODO only for Frontend...
@@ -176,15 +191,6 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
             >
               Add New
             </Button>
-            {/*<Button*/}
-            {/*  color='primary'*/}
-            {/*  endContent={<FiSave />}*/}
-            {/*  size='sm'*/}
-            {/*  onClick={() => onUpdateTripSections()}*/}
-            {/*  className='bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg'*/}
-            {/*>*/}
-            {/*  Save trip*/}
-            {/*</Button>*/}
           </div>
         </div>
         <div className='flex justify-between items-center'>
@@ -204,13 +210,7 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
     if (columnKey === 'type') {
       return (
         <TypeCell
-          type={
-            section.serviceProvider?.type ??
-            section.transportType ??
-            section.placementType ??
-            section.type ??
-            ''
-          }
+          type={section.type ?? ''}
           onUpdate={(newValue) =>
             onSaveTableCell(newValue, section.id, columnKey)
           }
@@ -247,10 +247,30 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
         />
       )
     }
-    if (columnKey === 'startingPoint' || columnKey === 'endPoint') {
+    if (columnKey === 'startingPoint') {
+      const data = section.startingPoint?.dateTime
+        ? section.startingPoint
+        : { ...section.startingPoint, dateTime: section.dateTimeStart }
+
       return (
         <TripPointCell
-          data={section.startingPoint ?? fakeStartPoint}
+          point={data}
+          title='Set your starting point'
+          onUpdate={(newValue) =>
+            onSaveTableCell(newValue, section.id, columnKey)
+          }
+        />
+      )
+    }
+    if (columnKey === 'endPoint') {
+      const data = section.endPoint?.dateTime
+        ? section.endPoint
+        : { ...section.endPoint, dateTime: section.dateTimeStart }
+
+      return (
+        <TripPointCell
+          point={data}
+          title='Set your finishing point'
           onUpdate={(newValue) =>
             onSaveTableCell(newValue, section.id, columnKey)
           }
@@ -259,7 +279,7 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
     }
     if (columnKey === 'payments') {
       return (
-        <PriceCell
+        <PaymentsCell
           data={section.payments}
           onSave={(newValue) =>
             onSaveTableCell(newValue, section.id, columnKey)
@@ -269,10 +289,7 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
     }
     if (columnKey === 'duration') {
       return (
-        <DurationCell
-          dateTimeEnd={section.dateTimeEnd}
-          dateTimeStart={section.dateTimeStart}
-        />
+        <DurationCell end={section.endPoint} start={section.startingPoint} />
       )
     }
     if (columnKey === 'note') {
@@ -318,7 +335,7 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
             {columns.map((column) => (
               <div
                 key={column.uid}
-                className='th'
+                className='th justify-center'
                 style={{ width: `${column.width}px` }}
               >
                 <span>{column.name}</span>
@@ -326,19 +343,36 @@ export const TripTable = ({ sections }: OneTripTableProps) => {
             ))}
           </div>
           <div className='tbody'>
-            {sectionsToDisplay.map((section, index) => (
-              <div key={index} className='tr'>
-                {columns.map((column) => (
-                  <div
-                    key={column.uid + section.name}
-                    className='td'
-                    style={{ width: `${column.width}px` }}
-                  >
-                    {renderCell(column.uid, section)}
-                  </div>
-                ))}
+            {sectionsToDisplay?.length > 0 ? (
+              sectionsToDisplay.map((section, index) => (
+                <div key={index} className='tr'>
+                  {columns.map((column) => (
+                    <div
+                      key={column.uid + section.name}
+                      className='td'
+                      style={{ width: `${column.width}px` }}
+                    >
+                      {renderCell(column.uid, section)}
+                    </div>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <div className='text-center py-10'>
+                <div className='mb-8'>{"You don't have any trip section"}</div>
+                <Button
+                  color='primary'
+                  onPress={() => {
+                    updateTripMutation({
+                      _id: trip._id,
+                      sections: [...sectionsToDisplay, defaultSection],
+                    })
+                  }}
+                >
+                  Create first
+                </Button>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
