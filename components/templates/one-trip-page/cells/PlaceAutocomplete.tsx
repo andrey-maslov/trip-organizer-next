@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { Input } from '@nextui-org/react'
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
 
 interface PlaceAutocompleteProps {
   onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void
