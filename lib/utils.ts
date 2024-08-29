@@ -152,3 +152,32 @@ export const isEmptyObject = (object: unknown) => {
 
   return true
 }
+
+export const truncateSentence = (
+  sentence: unknown,
+  wordLimit: number,
+  charLimit = 30
+): string => {
+  if (typeof sentence !== 'string') {
+    return ''
+  }
+  const words = sentence.split(' ')
+
+  // If the total number of words is within the word limit, process character limits
+  const truncatedWords = words.slice(0, wordLimit).map((word) => {
+    if (word.length > charLimit) {
+      return word.slice(0, charLimit) + '...'
+    }
+
+    return word
+  })
+
+  const truncatedSentence = truncatedWords.join(' ')
+
+  // Check if the sentence needs truncation based on word count
+  if (words.length > wordLimit) {
+    return truncatedSentence + '...'
+  }
+
+  return truncatedSentence
+}

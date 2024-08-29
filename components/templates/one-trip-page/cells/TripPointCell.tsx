@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  useDisclosure,
 } from '@nextui-org/react'
 import { Button } from '@nextui-org/react'
 import { parseAbsolute, toTimeZone } from '@internationalized/date'
@@ -18,17 +19,20 @@ import {
   CustomData,
   CustomDateTimePicker,
 } from '@/components/CustomDateTimePicker'
-import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
+import { getTimeZone } from '@/lib/date'
 import { PlaceAutocomplete } from '@/components/templates/one-trip-page/cells/PlaceAutocomplete'
+import { defaultPoint } from '@/constants/defaultEntities'
+
+// const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
 
 type PointCellProps = {
-  point: TripPoint
+  initialPoint: TripPoint
   onUpdate: (value: TripPoint) => void
   title: string
 }
 
 export const TripPointCell: FC<PointCellProps> = ({
-  point = {},
+  initialPoint = {},
   onUpdate,
   title,
 }) => {
@@ -39,23 +43,26 @@ export const TripPointCell: FC<PointCellProps> = ({
   // dateTime: '2023-08-29T15:36:32.807Z',
   // timeZone: 'Europe/Warsaw',
 
-  const [isOpen, setOpen] = useState(false)
-  const [name, setName] = useState(point.name)
-  // const [place, setPlace] = useState<PlaceAutocomplete>()
-  const [address, setAddress] = useState(point.address)
+  // const [isOpen, setOpen] = useState(false)
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [place, setPlace] = useState<TripPoint['place']>(
+    initialPoint.place ?? defaultPoint.place
+  )
   const [timeZone, setTimeZone] = useState<Key>(getTimeZone())
   const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
     const currentDate = new Date()
-    const dateISOString = point?.dateTime ?? currentDate.toISOString()
+    const dateISOString = initialPoint?.dateTime ?? currentDate.toISOString()
 
-    return parseAbsolute(dateISOString, point?.timeZone ?? getTimeZone())
+    return parseAbsolute(dateISOString, initialPoint?.timeZone ?? getTimeZone())
   })
 
   const savePoint = () => {
     const pointDto: TripPoint = {
-      ...point,
-      address,
-      name,
+      ...initialPoint,
+      place: {
+        ...initialPoint.place,
+        ...place,
+      },
       dateTime: zonedDateTime.toAbsoluteString(),
       timeZone: timeZone as string,
     }
@@ -65,24 +72,29 @@ export const TripPointCell: FC<PointCellProps> = ({
 
   return (
     <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
-      <Button
-        className='h-auto'
-        color='default'
-        size='sm'
-        variant='light'
-        onPress={() => setOpen(true)}
-      >
-        {point?.name ?? '-'}
-        <br />
-        {getFormattedDate(point?.dateTime, 'medium')} <br />
-        {getFormattedTime(point?.dateTime, 'short', 'ru')}
-      </Button>
+      {/*<Button*/}
+      {/*  className='h-auto'*/}
+      {/*  color='default'*/}
+      {/*  size='sm'*/}
+      {/*  variant='light'*/}
+      {/*  onPress={onOpen}*/}
+      {/*>*/}
+      {/*  {truncateSentence(initialPoint?.['place']?.name, 2) ?? '-'}*/}
+      {/*  <br />*/}
+      {/*  {getFormattedDate(initialPoint?.dateTime, 'medium')} <br />*/}
+      {/*  {getFormattedTime(initialPoint?.dateTime, 'short', 'ru')}*/}
+      {/*</Button>*/}
+
+      <PlaceAutocomplete value={place.address} onPlaceSelect={setPlace} />
 
       <Modal
+        onOpenChange={onOpenChange}
         backdrop='opaque'
-        isOpen={isOpen}
+        // isDismissable={false}
+        isDismissable={false}
         size='md'
-        onOpenChange={() => setOpen(false)}
+        // onOpenChange={() => setOpen(false)}
+        isOpen={true}
       >
         <ModalContent>
           {(onClose) => (
@@ -90,34 +102,9 @@ export const TripPointCell: FC<PointCellProps> = ({
               <ModalHeader className='flex flex-col gap-1'>{title}</ModalHeader>
               <ModalBody>
                 <PlaceAutocomplete
-                  value={address}
-                  onPlaceSelect={(value) => {
-                    setName(value?.name)
-                    setAddress(value?.formatted_address)
-                  }}
+                  value={place.address}
+                  onPlaceSelect={setPlace}
                 />
-
-                {/*<Input*/}
-                {/*  placeholder='Enter starting place'*/}
-                {/*  size='sm'*/}
-                {/*  type='text'*/}
-                {/*  value={name}*/}
-                {/*  variant='underlined'*/}
-                {/*  onValueChange={setName}*/}
-                {/*/>*/}
-                {/*<Autocomplete*/}
-                {/*  shouldCloseOnBlur*/}
-                {/*  defaultItems={fakeAddresses}*/}
-                {/*  placeholder='Search an address'*/}
-                {/*  size='sm'*/}
-                {/*  variant='underlined'*/}
-                {/*>*/}
-                {/*  {(item) => (*/}
-                {/*    <AutocompleteItem key={item.value}>*/}
-                {/*      {item.label}*/}
-                {/*    </AutocompleteItem>*/}
-                {/*  )}*/}
-                {/*</Autocomplete>*/}
                 <div className='flex w-full flex-wrap md:flex-nowrap items-center gap-2 mt-4'>
                   <CustomDateTimePicker
                     label='Date and time'
@@ -132,9 +119,9 @@ export const TripPointCell: FC<PointCellProps> = ({
                     label: value,
                     value,
                   }))}
+                  inputValue={timeZone as string}
                   label='Time zone'
                   placeholder='Select time zone'
-                  selectedKey={timeZone as string}
                   size='sm'
                   variant='underlined'
                   onSelectionChange={(value) => {

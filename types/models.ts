@@ -67,8 +67,11 @@ export type CurrencyRates = {
 }
 
 export type TripPoint = {
-  name?: string
-  address?: string
+  place: {
+    name?: string
+    address?: string
+    placeId?: string
+  }
   dateTime?: string
   timeZone?: string
 }

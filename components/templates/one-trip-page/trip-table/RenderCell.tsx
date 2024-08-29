@@ -87,7 +87,7 @@ export const RenderCell = ({
 
     return (
       <TripPointCell
-        point={data}
+        initialPoint={data}
         title='Set your starting point'
         onUpdate={(newValue) =>
           onSaveTableCell(newValue, section.id, columnKey)
@@ -102,7 +102,7 @@ export const RenderCell = ({
 
     return (
       <TripPointCell
-        point={data}
+        initialPoint={data}
         title='Set your finishing point'
         onUpdate={(newValue) =>
           onSaveTableCell(newValue, section.id, columnKey)
