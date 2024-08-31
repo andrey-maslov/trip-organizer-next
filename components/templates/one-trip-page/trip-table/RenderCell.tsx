@@ -140,8 +140,7 @@ export const RenderCell = ({
             </Button>
           </DropdownTrigger>
           <DropdownMenu>
-            <DropdownItem>View</DropdownItem>
-            <DropdownItem>Edit</DropdownItem>
+            <DropdownItem>Disable</DropdownItem>
             <DropdownItem onPress={() => onDeleteSection()}>
               Delete
             </DropdownItem>

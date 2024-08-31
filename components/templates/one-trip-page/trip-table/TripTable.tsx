@@ -1,10 +1,10 @@
-import { Button, Selection } from '@nextui-org/react'
+import { Button, Divider, Selection } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
+import { IoMdAdd } from 'react-icons/io'
 
-import { createNewSection } from '@/lib/utils'
 import { Section, Trip } from '@/types/models'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 import { updateSection, updateTrip } from '@/apiRequests/apiDB'
@@ -89,23 +89,13 @@ export const TripTable = ({ trip }: Props) => {
       return
     }
 
-    // if ((columnKey = 'transportType')) {
-    //   // think about cell
-    // }
-
-    // TODO what about new section creating when we don't have a section ID?
-
     updateSectionMutation({ tripId: slug, sectionData: newSectionData })
   }
 
-  // TODO only for Frontend...
   const onAddNewSection = () => {
-    setSectionsToDisplay((prevSections) => [
-      ...prevSections,
-      createNewSection(prevSections.length),
-    ])
-    toast.success('Section added', {
-      position: 'top-center',
+    updateTripMutation({
+      _id: trip._id,
+      sections: [...sectionsToDisplay, defaultSection],
     })
   }
 
@@ -160,21 +150,25 @@ export const TripTable = ({ trip }: Props) => {
               ))
             ) : (
               <div className='text-center py-10'>
-                <div className='mb-8'>{"You don't have any trip section"}</div>
-                <Button
-                  color='primary'
-                  onPress={() => {
-                    updateTripMutation({
-                      _id: trip._id,
-                      sections: [...sectionsToDisplay, defaultSection],
-                    })
-                  }}
-                >
+                <div className='mb-8'>You don&apos;t have any trip section</div>
+                <Button color='primary' onPress={onAddNewSection}>
                   Create first
                 </Button>
               </div>
             )}
           </div>
+        </div>
+
+        <Divider />
+        <div className='py-3 flex justify-center'>
+          <Button
+            isIconOnly
+            className='bg-gradient-to-tr from-yellow-400 to-yellow-600 text-white shadow-lg'
+            title='Add new section'
+            onPress={onAddNewSection}
+          >
+            <IoMdAdd />
+          </Button>
         </div>
       </div>
       <NotesDrawer section={currentSection} />

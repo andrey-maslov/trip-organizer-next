@@ -1,20 +1,16 @@
-import { Button } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
 
 type ButtonEditProps = {
   onClick?: () => void
+  classNames?: string
 }
 
-export const ButtonEdit = ({ onClick }: ButtonEditProps) => (
-  <Button
-    isIconOnly
-    aria-label='edit'
-    className='btn-edit'
-    color='warning'
-    size='sm'
-    variant='faded'
-    onPress={onClick}
+export const ButtonEdit = ({ onClick, classNames }: ButtonEditProps) => (
+  <button
+    className={`hover:bg-foreground-100 rounded-lg text-center p-2 ${classNames}`}
+    title='edit address'
+    onClick={onClick}
   >
     <FiEdit2 />
-  </Button>
+  </button>
 )

@@ -11,7 +11,7 @@ export const defaultPoint: TripPoint = {
 
 export const defaultSection: Section = {
   id: 'default',
-  name: 'Default',
+  name: 'Section name',
   status: 'to_find',
   startingPoint: defaultPoint,
   endPoint: defaultPoint,
