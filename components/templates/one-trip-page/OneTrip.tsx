@@ -10,12 +10,14 @@ import {
 } from '@nextui-org/react'
 import { toast } from 'react-toastify'
 import { FiSettings } from 'react-icons/fi'
+import { Tabs, Tab } from '@nextui-org/tabs'
 
 import { deleteOneTrip, getOneTrip, updateTrip } from '@/apiRequests/apiDB'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 import { Editable } from '@/components/Editable'
 import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripTable'
 import { getFormattedDate } from '@/lib/date'
+import { TripView } from '@/components/templates/one-trip-page/trip-view/TripView'
 
 export const OneTrip = () => {
   const { slug } = useParams()
@@ -127,7 +129,15 @@ export const OneTrip = () => {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <TripTable trip={trip} />
+
+      <Tabs aria-label='Options'>
+        <Tab key='view' title='View mode'>
+          <TripView trip={trip} />
+        </Tab>
+        <Tab key='edit' title='Edit mode'>
+          <TripTable trip={trip} />
+        </Tab>
+      </Tabs>
     </div>
   )
 }

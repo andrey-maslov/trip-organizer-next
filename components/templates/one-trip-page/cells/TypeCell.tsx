@@ -1,6 +1,4 @@
-import React, { ReactNode } from 'react'
-import { FaBus, FaCarSide, FaHotel, FaQuestion, FaTrain } from 'react-icons/fa'
-import { ImAirplane } from 'react-icons/im'
+import React from 'react'
 import { Button } from '@nextui-org/button'
 import {
   Dropdown,
@@ -10,21 +8,11 @@ import {
 } from '@nextui-org/react'
 
 import { serviceProviderTypes } from '@/constants/constants'
+import { SectionTypeIcon } from '@/components/SectionTypeIcon'
 
 type TypeCellProps = {
   type: string
   onUpdate: (value: string) => void
-}
-
-const typeIcons: Record<string, ReactNode> = {
-  bus: <FaBus />,
-  flight: <ImAirplane />,
-  aircraft: <ImAirplane />,
-  train: <FaTrain />,
-  car: <FaCarSide />,
-  hotel: <FaHotel />,
-  flat: <FaHotel />,
-  unknown: <FaQuestion />,
 }
 
 export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
@@ -42,7 +30,7 @@ export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
             // isLoading={isPending}
           >
             <div className='text-xl text-foreground-400'>
-              {typeIcons[type ?? 'unknown']}
+              <SectionTypeIcon type={type} />
             </div>
           </Button>
         </DropdownTrigger>
@@ -59,7 +47,7 @@ export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
             <DropdownItem
               key={item.label}
               className='outline-0'
-              startContent={typeIcons[item.value]}
+              startContent={<SectionTypeIcon type={item.value} />}
               variant='flat'
             >
               {item.label}
