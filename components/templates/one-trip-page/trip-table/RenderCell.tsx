@@ -23,16 +23,16 @@ import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
 type Props = {
   columnKey: Key
   section: Section
-  onSaveTableCell: (value: any, sectionId: string, columnKey: string) => void
-  onNoteClick: () => void
+  tripId: string
+  onSave: (value: any, sectionId: string, columnKey: string) => void
   onDeleteSection: () => void
 }
 
 export const RenderCell = ({
   columnKey,
   section,
-  onSaveTableCell,
-  onNoteClick,
+  tripId,
+  onSave,
   onDeleteSection,
 }: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
@@ -42,9 +42,7 @@ export const RenderCell = ({
     return (
       <TypeCell
         type={section.type ?? ''}
-        onUpdate={(newValue) =>
-          onSaveTableCell(newValue, section.id, columnKey)
-        }
+        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -52,9 +50,7 @@ export const RenderCell = ({
     return (
       <NameCell
         name={section?.name ?? ''}
-        onUpdate={(newValue) =>
-          onSaveTableCell(newValue, section.id, columnKey)
-        }
+        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -62,9 +58,7 @@ export const RenderCell = ({
     return (
       <StatusCell
         status={cellValue || DEFAULT_SECTION_STATUS}
-        onUpdate={(newValue) =>
-          onSaveTableCell(newValue, section.id, columnKey)
-        }
+        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -72,9 +66,7 @@ export const RenderCell = ({
     return (
       <ServiceProviderCell
         serviceProvider={section.serviceProvider}
-        onUpdate={(newValue) =>
-          onSaveTableCell(newValue, section.id, columnKey)
-        }
+        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -87,9 +79,7 @@ export const RenderCell = ({
       <TripPointCell
         initialPoint={data}
         title='Set your starting point'
-        onUpdate={(newValue) =>
-          onSaveTableCell(newValue, section.id, columnKey)
-        }
+        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -102,9 +92,7 @@ export const RenderCell = ({
       <TripPointCell
         initialPoint={data}
         title='Set your finishing point'
-        onUpdate={(newValue) =>
-          onSaveTableCell(newValue, section.id, columnKey)
-        }
+        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -112,7 +100,7 @@ export const RenderCell = ({
     return (
       <PaymentsCell
         data={section.payments}
-        onSave={(newValue) => onSaveTableCell(newValue, section.id, columnKey)}
+        onSave={(newValue) => onSave(newValue, section.id, columnKey)}
       />
     )
   }
@@ -124,7 +112,7 @@ export const RenderCell = ({
       <NoteCell
         noteId={section.note as string}
         sectionId={section.id}
-        onClick={() => onNoteClick()}
+        tripId={tripId}
       />
     )
   }

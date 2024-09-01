@@ -153,7 +153,8 @@ export interface UnsplashApiResponse {
 export type Note = {
   _id: string
   id: string
-  sectionId: Types.ObjectId | string
+  trip: Types.ObjectId | string
+  section: Types.ObjectId | string
   content?: JSON | undefined
   createdAt: DateType
   updatedAt?: DateType

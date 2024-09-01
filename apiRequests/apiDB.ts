@@ -51,6 +51,6 @@ export const deleteOneNote = async ({
 }: {
   noteId: string
   sectionId: string
-  tripId: string | string[]
+  tripId: string
 }): Promise<any> =>
   api.delete('notes', { json: { noteId, sectionId, tripId } }).text()

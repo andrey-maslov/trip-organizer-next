@@ -4,16 +4,23 @@ import connectMongo from '@/lib/db/connectMongo'
 import NoteSchema from '@/lib/db/schemas/Note.schema'
 import { Note } from '@/types/models'
 
+const host = process.env.NEXT_PUBLIC_HOST
+
 // Create new Note
 export async function POST(request: Request) {
   await connectMongo()
 
   try {
     const { tripId, sectionId, ...note } = await request.json()
-    const newNote: Note = await NoteSchema.create({ ...note, sectionId })
+
+    const newNote: Note = await NoteSchema.create({
+      ...note,
+      section: sectionId,
+      trip: tripId,
+    })
 
     await ky
-      .put(`http://localhost:3000/api/trips/${tripId}/${sectionId}`, {
+      .put(`${host}/api/trips/${tripId}/${sectionId}`, {
         json: { noteId: newNote._id },
       })
       .json()
@@ -26,15 +33,17 @@ export async function POST(request: Request) {
   }
 }
 
+// TODO ???
 export async function DELETE(request: Request) {
   await connectMongo()
 
   try {
     const { tripId, sectionId, noteId } = await request.json()
-    // await NoteSchema.deleteOne({ _id: noteId })
+
+    await NoteSchema.deleteOne({ _id: noteId })
 
     await ky
-      .put(`http://localhost:3000/api/trips/${tripId}/${sectionId}`, {
+      .put(`${host}/api/trips/${tripId}/${sectionId}`, {
         json: { noteId: null },
       })
       .json()

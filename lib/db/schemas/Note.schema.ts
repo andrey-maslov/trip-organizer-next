@@ -3,7 +3,12 @@ import { Schema, model, models } from 'mongoose'
 import { Note } from '@/types/models'
 
 const NoteSchema = new Schema<Note>({
-  sectionId: {
+  trip: {
+    type: Schema.Types.ObjectId,
+    ref: 'Trip',
+    required: true,
+  },
+  section: {
     type: Schema.Types.ObjectId,
     ref: 'Section',
     required: true,

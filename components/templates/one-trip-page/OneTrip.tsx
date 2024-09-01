@@ -18,6 +18,7 @@ import { Editable } from '@/components/Editable'
 import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripTable'
 import { getFormattedDate } from '@/lib/date'
 import { TripView } from '@/components/templates/one-trip-page/trip-view/TripView'
+import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 
 export const OneTrip = () => {
   const { slug } = useParams()
@@ -138,6 +139,8 @@ export const OneTrip = () => {
           <TripTable trip={trip} />
         </Tab>
       </Tabs>
+
+      <NotesDrawer />
     </div>
   )
 }

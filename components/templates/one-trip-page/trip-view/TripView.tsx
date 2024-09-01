@@ -8,6 +8,7 @@ import { BsGeoAlt } from 'react-icons/bs'
 import { Link } from '@nextui-org/link'
 import { Divider } from '@nextui-org/divider'
 import { toast } from 'react-toastify'
+import { useMutation } from '@tanstack/react-query'
 
 import { Trip } from '@/types/models'
 import { SectionTypeIcon } from '@/components/SectionTypeIcon'
@@ -21,12 +22,36 @@ import {
   statusOptionsMap,
 } from '@/components/templates/one-trip-page/trip-table.config'
 import { CopyToClipboard } from '@/components/CopyToClipboard'
+import { useQueryParams } from '@/hooks/useQueryParams'
+import { createNote } from '@/apiRequests/apiDB'
 
 type Props = {
   trip: Trip
 }
 
 export const TripView = ({ trip }: Props) => {
+  const { setQueryParams } = useQueryParams()
+
+  // Create new Note
+  const { mutate: createNoteMutation, isPending } = useMutation({
+    mutationFn: createNote,
+    onSuccess: (res) => {
+      setQueryParams({ note: res._id })
+    },
+  })
+
+  const onOpenNote = (tripId: string, sectionId: string, noteId?: string) => {
+    if (noteId) {
+      setQueryParams({ note: noteId })
+    } else {
+      // create note and set noteId as query param
+      createNoteMutation({
+        sectionId,
+        tripId: tripId,
+      })
+    }
+  }
+
   return (
     <div>
       {trip.sections.map((section) => {
@@ -46,7 +71,13 @@ export const TripView = ({ trip }: Props) => {
                 <button
                   className='hover:bg-foreground-100 rounded-lg text-center p-2 text-foreground-600'
                   title='expand section'
-                  onClick={() => console.log('')}
+                  onClick={() =>
+                    onOpenNote(
+                      trip._id,
+                      section._id as string,
+                      section.note as string
+                    )
+                  }
                 >
                   <FaExpand />
                 </button>

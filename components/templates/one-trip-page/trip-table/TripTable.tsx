@@ -6,7 +6,6 @@ import { useParams } from 'next/navigation'
 import { IoMdAdd } from 'react-icons/io'
 
 import { Section, Trip } from '@/types/models'
-import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 import { updateSection, updateTrip } from '@/apiRequests/apiDB'
 import {
   columns,
@@ -23,7 +22,6 @@ export const TripTable = ({ trip }: Props) => {
   const queryClient = useQueryClient()
   const { slug } = useParams()
   const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
-  const [currentSection, setCurrentSection] = useState<Section | null>(null)
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
@@ -127,6 +125,7 @@ export const TripTable = ({ trip }: Props) => {
                       <RenderCell
                         columnKey={column.uid}
                         section={section}
+                        tripId={trip._id}
                         onDeleteSection={() => {
                           updateTripMutation({
                             _id: trip._id,
@@ -135,14 +134,14 @@ export const TripTable = ({ trip }: Props) => {
                             ),
                           })
                         }}
-                        onNoteClick={() => {
-                          setCurrentSection(
-                            sectionsToDisplay.find(
-                              (item) => item.id === section.id
-                            ) ?? null
-                          )
-                        }}
-                        onSaveTableCell={onSaveTableCell}
+                        // onNoteClick={() => {
+                        //   setCurrentSection(
+                        //     sectionsToDisplay.find(
+                        //       (item) => item.id === section.id
+                        //     ) ?? null
+                        //   )
+                        // }}
+                        onSave={onSaveTableCell}
                       />
                     </div>
                   ))}
@@ -171,7 +170,6 @@ export const TripTable = ({ trip }: Props) => {
           </Button>
         </div>
       </div>
-      <NotesDrawer section={currentSection} />
     </>
   )
 }

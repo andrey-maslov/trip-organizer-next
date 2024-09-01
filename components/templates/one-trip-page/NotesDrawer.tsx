@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Drawer from 'react-modern-drawer'
 import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
@@ -11,7 +11,6 @@ import { useQueryParams } from '@/hooks/useQueryParams'
 import 'react-modern-drawer/dist/index.css'
 import dynamic from 'next/dynamic'
 
-import { Section } from '@/types/models'
 import { title, subtitle } from '@/components/primitives'
 import { deleteOneNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
 
@@ -23,11 +22,7 @@ const DynamicTiptapEditor = dynamic(
   }
 )
 
-type NotesProps = {
-  section: Section | null
-}
-
-export const NotesDrawer: FC<NotesProps> = ({ section }) => {
+export const NotesDrawer = () => {
   const { slug } = useParams()
   const queryClient = useQueryClient()
 
@@ -58,8 +53,8 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
     mutationFn: () =>
       deleteOneNote({
         noteId: searchObj.note,
-        sectionId: section?.id ?? '',
-        tripId: trip?._id as string,
+        sectionId: (note?.section ?? '') as string,
+        tripId: (note?.trip ?? '') as string,
       }),
     onSuccess: async () => {
       toast.success('Note successfully deleted')
@@ -70,6 +65,10 @@ export const NotesDrawer: FC<NotesProps> = ({ section }) => {
       toast.error("Note wasn't deleted")
     },
   })
+
+  const section = (trip?.sections ?? []).find(
+    (section) => section.note === searchObj.note
+  )
 
   if (!isOpen) {
     return null

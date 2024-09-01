@@ -1,26 +1,19 @@
 import { FC } from 'react'
 import { Button } from '@nextui-org/button'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
 
 import { useQueryParams } from '@/hooks/useQueryParams'
-import { createNote, getOneTrip } from '@/apiRequests/apiDB'
+import { createNote } from '@/apiRequests/apiDB'
 
 type Props = {
   noteId: string | undefined
   sectionId: string
-  onClick: () => void
+  tripId: string
 }
 
-export const NoteCell: FC<Props> = ({ noteId, sectionId, onClick }) => {
+export const NoteCell: FC<Props> = ({ noteId, sectionId, tripId }) => {
   const { setQueryParams } = useQueryParams()
-  const { slug } = useParams()
-
-  // Fetch Trip
-  const { data: trip } = useQuery({
-    queryKey: ['trip', slug],
-    queryFn: () => getOneTrip(slug as string),
-  })
+  // const { slug } = useParams()
 
   // Create new Note
   const { mutate: createNoteMutation, isPending } = useMutation({
@@ -30,15 +23,14 @@ export const NoteCell: FC<Props> = ({ noteId, sectionId, onClick }) => {
     },
   })
 
-  const setCurrentNote = () => {
+  const onOpenNote = () => {
     if (noteId) {
-      onClick()
       setQueryParams({ note: noteId })
     } else {
       // create note and set noteId as query param
       createNoteMutation({
         sectionId,
-        tripId: trip?._id as string,
+        tripId: tripId,
       })
     }
   }
@@ -50,7 +42,7 @@ export const NoteCell: FC<Props> = ({ noteId, sectionId, onClick }) => {
         isLoading={isPending}
         size='sm'
         variant='light'
-        onPress={() => setCurrentNote()}
+        onPress={() => onOpenNote()}
       >
         {noteId ? 'Note' : 'Add note'}
       </Button>
