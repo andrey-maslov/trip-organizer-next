@@ -25,7 +25,6 @@ import { Note } from '@/types/models'
 import { updateNote } from '@/apiRequests/apiDB'
 
 import clsx from 'clsx'
-import { Button } from '@nextui-org/react'
 
 import {
   getDocumentStatus,
@@ -157,20 +156,6 @@ const TiptapEditor = ({
           >
             {getDocumentStatus(isSaved)}
           </div>
-        )}
-        {typeof deleteNote !== 'undefined' && (
-          <Button
-            color='danger'
-            size='sm'
-            variant='flat'
-            onPress={() => {
-              if (confirm('Do you really want to delete your note?')) {
-                deleteNote()
-              }
-            }}
-          >
-            Delete note
-          </Button>
         )}
       </div>
       <Divider />

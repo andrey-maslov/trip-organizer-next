@@ -60,5 +60,6 @@ function getSearchValues(
 ): SearchParams {
   return {
     note: search.get('note') ?? '',
+    fullscreen: search.get('fullscreen') ?? '',
   }
 }

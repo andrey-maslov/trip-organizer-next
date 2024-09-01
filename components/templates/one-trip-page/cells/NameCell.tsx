@@ -17,7 +17,7 @@ export const NameCell: React.FC<NameCellProps> = ({ name, onUpdate }) => (
         'text-nowrap',
         name === defaultSection.name ? 'text-foreground-400' : ''
       )}
-      content={name || placeholder}
+      content={name}
       setContent={onUpdate}
     />
   </div>

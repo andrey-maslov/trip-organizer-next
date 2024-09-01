@@ -42,7 +42,7 @@ export const TripView = ({ trip }: Props) => {
 
   const onOpenNote = (tripId: string, sectionId: string, noteId?: string) => {
     if (noteId) {
-      setQueryParams({ note: noteId })
+      setQueryParams({ note: noteId, fullscreen: true })
     } else {
       // create note and set noteId as query param
       createNoteMutation({

@@ -47,7 +47,9 @@ export const Toolbar = ({ editor }: ToolbarProps) => {
   return (
     <div
       ref={ref}
-      className={classNames('ToolbarContainer', { sticky: !inView })}
+      className={classNames('ToolbarContainer overflow-auto', {
+        sticky: !inView,
+      })}
     >
       <div className='Toolbar'>
         <div

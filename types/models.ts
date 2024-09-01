@@ -162,6 +162,7 @@ export type Note = {
 
 export type SearchParams = {
   note: string
+  fullscreen: string
 }
 
 // Google autocomplete place type

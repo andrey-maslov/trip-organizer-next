@@ -59,10 +59,10 @@ export const CreateNewTrip = () => {
         <div className='flex-grow'>
           <h1 className='text-4xl font-bold mb-6'>{name}</h1>
           {description.length > 5 ? (
-            <h2 className='text-2xl mb-4 text-foreground-500'>{description}</h2>
+            <h2 className='text-xl mb-4 text-foreground-500'>{description}</h2>
           ) : null}
           {(date?.start || date?.end) && (
-            <h2 className='text-2xl mb-8 text-foreground'>
+            <h2 className='text-xl mb-8 text-foreground'>
               {`From ${date?.start ? getFormattedDate(date?.start.toString()) : ' ? '} to ${date.end ? getFormattedDate(date.end.toString()) : ' ? '}`}
             </h2>
           )}

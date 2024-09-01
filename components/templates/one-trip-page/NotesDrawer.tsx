@@ -1,15 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Drawer from 'react-modern-drawer'
 import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { BsChevronDoubleLeft } from 'react-icons/bs'
+import { Button } from '@nextui-org/button'
+import dynamic from 'next/dynamic'
+import clsx from 'clsx'
+import { MdOutlineDelete } from 'react-icons/md'
+import { IoCloseOutline } from 'react-icons/io5'
 
 import { useQueryParams } from '@/hooks/useQueryParams'
 
 import 'react-modern-drawer/dist/index.css'
-import dynamic from 'next/dynamic'
 
 import { title, subtitle } from '@/components/primitives'
 import { deleteOneNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
@@ -29,6 +34,7 @@ export const NotesDrawer = () => {
   const { removeQueryParams, searchObj } = useQueryParams()
 
   const [isOpen, setOpen] = useState(false)
+  const [isFullscreen, setFullscreen] = useState(Boolean(searchObj.fullscreen))
 
   useEffect(() => {
     setOpen(Boolean(searchObj.note))
@@ -79,21 +85,60 @@ export const NotesDrawer = () => {
       className='notes-drawer'
       direction='right'
       open={isOpen}
-      size={'40vw'}
+      size={isFullscreen ? '100vw' : '40vw'}
       onClose={() => {
         setOpen(false)
         removeQueryParams()
       }}
     >
-      <div className='bg-background p-20'>
+      <div className='bg-background p-4 md:px-10 xl:px-12 relative'>
+        <div className='mb-4 flex justify-between'>
+          <div>
+            <Button
+              isIconOnly
+              className='text-xl text-foreground-400 mr-4'
+              size='sm'
+              variant='light'
+              onPress={() => setFullscreen(!isFullscreen)}
+            >
+              <BsChevronDoubleLeft
+                className={clsx(isFullscreen ? 'rotate-180' : '')}
+              />
+            </Button>
+            <Button
+              isIconOnly
+              className='text-xl text-foreground-400'
+              size='sm'
+              variant='light'
+              onPress={() => {
+                setOpen(false)
+                removeQueryParams()
+              }}
+            >
+              <IoCloseOutline />
+            </Button>
+          </div>
+          <Button
+            isIconOnly
+            className='text-xl'
+            color='danger'
+            size='sm'
+            title='delete note'
+            variant='flat'
+            onPress={() => {
+              if (confirm('Do you really want to delete your note?')) {
+                deleteNoteMutation()
+              }
+            }}
+          >
+            <MdOutlineDelete />
+          </Button>
+        </div>
         <h1 className={title({ class: 'mb-10' })}>{trip?.name}</h1>
         <h2 className={subtitle({ class: 'mb-2' })}>
           Section: {section?.name}
         </h2>
-        <DynamicTiptapEditor
-          deleteNote={() => deleteNoteMutation()}
-          note={note}
-        />
+        <DynamicTiptapEditor note={note} />
       </div>
     </Drawer>
   )
