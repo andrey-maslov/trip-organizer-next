@@ -67,8 +67,12 @@ export type CurrencyRates = {
 }
 
 export type TripPoint = {
-  name?: string
-  address?: string
+  place: {
+    name?: string
+    secondaryName?: string
+    address?: string
+    placeId?: string
+  }
   dateTime?: string
   timeZone?: string
 }
@@ -157,4 +161,28 @@ export type Note = {
 
 export type SearchParams = {
   note: string
+}
+
+// Google autocomplete place type
+export type GAPlace = {
+  description: string
+  matched_substrings: Array<{
+    length: number
+    offset: number
+  }>
+  place_id: string
+  reference: string
+  structured_formatting: {
+    main_text: string
+    main_text_matched_substrings: Array<{
+      length: number
+      offset: number
+    }>
+    secondary_text: string
+  }
+  terms: Array<{
+    offset: number
+    value: string
+  }>
+  types: string[]
 }

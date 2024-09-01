@@ -45,7 +45,7 @@ export const PaymentsCell: React.FC<Props> = ({ data, onSave }) => {
   }
 
   return (
-    <div className='flex items-center relative editable-elemenet'>
+    <div className='flex items-center relative editable-elemenet w-full'>
       <Button
         color='default'
         size='sm'

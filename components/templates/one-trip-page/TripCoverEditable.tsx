@@ -44,7 +44,10 @@ export const TripCoverEditable = ({
         width={200}
       />
       {tripName.length >= 5 && (
-        <ButtonEdit onClick={() => setPicsListOpen(true)} />
+        <ButtonEdit
+          classNames='btn-edit bg-white shadow-md'
+          onClick={() => setPicsListOpen(true)}
+        />
       )}
 
       <Modal

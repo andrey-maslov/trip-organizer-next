@@ -8,7 +8,6 @@ import {
   getKeyValue,
 } from '@nextui-org/react'
 import { FiMoreVertical } from 'react-icons/fi'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { Section } from '@/types/models'
 import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
@@ -38,7 +37,6 @@ export const RenderCell = ({
 }: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
   const cellValue = getKeyValue(section, columnKey as string | number)
-  const queryClient = useQueryClient()
 
   if (columnKey === 'type') {
     return (
@@ -87,7 +85,7 @@ export const RenderCell = ({
 
     return (
       <TripPointCell
-        point={data}
+        initialPoint={data}
         title='Set your starting point'
         onUpdate={(newValue) =>
           onSaveTableCell(newValue, section.id, columnKey)
@@ -102,7 +100,7 @@ export const RenderCell = ({
 
     return (
       <TripPointCell
-        point={data}
+        initialPoint={data}
         title='Set your finishing point'
         onUpdate={(newValue) =>
           onSaveTableCell(newValue, section.id, columnKey)
@@ -140,8 +138,7 @@ export const RenderCell = ({
             </Button>
           </DropdownTrigger>
           <DropdownMenu>
-            <DropdownItem>View</DropdownItem>
-            <DropdownItem>Edit</DropdownItem>
+            <DropdownItem>Disable</DropdownItem>
             <DropdownItem onPress={() => onDeleteSection()}>
               Delete
             </DropdownItem>

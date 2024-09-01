@@ -5,20 +5,27 @@ export const defaultTrip: Partial<Trip> = {
   sections: [],
 }
 
+export const defaultPoint: TripPoint = {
+  place: {},
+}
+
 export const defaultSection: Section = {
   id: 'default',
-  name: 'Default',
+  // type: 'unknown',
+  name: 'Section name',
   status: 'to_find',
-  startingPoint: {},
-  endPoint: {},
+  startingPoint: defaultPoint,
+  endPoint: defaultPoint,
 }
 
 export const defaultCoverImage =
   'https://images.unsplash.com/photo-1541665728259-94dc0f5964d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzY5NzB8MHwxfHNlYXJjaHw1fHxqb3VybmV5JTIwM3xlbnwwfHx8fDE3MTYxMzYwNzh8MA&ixlib=rb-4.0.3&q=80&w=400'
 
 export const fakeStartPoint: TripPoint = {
-  name: 'Wroclaw',
-  address: 'ul. Sucha 1, 50-086 Wrocław, Polska',
+  place: {
+    name: 'Wroclaw',
+    address: 'ul. Sucha 1, 50-086 Wrocław, Polska',
+  },
   dateTime: '2023-08-29T15:36:32.807Z',
   timeZone: 'Europe/Warsaw',
   // coordinates: '',

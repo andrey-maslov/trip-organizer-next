@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, Key, useState } from 'react'
+import React, { FC, useState } from 'react'
 import {
   Autocomplete,
   AutocompleteItem,
@@ -8,27 +8,49 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  useDisclosure,
 } from '@nextui-org/react'
 import { Button } from '@nextui-org/react'
 import { parseAbsolute, toTimeZone } from '@internationalized/date'
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 
 import { timeZones } from '@/constants/timezones'
-import { TripPoint } from '@/types/models'
+import { GAPlace, TripPoint } from '@/types/models'
 import {
   CustomData,
   CustomDateTimePicker,
 } from '@/components/CustomDateTimePicker'
 import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
-import { PlaceAutocomplete } from '@/components/templates/one-trip-page/cells/PlaceAutocomplete'
+import { defaultPoint } from '@/constants/defaultEntities'
+import { truncateSentence } from '@/lib/utils'
+import { ButtonEdit } from '@/components/ButtonEdit'
+
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
+// const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
 
 type PointCellProps = {
-  point: TripPoint
+  initialPoint: TripPoint
   onUpdate: (value: TripPoint) => void
   title: string
 }
 
+const placeAutocompleteStyles = {
+  input: (provided: any) => ({
+    ...provided,
+    // color: 'blue',
+  }),
+  option: (provided: any) => ({
+    ...provided,
+    // color: 'blue',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    // color: 'blue',
+  }),
+}
+
 export const TripPointCell: FC<PointCellProps> = ({
-  point = {},
+  initialPoint,
   onUpdate,
   title,
 }) => {
@@ -39,29 +61,45 @@ export const TripPointCell: FC<PointCellProps> = ({
   // dateTime: '2023-08-29T15:36:32.807Z',
   // timeZone: 'Europe/Warsaw',
 
-  const [isOpen, setOpen] = useState(false)
-  const [name, setName] = useState(point.name)
-  // const [place, setPlace] = useState<PlaceAutocomplete>()
-  const [address, setAddress] = useState(point.address)
-  const [timeZone, setTimeZone] = useState<Key>(getTimeZone())
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
+  const [editPlace, setEditPlace] = useState(
+    !Boolean(initialPoint.place?.address)
+  )
+  const [point, setPoint] = useState(
+    initialPoint ? initialPoint : { ...defaultPoint, timeZone: getTimeZone() }
+  )
+  const [place, setPlace] = useState<{
+    label: string
+    value: GAPlace | any
+  } | null>(null)
   const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
     const currentDate = new Date()
-    const dateISOString = point?.dateTime ?? currentDate.toISOString()
+    const dateISOString = initialPoint?.dateTime ?? currentDate.toISOString()
 
-    return parseAbsolute(dateISOString, point?.timeZone ?? getTimeZone())
+    return parseAbsolute(dateISOString, initialPoint?.timeZone ?? getTimeZone())
   })
 
   const savePoint = () => {
+    const newPlace = place?.value
+      ? {
+          name: place?.value.structured_formatting.main_text,
+          secondaryName: place?.value.structured_formatting.secondary_text,
+          address: place?.value.description,
+          placeId: place?.value.place_id,
+        }
+      : point.place
+
     const pointDto: TripPoint = {
       ...point,
-      address,
-      name,
+      place: newPlace,
       dateTime: zonedDateTime.toAbsoluteString(),
-      timeZone: timeZone as string,
     }
 
     onUpdate(pointDto)
   }
+
+  const pointAddress = point.place?.address ?? place?.value?.description
 
   return (
     <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
@@ -70,61 +108,52 @@ export const TripPointCell: FC<PointCellProps> = ({
         color='default'
         size='sm'
         variant='light'
-        onPress={() => setOpen(true)}
+        onPress={onOpen}
       >
-        {point?.name ?? '-'}
+        {truncateSentence(initialPoint?.['place']?.name, 2) ?? '-'}
         <br />
-        {getFormattedDate(point?.dateTime, 'medium')} <br />
-        {getFormattedTime(point?.dateTime, 'short', 'ru')}
+        {getFormattedDate(initialPoint?.dateTime, 'medium')} <br />
+        {getFormattedTime(initialPoint?.dateTime, 'short', 'ru')}
       </Button>
 
       <Modal
         backdrop='opaque'
         isOpen={isOpen}
         size='md'
-        onOpenChange={() => setOpen(false)}
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>{title}</ModalHeader>
               <ModalBody>
-                <PlaceAutocomplete
-                  value={address}
-                  onPlaceSelect={(value) => {
-                    setName(value?.name)
-                    setAddress(value?.formatted_address)
-                  }}
-                />
+                {pointAddress && !editPlace ? (
+                  <div className='flex items-center justify-between'>
+                    <div>{pointAddress}</div>
+                    <ButtonEdit onClick={() => setEditPlace(!editPlace)} />
+                  </div>
+                ) : (
+                  <div className='h-10'>
+                    <GooglePlacesAutocomplete
+                      apiKey={API_KEY}
+                      selectProps={{
+                        value: place,
+                        onChange: (value) => setPlace(value),
+                        styles: placeAutocompleteStyles,
+                      }}
+                    />
+                  </div>
+                )}
 
-                {/*<Input*/}
-                {/*  placeholder='Enter starting place'*/}
-                {/*  size='sm'*/}
-                {/*  type='text'*/}
-                {/*  value={name}*/}
-                {/*  variant='underlined'*/}
-                {/*  onValueChange={setName}*/}
-                {/*/>*/}
-                {/*<Autocomplete*/}
-                {/*  shouldCloseOnBlur*/}
-                {/*  defaultItems={fakeAddresses}*/}
-                {/*  placeholder='Search an address'*/}
-                {/*  size='sm'*/}
-                {/*  variant='underlined'*/}
-                {/*>*/}
-                {/*  {(item) => (*/}
-                {/*    <AutocompleteItem key={item.value}>*/}
-                {/*      {item.label}*/}
-                {/*    </AutocompleteItem>*/}
-                {/*  )}*/}
-                {/*</Autocomplete>*/}
                 <div className='flex w-full flex-wrap md:flex-nowrap items-center gap-2 mt-4'>
+                  {/*Date Time*/}
                   <CustomDateTimePicker
                     label='Date and time'
                     value={zonedDateTime}
                     onChange={setZonedDateTime}
                   />
                 </div>
+                {/*Time zone*/}
                 <Autocomplete
                   shouldCloseOnBlur
                   className='max-w-[14rem]'
@@ -132,13 +161,18 @@ export const TripPointCell: FC<PointCellProps> = ({
                     label: value,
                     value,
                   }))}
+                  // defaultSelectedKey={getTimeZone()}
+                  inputValue={point.timeZone as string}
                   label='Time zone'
                   placeholder='Select time zone'
-                  selectedKey={timeZone as string}
                   size='sm'
                   variant='underlined'
                   onSelectionChange={(value) => {
-                    setTimeZone(value as string)
+                    setPoint((prev) => ({
+                      ...prev,
+                      timeZone: value as string,
+                    }))
+
                     setZonedDateTime(toTimeZone(zonedDateTime, value as string))
                   }}
                 >
