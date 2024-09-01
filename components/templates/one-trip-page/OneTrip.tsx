@@ -65,8 +65,8 @@ export const OneTrip = () => {
   }
 
   return (
-    <div className='container p-4 lg:p-8'>
-      <div className='flex gap-4 mb-8 items-start'>
+    <div className=''>
+      <div className='flex gap-4 mb-4 flex-wrap md:flex-nowrap items-start'>
         <div className='flex min-w-[200px]'>
           <TripCoverEditable
             coverSrc={trip.cover}
@@ -77,14 +77,14 @@ export const OneTrip = () => {
           />
         </div>
         <div className='w-full'>
-          <div className='flex gap-4 mb-4 items-center'>
+          <div className='flex gap-4 mb-4 items-center flex-wrap md:flex-nowrap'>
             <Editable
-              className='font-bold text-3xl'
+              className='font-bold text-xl xl:text-3xl'
               content={trip?.name}
               setContent={(name) => updateTripMutation({ ...trip, name })}
               tag='h1'
             />
-            <div className='text-foreground-400'>
+            <div className='text-foreground-400 text-sm md:text-md'>
               <span>Slug: </span>
               <Editable
                 content={(trip?.slug || trip?.name)
@@ -97,14 +97,14 @@ export const OneTrip = () => {
             </div>
           </div>
           <Editable
-            className='text-xl text-foreground-500 mb-4'
+            className='text-md xl:text-xl text-foreground-500 mb-4'
             content={trip?.description}
             setContent={(description) =>
               updateTripMutation({ ...trip, description })
             }
             tag='h2'
           />
-          <h2 className='text-xl mb-8 text-foreground'>
+          <h2 className='text-md xl:text-xl mb-2 lg:mb-8 text-foreground'>
             {trip?.dateTimeStart
               ? `From ${getFormattedDate(trip.dateTimeStart)}`
               : ''}{' '}
@@ -114,6 +114,7 @@ export const OneTrip = () => {
           </h2>
         </div>
 
+        {/*Settings*/}
         <Dropdown>
           <DropdownTrigger>
             <button

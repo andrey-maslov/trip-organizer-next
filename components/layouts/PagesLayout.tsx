@@ -22,9 +22,9 @@ export const PagesLayout = ({ children }: PagesLayoutProps) => {
     <>
       {isClient ? (
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'light' }}>
-          <div className='relative flex flex-col h-screen'>
+          <div className='relative flex flex-col h-screen max-w-[100%]'>
             <Navbar />
-            <main className='container mx-auto max-w-7xl pt-16 px-6 flex-grow'>
+            <main className='container mx-auto max-w-7xl py-8 xl:py-16 px-4 xl:px-6 flex-grow'>
               <ErrorBoundary>{children}</ErrorBoundary>
             </main>
             <Divider />

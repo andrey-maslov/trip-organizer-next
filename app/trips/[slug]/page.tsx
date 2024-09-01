@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function OneTripPageTemplate() {
   return (
-    <div className='container p-4 lg:p-8'>
+    <div>
       <Suspense fallback={<Loader />}>
         <div>
           <OneTrip />
