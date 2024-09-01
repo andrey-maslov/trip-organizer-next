@@ -3,7 +3,8 @@ import { FaBus, FaCarSide, FaHotel, FaQuestion, FaTrain } from 'react-icons/fa'
 import { ImAirplane } from 'react-icons/im'
 
 type Props = {
-  type: string
+  type?: string
+  classNames?: string
 }
 
 const typeIcons: Record<string, ReactNode> = {
@@ -17,6 +18,6 @@ const typeIcons: Record<string, ReactNode> = {
   unknown: <FaQuestion />,
 }
 
-export const SectionTypeIcon = ({ type }: Props) => {
-  return typeIcons[type ?? 'unknown']
+export const SectionTypeIcon = ({ type = 'unknown', classNames }: Props) => {
+  return <span className={classNames}>{typeIcons[type ?? 'unknown']}</span>
 }
