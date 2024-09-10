@@ -134,13 +134,18 @@ export const TripTable = ({ trip }: Props) => {
                             ),
                           })
                         }}
-                        // onNoteClick={() => {
-                        //   setCurrentSection(
-                        //     sectionsToDisplay.find(
-                        //       (item) => item.id === section.id
-                        //     ) ?? null
-                        //   )
-                        // }}
+                        onMoveSection={(sectionId, direction) => {
+                          const rearrangedSections = moveObject(
+                            sectionsToDisplay,
+                            sectionId,
+                            direction
+                          )
+
+                          updateTripMutation({
+                            _id: trip._id,
+                            sections: rearrangedSections,
+                          })
+                        }}
                         onSave={onSaveTableCell}
                       />
                     </div>
@@ -172,4 +177,47 @@ export const TripTable = ({ trip }: Props) => {
       </div>
     </>
   )
+}
+
+const moveObject = (
+  items: Section[],
+  objectId: string,
+  direction: 'up' | 'down'
+): Section[] => {
+  // Найдем индекс объекта, который нужно переместить
+  const index = items.findIndex((item) => item.id === objectId)
+
+  // Если объект не найден, возвращаем массив без изменений
+  if (index === -1) {
+    return items
+  }
+
+  // Обработаем перемещение вверх
+  if (direction === 'up' && index > 0) {
+    const newItems = [...items]
+
+    // Меняем местами текущий объект и объект выше по списку
+    ;[newItems[index], newItems[index - 1]] = [
+      newItems[index - 1],
+      newItems[index],
+    ]
+
+    return newItems
+  }
+
+  // Обработаем перемещение вниз
+  if (direction === 'down' && index < items.length - 1) {
+    const newItems = [...items]
+
+    // Меняем местами текущий объект и объект ниже по списку
+    ;[newItems[index], newItems[index + 1]] = [
+      newItems[index + 1],
+      newItems[index],
+    ]
+
+    return newItems
+  }
+
+  // Если объект на границе списка и не может быть перемещен, возвращаем массив без изменений
+  return items
 }

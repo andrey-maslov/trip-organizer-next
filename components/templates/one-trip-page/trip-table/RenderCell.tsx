@@ -26,6 +26,7 @@ type Props = {
   tripId: string
   onSave: (value: any, sectionId: string, columnKey: string) => void
   onDeleteSection: () => void
+  onMoveSection: (sectionId: string, direction: 'up' | 'down') => void
 }
 
 export const RenderCell = ({
@@ -34,6 +35,7 @@ export const RenderCell = ({
   tripId,
   onSave,
   onDeleteSection,
+  onMoveSection,
 }: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
   const cellValue = getKeyValue(section, columnKey as string | number)
@@ -126,6 +128,12 @@ export const RenderCell = ({
             </Button>
           </DropdownTrigger>
           <DropdownMenu>
+            <DropdownItem onPress={() => onMoveSection(section.id, 'up')}>
+              Move Up
+            </DropdownItem>
+            <DropdownItem onPress={() => onMoveSection(section.id, 'down')}>
+              Move Down
+            </DropdownItem>
             <DropdownItem>Disable</DropdownItem>
             <DropdownItem onPress={() => onDeleteSection()}>
               Delete
