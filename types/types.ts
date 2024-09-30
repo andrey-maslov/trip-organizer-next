@@ -188,3 +188,12 @@ export type GAPlace = {
   }>
   types: string[]
 }
+
+export type UserData = {
+  _id: string
+  firstName?: string
+  lastName?: string
+  displayName?: string
+  email: string
+  role: 'user' | 'admin'
+}

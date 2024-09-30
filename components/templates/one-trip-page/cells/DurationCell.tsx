@@ -1,5 +1,5 @@
 import { getHumanizedTimeDuration } from '@/lib/date'
-import { TripPoint } from '@/types/models'
+import { TripPoint } from '@/types/types'
 
 type DurationCellProps = {
   start: TripPoint

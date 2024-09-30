@@ -15,7 +15,7 @@ import { parseAbsolute, toTimeZone } from '@internationalized/date'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 
 import { timeZones } from '@/constants/timezones'
-import { GAPlace, TripPoint } from '@/types/models'
+import { GAPlace, TripPoint } from '@/types/types'
 import {
   CustomData,
   CustomDateTimePicker,

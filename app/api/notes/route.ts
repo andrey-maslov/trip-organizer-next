@@ -2,7 +2,7 @@ import ky from 'ky-universal'
 
 import connectMongo from '@/lib/db/connectMongo'
 import NoteSchema from '@/lib/db/schemas/Note.schema'
-import { Note } from '@/types/models'
+import { Note } from '@/types/types'
 
 const host = process.env.NEXT_PUBLIC_HOST
 

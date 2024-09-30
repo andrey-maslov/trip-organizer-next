@@ -1,45 +1,53 @@
 'use client'
 
+import {
+  SignedIn,
+  SignedOut,
+  useClerk,
+  UserButton,
+  useUser,
+} from '@clerk/nextjs'
 import { Button } from '@nextui-org/button'
 import { FiLogIn, FiLogOut } from 'react-icons/fi'
-import { connectWithPopup, useUser } from '@eartho/one-client-nextjs/client'
 import { Link } from '@nextui-org/link'
 
 export const UserPopup = () => {
-  const { user, error, isLoading, checkSession } = useUser()
+  const { signOut } = useClerk()
+  const { user } = useUser()
 
-  console.log(user)
-
-  // TODO fix all callbacks
-  const EARTHO_ACCESS_POINT = process.env.NEXT_PUBLIC_EARTHO_ACCESS_POINT ?? ''
+  // console.log('U', user)
 
   return (
     <div>
-      {user ? (
+      <SignedIn>
         <div>
           <span className='text-foreground inline-block mr-2'>
-            Hello, {user.displayName ?? 'unknown guest'}!
+            Hello, {user?.firstName ?? 'unknown guest'}!
           </span>
+
+          <UserButton />
+
           <Button
-            as={Link}
             className='text-sm font-normal text-default-600 bg-default-100'
-            href={'/api/access/logout'}
             startContent={<FiLogOut className='text-danger' />}
             variant='flat'
+            onPress={() => signOut({ redirectUrl: '/' })}
           >
-            Log Out
+            Logout
           </Button>
         </div>
-      ) : (
+      </SignedIn>
+      <SignedOut>
         <Button
+          as={Link}
           className='text-sm font-normal text-default-600 bg-default-100'
+          href={'/sign-in'}
           startContent={<FiLogIn className='text-yellow-600' />}
           variant='flat'
-          onPress={() => connectWithPopup('login')}
         >
-          Log In
+          Sign In
         </Button>
-      )}
+      </SignedOut>
     </div>
   )
 }

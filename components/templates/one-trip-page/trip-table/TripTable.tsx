@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { IoMdAdd } from 'react-icons/io'
 
-import { Section, Trip } from '@/types/models'
+import { Section, Trip } from '@/types/types'
 import { updateSection, updateTrip } from '@/apiRequests/apiDB'
 import {
   columns,

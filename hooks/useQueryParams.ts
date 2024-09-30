@@ -5,7 +5,7 @@ import {
   useSearchParams,
 } from 'next/navigation'
 
-import { SearchParams } from '@/types/models'
+import { SearchParams } from '@/types/types'
 
 type UseQueryParamsReturn = {
   searchObj: SearchParams

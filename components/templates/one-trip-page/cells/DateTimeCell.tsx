@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { FiEdit2 } from 'react-icons/fi'
 
-import { DateType } from '@/types/models'
+import { DateType } from '@/types/types'
 import { getFormattedDate, getFormattedTime } from '@/lib/date'
 
 type DateTimeCellProps = {

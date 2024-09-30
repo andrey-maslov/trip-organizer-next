@@ -1,6 +1,6 @@
 import ky from 'ky'
 
-import { Note, Section, Trip } from '@/types/models'
+import { Note, Section, Trip } from '@/types/types'
 
 const api = ky.create({
   prefixUrl: '/api',

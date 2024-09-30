@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react'
 
 import { getTotalPriceFromSection } from '@/lib/utils'
-import { Payment } from '@/types/models'
+import { Payment } from '@/types/types'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
 
 type Props = {

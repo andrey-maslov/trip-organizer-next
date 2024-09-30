@@ -11,7 +11,7 @@ import {
   statusOptionsMap,
 } from '@/components/templates/one-trip-page/trip-table.config'
 import { statusTypes } from '@/constants/constants'
-import { Status } from '@/types/models'
+import { Status } from '@/types/types'
 
 type StatusCellProps = {
   status: Status

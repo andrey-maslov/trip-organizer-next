@@ -21,7 +21,7 @@ import { Toolbar } from './Toolbar'
 
 import './tiptap.scss'
 import './content.scss'
-import { Note } from '@/types/models'
+import { Note } from '@/types/types'
 import { updateNote } from '@/apiRequests/apiDB'
 
 import clsx from 'clsx'

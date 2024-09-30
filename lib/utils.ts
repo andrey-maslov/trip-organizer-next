@@ -1,4 +1,4 @@
-import { Payment, Section } from '@/types/models'
+import { Payment, Section } from '@/types/types'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { defaultSection } from '@/constants/defaultEntities'
 

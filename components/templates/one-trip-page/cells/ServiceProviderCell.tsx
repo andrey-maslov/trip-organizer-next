@@ -8,7 +8,7 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 
-import { Section } from '@/types/models'
+import { Section } from '@/types/types'
 
 type Props = {
   serviceProvider: Section['serviceProvider']

@@ -7,7 +7,7 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ThemeProviderProps } from 'next-themes/dist/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PropsWithChildren } from 'react'
-import { EarthoClientProvider } from '@eartho/one-client-nextjs/client'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,8 +21,6 @@ const queryClient = new QueryClient({
 export interface ProvidersProps {
   themeProps: Partial<ThemeProviderProps>
 }
-// TODO update Eartho https://github.com/eartho-group/one-client-react/blob/main/examples/nextjs-app/pages/_app.js
-const EARTHO_CLIENT_ID = process.env.NEXT_PUBLIC_EARTHO_CLIENT_ID ?? ''
 
 export function Providers({
   children,
@@ -32,11 +30,11 @@ export function Providers({
 
   return (
     <NextUIProvider navigate={router.push}>
-      <EarthoClientProvider>
+      <ClerkProvider>
         <QueryClientProvider client={queryClient}>
           <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
         </QueryClientProvider>
-      </EarthoClientProvider>
+      </ClerkProvider>
     </NextUIProvider>
   )
 }

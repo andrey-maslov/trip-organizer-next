@@ -9,7 +9,7 @@ import {
 } from '@nextui-org/react'
 import { FiMoreVertical } from 'react-icons/fi'
 
-import { Section } from '@/types/models'
+import { Section } from '@/types/types'
 import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
 import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
 import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'

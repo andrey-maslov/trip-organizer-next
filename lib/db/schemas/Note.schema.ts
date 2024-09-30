@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose'
 
-import { Note } from '@/types/models'
+import { Note } from '@/types/types'
 
 const NoteSchema = new Schema<Note>({
   trip: {

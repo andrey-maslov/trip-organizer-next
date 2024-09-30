@@ -2,7 +2,7 @@ import { Schema, model, models } from 'mongoose'
 
 import { SectionSchema } from './Section.schema'
 
-import { Trip } from '@/types/models'
+import { Trip } from '@/types/types'
 
 const TripSchema = new Schema<Trip>({
   name: { type: String, required: true },

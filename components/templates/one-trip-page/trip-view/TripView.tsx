@@ -10,7 +10,7 @@ import { Divider } from '@nextui-org/divider'
 import { toast } from 'react-toastify'
 import { useMutation } from '@tanstack/react-query'
 
-import { Trip } from '@/types/models'
+import { Trip } from '@/types/types'
 import { SectionTypeIcon } from '@/components/SectionTypeIcon'
 import {
   getFormattedDate,

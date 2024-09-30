@@ -1,7 +1,7 @@
 import { Schema, model, models } from 'mongoose'
 
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
-import { Payment, Section } from '@/types/models'
+import { Payment, Section } from '@/types/types'
 
 export const PaymentSchema = new Schema<Payment>({
   name: { type: String, required: false },

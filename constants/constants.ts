@@ -3,7 +3,7 @@ import {
   CurrencyRates,
   SectionType,
   Status,
-} from '@/types/models'
+} from '@/types/types'
 
 export const transportTypes = [
   'bus',

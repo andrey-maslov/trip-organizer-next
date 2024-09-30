@@ -51,6 +51,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - [React Google Places Autocomplete](https://tintef.github.io/react-google-places-autocomplete/docs/)
 - [Google places](https://developers.google.com/maps/documentation/javascript/examples/rgm-autocomplete)
 
-### Authentication Eartho
-- [Docs](https://eartho.page.link/docs)
-- [Code examples](https://github.com/eartho-group/eartho-packages/tree/main/one-client-nextjs)
+### Authentication Clerk
+- [Docs]()
+- [Code examples](https://github.com/clerk/clerk-nextjs-demo-app-router)
+- [API routes](https://clerk.com/docs/references/nextjs/route-handlers)
