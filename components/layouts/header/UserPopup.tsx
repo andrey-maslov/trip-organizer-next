@@ -2,26 +2,30 @@
 
 import { Button } from '@nextui-org/button'
 import { FiLogIn, FiLogOut } from 'react-icons/fi'
-import { useEarthoOne } from '@eartho/one-client-react'
+import { connectWithPopup, useUser } from '@eartho/one-client-nextjs/client'
+import { Link } from '@nextui-org/link'
 
 export const UserPopup = () => {
-  const { isConnected, user, connectWithPopup, logout } = useEarthoOne()
+  const { user, error, isLoading, checkSession } = useUser()
+
+  console.log(user)
 
   // TODO fix all callbacks
   const EARTHO_ACCESS_POINT = process.env.NEXT_PUBLIC_EARTHO_ACCESS_POINT ?? ''
 
   return (
     <div>
-      {isConnected ? (
+      {user ? (
         <div>
           <span className='text-foreground inline-block mr-2'>
-            Hello, {user?.user?.displayName ?? 'unknown guest'}!
+            Hello, {user.displayName ?? 'unknown guest'}!
           </span>
           <Button
+            as={Link}
             className='text-sm font-normal text-default-600 bg-default-100'
+            href={'/api/access/logout'}
             startContent={<FiLogOut className='text-danger' />}
             variant='flat'
-            // onPress={() => logout({ returnTo: window.location.origin })}
           >
             Log Out
           </Button>
@@ -31,7 +35,7 @@ export const UserPopup = () => {
           className='text-sm font-normal text-default-600 bg-default-100'
           startContent={<FiLogIn className='text-yellow-600' />}
           variant='flat'
-          // onPress={() => connectWithPopup({ access_id: EARTHO_ACCESS_POINT })}
+          onPress={() => connectWithPopup('login')}
         >
           Log In
         </Button>

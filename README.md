@@ -37,16 +37,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - install new versions ``yarn``
   [Documentation](https://github.com/raineorshine/npm-check-updates)
 
-## TipTap editor
+### TipTap editor
 - Example: [Codepen](https://codesandbox.io/p/sandbox/tiptap-0sqm3i?file=%2Fsrc%2Fcomponents%2FToolbar.tsx%3A45%2C1-48%2C7) 
 
-## Date Time picker
+### Date Time picker
 - [Documentation](https://react-day-picker.js.org/start)
 
-## Date formatting
+### Date formatting
 - [Tempo](https://tempo.formkit.com/)
 - [Adobe internationalized](https://react-spectrum.adobe.com/internationalized/date/ZonedDateTime.html) to work with NextUI calendars
 
-## Places and address finder
+### Places and address finder
 - [React Google Places Autocomplete](https://tintef.github.io/react-google-places-autocomplete/docs/)
 - [Google places](https://developers.google.com/maps/documentation/javascript/examples/rgm-autocomplete)
+
+### Authentication Eartho
+- [Docs](https://eartho.page.link/docs)
+- [Code examples](https://github.com/eartho-group/eartho-packages/tree/main/one-client-nextjs)

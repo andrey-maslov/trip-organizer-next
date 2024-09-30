@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
 import { ThemeProviderProps } from 'next-themes/dist/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { EarthoOneProvider } from '@eartho/one-client-react'
 import { PropsWithChildren } from 'react'
+import { EarthoClientProvider } from '@eartho/one-client-nextjs/client'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,11 +32,11 @@ export function Providers({
 
   return (
     <NextUIProvider navigate={router.push}>
-      <EarthoOneProvider clientId={EARTHO_CLIENT_ID} domain={''}>
+      <EarthoClientProvider>
         <QueryClientProvider client={queryClient}>
           <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
         </QueryClientProvider>
-      </EarthoOneProvider>
+      </EarthoClientProvider>
     </NextUIProvider>
   )
 }
