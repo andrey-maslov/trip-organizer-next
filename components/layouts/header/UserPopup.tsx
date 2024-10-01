@@ -8,8 +8,6 @@ import { Link } from '@nextui-org/link'
 export const UserPopup = () => {
   const { user } = useUser()
 
-  console.log(user)
-
   return (
     <div>
       <SignedIn>

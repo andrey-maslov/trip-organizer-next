@@ -11,6 +11,7 @@ const TripSchema = new Schema<Trip>({
   dateTimeEnd: { type: Date, required: false },
   description: { type: String, required: false },
   cover: { type: String, required: false },
+  user: { type: String, required: true, default: null },
   sections: [SectionSchema],
 })
 

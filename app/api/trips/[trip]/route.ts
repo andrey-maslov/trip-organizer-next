@@ -1,4 +1,5 @@
 import { isValidObjectId, Types } from 'mongoose'
+import { auth } from '@clerk/nextjs/server'
 
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
@@ -32,9 +33,18 @@ export async function GET(
 }
 
 export async function PUT(request: Request) {
-  const payload = await request.json()
+  const { userId } = auth()
+
+  if (!userId) {
+    return new Response('Unauthorized', { status: 401 })
+  }
 
   await connectMongo()
+
+  const payload = await request.json()
+
+  // temp solution
+  payload.user = userId
 
   // Update one trip
   try {

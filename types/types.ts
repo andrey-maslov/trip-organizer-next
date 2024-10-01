@@ -19,6 +19,7 @@ export type Trip = {
   dateTimeEnd?: DateType
   description?: string
   cover?: string
+  user?: string
 }
 
 export type Section = {
