@@ -1,40 +1,24 @@
 'use client'
 
-import {
-  SignedIn,
-  SignedOut,
-  useClerk,
-  UserButton,
-  useUser,
-} from '@clerk/nextjs'
+import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
 import { Button } from '@nextui-org/button'
-import { FiLogIn, FiLogOut } from 'react-icons/fi'
+import { FiLogIn } from 'react-icons/fi'
 import { Link } from '@nextui-org/link'
 
 export const UserPopup = () => {
-  const { signOut } = useClerk()
   const { user } = useUser()
 
-  // console.log('U', user)
+  console.log(user)
 
   return (
     <div>
       <SignedIn>
-        <div>
-          <span className='text-foreground inline-block mr-2'>
+        <div className='flex items-center justify-between p-6'>
+          <span className='text-foreground-500 inline-block mr-2 text-small'>
             Hello, {user?.firstName ?? 'unknown guest'}!
           </span>
 
           <UserButton />
-
-          <Button
-            className='text-sm font-normal text-default-600 bg-default-100'
-            startContent={<FiLogOut className='text-danger' />}
-            variant='flat'
-            onPress={() => signOut({ redirectUrl: '/' })}
-          >
-            Logout
-          </Button>
         </div>
       </SignedIn>
       <SignedOut>

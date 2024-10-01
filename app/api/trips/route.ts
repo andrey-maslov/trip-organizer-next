@@ -3,10 +3,7 @@ import TripSchema from '@/lib/db/schemas/Trip.schema'
 import { Trip } from '@/types/types'
 
 export async function GET() {
-  // const { userId, getToken, sessionClaims } = auth()
-  // const token = getToken()
-  //
-  // console.log('TOKEN', sessionClaims?.sub)
+  // const { userId, getToken } = auth()
   // const user = await currentUser()
 
   // console.log(user)
@@ -16,12 +13,16 @@ export async function GET() {
   //   return new Response('Unauthorized', { status: 401 })
   // }
 
+  await connectMongo()
+
   // Get many trips
   try {
-    const trips = await TripSchema.find({})
+    const trips = await TripSchema.find({}).lean()
 
     return Response.json({ trips })
   } catch (e) {
+    console.log(e)
+
     return new Response('Get all error', {
       status: 500,
     })

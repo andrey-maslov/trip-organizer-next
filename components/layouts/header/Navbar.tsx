@@ -29,9 +29,12 @@ export const Navbar = () => {
             className='flex justify-start items-center gap-1 text-foreground'
             href='/'
           >
-            <h3 className='font-bold'>TripOrg</h3>
+            <h3 className='font-bold text-xl'>TripOrg</h3>
           </NextLink>
         </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent>
         <ul className='hidden lg:flex gap-4 justify-start ml-2'>
           {user.user &&
             siteConfig.navItems.map((item) => (
