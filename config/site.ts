@@ -5,12 +5,12 @@ export const siteConfig = {
   description: 'Quick and easy tool for organizing costs and logistics',
   navItems: [
     {
-      label: 'Home',
-      href: '/',
-    },
-    {
       label: 'Trips',
       href: '/trips',
+    },
+    {
+      label: 'Profile',
+      href: '/user-profile',
     },
     // {
     //   label: 'Blog',

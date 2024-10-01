@@ -5,7 +5,7 @@ import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
 import { FiPlus } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
 
-import { getAllTrips } from '@/apiRequests/apiDB'
+import { getAllTrips } from '@/queries/queries.db'
 import { defaultCoverImage } from '@/constants/defaultEntities'
 
 export default function TripsList() {

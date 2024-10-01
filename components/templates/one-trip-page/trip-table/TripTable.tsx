@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { IoMdAdd } from 'react-icons/io'
 
 import { Section, Trip } from '@/types/types'
-import { updateSection, updateTrip } from '@/apiRequests/apiDB'
+import { updateSection, updateTrip } from '@/queries/queries.db'
 import {
   columns,
   INITIAL_VISIBLE_COLUMNS,

@@ -23,7 +23,7 @@ import {
 } from '@/components/templates/one-trip-page/trip-table.config'
 import { CopyToClipboard } from '@/components/CopyToClipboard'
 import { useQueryParams } from '@/hooks/useQueryParams'
-import { createNote } from '@/apiRequests/apiDB'
+import { createNote } from '@/queries/queries.db'
 
 type Props = {
   trip: Trip

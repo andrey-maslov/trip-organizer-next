@@ -17,7 +17,7 @@ import { useQueryParams } from '@/hooks/useQueryParams'
 import 'react-modern-drawer/dist/index.css'
 
 import { title, subtitle } from '@/components/primitives'
-import { deleteOneNote, getOneNote, getOneTrip } from '@/apiRequests/apiDB'
+import { deleteOneNote, getOneNote, getOneTrip } from '@/queries/queries.db'
 
 const DynamicTiptapEditor = dynamic(
   () => import('../../tiptap-editor/TiptapEditor'),

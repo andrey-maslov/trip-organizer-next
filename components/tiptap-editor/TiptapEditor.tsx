@@ -22,7 +22,7 @@ import { Toolbar } from './Toolbar'
 import './tiptap.scss'
 import './content.scss'
 import { Note } from '@/types/types'
-import { updateNote } from '@/apiRequests/apiDB'
+import { updateNote } from '@/queries/queries.db'
 
 import clsx from 'clsx'
 

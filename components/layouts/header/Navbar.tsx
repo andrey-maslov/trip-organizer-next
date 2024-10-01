@@ -12,12 +12,15 @@ import { link as linkStyles } from '@nextui-org/theme'
 import NextLink from 'next/link'
 import clsx from 'clsx'
 import { FiTwitter } from 'react-icons/fi'
+import { useUser } from '@clerk/nextjs'
 
 import { ThemeSwitch } from '@/components/layouts/header/ThemeSwitch'
 import { siteConfig } from '@/config/site'
 import { UserPopup } from '@/components/layouts/header/UserPopup'
 
 export const Navbar = () => {
+  const user = useUser()
+
   return (
     <NextUINavbar maxWidth='xl' position='sticky'>
       <NavbarContent className='basis-1/5 sm:basis-full' justify='start'>
@@ -30,20 +33,21 @@ export const Navbar = () => {
           </NextLink>
         </NavbarBrand>
         <ul className='hidden lg:flex gap-4 justify-start ml-2'>
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: 'foreground' }),
-                  'data-[active=true]:text-primary data-[active=true]:font-medium'
-                )}
-                color='foreground'
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
+          {user.user &&
+            siteConfig.navItems.map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: 'foreground' }),
+                    'data-[active=true]:text-primary data-[active=true]:font-medium'
+                  )}
+                  color='foreground'
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
         </ul>
       </NavbarContent>
 
@@ -51,9 +55,9 @@ export const Navbar = () => {
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
-        <NavbarItem className='hidden sm:flex gap-2'>
-          <ThemeSwitch />
-        </NavbarItem>
+        {/*<NavbarItem className='hidden sm:flex gap-2'>*/}
+        {/*  <ThemeSwitch />*/}
+        {/*</NavbarItem>*/}
         <NavbarItem className='hidden md:flex'>
           <UserPopup />
         </NavbarItem>

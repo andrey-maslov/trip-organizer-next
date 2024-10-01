@@ -12,7 +12,7 @@ import { toast } from 'react-toastify'
 import { FiSettings } from 'react-icons/fi'
 import { Tabs, Tab } from '@nextui-org/tabs'
 
-import { deleteOneTrip, getOneTrip, updateTrip } from '@/apiRequests/apiDB'
+import { deleteOneTrip, getOneTrip, updateTrip } from '@/queries/queries.db'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 import { Editable } from '@/components/Editable'
 import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripTable'

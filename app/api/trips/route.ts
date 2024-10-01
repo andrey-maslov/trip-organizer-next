@@ -1,19 +1,21 @@
-import { auth } from '@clerk/nextjs/server'
-
 import connectMongo from '@/lib/db/connectMongo'
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import { Trip } from '@/types/types'
 
 export async function GET() {
-  const { userId, getToken } = auth()
+  // const { userId, getToken } = auth()
+  // const user = await currentUser()
 
-  if (!userId) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+  // console.log(user)
+  // console.log(user?.emailAddresses[0].emailAddress)
 
-  // Get many teams
+  // if (!userId) {
+  //   return new Response('Unauthorized', { status: 401 })
+  // }
+
+  // Get many trips
   try {
-    const trips = await TripSchema.find().lean()
+    const trips = await TripSchema.find({}).lean()
 
     return Response.json({ trips })
   } catch (e) {

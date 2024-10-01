@@ -6,7 +6,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "expose": "ngrok http --url=busy-jackal-promptly.ngrok-free.app 3000"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.6.4",
@@ -40,6 +41,7 @@
     "react-toastify": "^10.0.5",
     "sanitize-html": "^2.13.0",
     "sass": "^1.79.4",
+    "svix": "^1.36.0",
     "throttle-debounce": "^5.0.2"
   },
   "devDependencies": {

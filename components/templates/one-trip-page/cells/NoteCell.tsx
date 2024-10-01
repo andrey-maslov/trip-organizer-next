@@ -3,7 +3,7 @@ import { Button } from '@nextui-org/button'
 import { useMutation } from '@tanstack/react-query'
 
 import { useQueryParams } from '@/hooks/useQueryParams'
-import { createNote } from '@/apiRequests/apiDB'
+import { createNote } from '@/queries/queries.db'
 
 type Props = {
   noteId: string | undefined

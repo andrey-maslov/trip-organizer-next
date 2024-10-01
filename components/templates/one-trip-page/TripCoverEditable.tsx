@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { defaultCoverImage } from '@/constants/defaultEntities'
 import { ButtonEdit } from '@/components/ButtonEdit'
-import { searchPictures } from '@/apiRequests/apiExternal'
+import { searchPictures } from '@/queries/queries.external'
 
 type Props = {
   coverSrc: string | undefined
