@@ -28,6 +28,8 @@ export const serviceProviderTypes = [...transportTypes, ...placementTypes]
 export const sectionTypes = ['road', 'stay'] as const
 export const DEFAULT_SECTION_STATUS: Status = 'to_find'
 
+export const DEFAUT_LOCALE = 'en'
+
 export const DEFAULT_SECTION_TYPE: SectionType = 'road'
 
 export const currencyISONames = ['EUR', 'USD', 'PLN', 'BYN'] as const

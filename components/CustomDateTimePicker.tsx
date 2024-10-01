@@ -17,9 +17,12 @@ export const CustomDateTimePicker = ({
   label,
   classNames,
 }: CustomDayPickerProps) => {
+  console.log(value)
+
   return (
     <DatePicker
       className={classNames}
+      granularity='minute'
       hourCycle={24}
       label={label}
       value={value}

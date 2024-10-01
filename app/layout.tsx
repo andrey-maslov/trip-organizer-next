@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import '../styles/globals.css'
-import 'react-day-picker/dist/style.css'
 import 'react-toastify/dist/ReactToastify.min.css'
 
 import clsx from 'clsx'

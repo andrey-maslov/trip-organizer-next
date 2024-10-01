@@ -73,6 +73,7 @@ export const TripPointCell: FC<PointCellProps> = ({
     label: string
     value: GAPlace | any
   } | null>(null)
+
   const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
     const currentDate = new Date()
     const dateISOString = initialPoint?.dateTime ?? currentDate.toISOString()
@@ -113,7 +114,10 @@ export const TripPointCell: FC<PointCellProps> = ({
         {truncateSentence(initialPoint?.['place']?.name, 2) ?? '-'}
         <br />
         {getFormattedDate(initialPoint?.dateTime, 'medium')} <br />
-        {getFormattedTime(initialPoint?.dateTime, 'short', 'ru')}
+        {getFormattedTime(initialPoint?.dateTime, {
+          locale: 'ru',
+          tz: initialPoint?.timeZone,
+        })}
       </Button>
 
       <Modal
@@ -150,7 +154,14 @@ export const TripPointCell: FC<PointCellProps> = ({
                   <CustomDateTimePicker
                     label='Date and time'
                     value={zonedDateTime}
-                    onChange={setZonedDateTime}
+                    onChange={(value) => {
+                      const updatedValue = value.set({
+                        second: 0,
+                        millisecond: 0,
+                      })
+
+                      setZonedDateTime(updatedValue)
+                    }}
                   />
                 </div>
                 {/*Time zone*/}

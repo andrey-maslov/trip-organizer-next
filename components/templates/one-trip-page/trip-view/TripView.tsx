@@ -99,7 +99,7 @@ export const TripView = ({ trip }: Props) => {
                   <>
                     <IoMdTimer className='mt-1 mr-2' />
                     <span className='inline-block mr-2'>
-                      {getFormattedTime(startTime, 'short', 'ru')}
+                      {getFormattedTime(startTime, { locale: 'ru' })}
                     </span>
                     <span className='text-default-500 font-light'>
                       {getFormattedDate(startTime, 'medium')}

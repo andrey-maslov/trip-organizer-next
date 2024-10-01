@@ -38,10 +38,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
   [Documentation](https://github.com/raineorshine/npm-check-updates)
 
 ### TipTap editor
-- Example: [Codepen](https://codesandbox.io/p/sandbox/tiptap-0sqm3i?file=%2Fsrc%2Fcomponents%2FToolbar.tsx%3A45%2C1-48%2C7) 
-
-### Date Time picker
-- [Documentation](https://react-day-picker.js.org/start)
+- Example: [Codepen](https://codesandbox.io/p/sandbox/tiptap-0sqm3i?file=%2Fsrc%2Fcomponents%2FToolbar.tsx%3A45%2C1-48%2C7)
 
 ### Date formatting
 - [Tempo](https://tempo.formkit.com/)

@@ -1,7 +1,9 @@
-import { Format, format, FormatStyle, diffMinutes } from '@formkit/tempo'
+import { Format, format, FormatStyle } from '@formkit/tempo'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { getLocalTimeZone } from '@internationalized/date'
+
+import { DEFAUT_LOCALE } from '@/constants/constants'
 
 dayjs.extend(duration)
 
@@ -19,36 +21,69 @@ export const getFormattedDate = (
 
 export const getFormattedTime = (
   date: Date | string | null | undefined,
-  timeFormat: FormatStyle = 'short',
-  locale?: string
+  options: { timeFormat?: FormatStyle; locale?: string; tz?: string }
 ): string => {
   if (!date) {
     return ''
   }
 
-  return format(date, { time: timeFormat }, locale)
+  // return format(date, { time: timeFormat }, locale)
+  return format({
+    date,
+    format: { time: options.timeFormat ?? 'short' },
+    tz: options.tz,
+    locale: options.locale ?? DEFAUT_LOCALE,
+  })
 }
 
 /**
  * Returns duration between two timestamps or convert duration in to string
- * @param time1
- * @param time2
+ * @param startTime
+ * @param endTime
  */
 export const getHumanizedTimeDuration = (
-  time1: Date | string | null | undefined,
-  time2?: Date | string | null | undefined
-): string | null => {
-  if (!time1 || !time2) {
-    return null
-  }
+  startTime: string,
+  endTime: string
+): string => {
+  // Convert the date-time strings into Date objects
+  const startDate = new Date(startTime)
+  const endDate = new Date(endTime)
 
-  let diff = diffMinutes(time2, time1)
+  // Reset the seconds and milliseconds to 00 for both start and end times
+  startDate.setSeconds(0, 0)
+  endDate.setSeconds(0, 0)
 
-  // TODO watch https://github.com/formkit/tempo/pull/66s
-  const humanizedDur = dayjs.duration(diff, 'minutes').format('D[d] H[h] m[m]')
+  // Calculate the difference in milliseconds
+  const durationMs = endDate.getTime() - startDate.getTime()
 
-  // remove such parts as 0h 0m 0s if it exists
-  return humanizedDur.replace(/\b0+[a-z]+\s*/gi, '').trim()
+  // Constants for time units in milliseconds
+  const msInMinute = 1000 * 60
+  const msInHour = msInMinute * 60
+  const msInDay = msInHour * 24
+  const msInWeek = msInDay * 7
+  const msInYear = msInDay * 365.25 // Accounting for leap years
+  const msInMonth = msInYear / 12
+
+  // Calculate years, months, weeks, days, hours, and minutes
+  const years = Math.floor(durationMs / msInYear)
+  const months = Math.floor((durationMs % msInYear) / msInMonth)
+  const weeks = Math.floor((durationMs % msInMonth) / msInWeek)
+  const days = Math.floor((durationMs % msInWeek) / msInDay)
+  const hours = Math.floor((durationMs % msInDay) / msInHour)
+  const minutes = Math.floor((durationMs % msInHour) / msInMinute)
+
+  // Build the result string, including only non-zero units
+  let result = ''
+
+  if (years > 0) result += `${years}y `
+  if (months > 0) result += `${months}m `
+  if (weeks > 0) result += `${weeks}w `
+  if (days > 0) result += `${days}d `
+  if (hours > 0) result += `${hours}h `
+  if (minutes > 0) result += `${minutes}m`
+
+  // Trim any trailing comma or space
+  return result.trim().replace(/,\s*$/, '')
 }
 
 export const getTimeZone = () => {
