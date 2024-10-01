@@ -2,6 +2,9 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 
+import UserSchema from '@/lib/db/schemas/User.schema'
+import { UserDB } from '@/types/types'
+
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
@@ -49,20 +52,84 @@ export async function POST(req: Request) {
     })
   }
 
-  // Do something with the payload
-  // For this guide, you simply log the payload to the console
-  const { id } = evt.data
-  const eventType = evt.type
-
-  console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-  console.log('Webhook body:', body)
-
+  // Create user
   if (evt.type === 'user.created') {
-    console.log('Created', evt.data)
+    try {
+      const user: UserDB = {
+        firstName: evt.data.first_name,
+        lastName: evt.data.last_name,
+        email: evt.data.email_addresses[0]?.email_address,
+        userClerkId: evt.data.id,
+        role: 'user',
+      }
+
+      await UserSchema.create(user)
+
+      // if (!evt.data.external_id) {
+      //   await clerkClient.users.updateUser(evt.data.id, {
+      //     externalId: newUser._id,
+      //   })
+      // }
+
+      return new Response('Event: ' + evt.type + '; status: OK', {
+        status: 200,
+      })
+    } catch (e) {
+      console.log(e)
+
+      return new Response('Webhook failed', { status: 500 })
+    }
   }
 
+  // update user
   if (evt.type === 'user.updated') {
-    console.log('Updated', evt.data)
+    try {
+      const user: UserDB = {
+        firstName: evt.data.first_name,
+        lastName: evt.data.last_name,
+        email: evt.data.email_addresses[0]?.email_address,
+        role: 'user',
+      }
+
+      const filter = { userClerkId: evt.data.id }
+
+      await UserSchema.findOneAndUpdate(filter, user, {
+        new: true,
+        upsert: true,
+        useFindAndModify: false,
+      })
+
+      // if (!evt.data.external_id) {
+      //   await clerkClient.users.updateUser(evt.data.id, {
+      //     externalId: updatedUser._id,
+      //   })
+      // }
+
+      return new Response('Event: ' + evt.type + '; status: OK', {
+        status: 200,
+      })
+    } catch (e) {
+      console.log(e)
+
+      return new Response('Webhook failed', { status: 500 })
+    }
+  }
+
+  // Delete user
+  if (evt.type === 'user.deleted') {
+    try {
+      await UserSchema.deleteOne({ userClerkId: evt.data.id })
+
+      console.log('Event: ' + evt.type + '; status: OK')
+
+      return new Response('Deleted', {
+        status: 200,
+      })
+    } catch (e) {
+      console.log(e)
+
+      return new Response('Webhook failed', { status: 500 })
+    }
   }
 
   return new Response('', { status: 200 })

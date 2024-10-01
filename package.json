@@ -10,6 +10,7 @@
     "expose": "ngrok http --url=busy-jackal-promptly.ngrok-free.app 3000"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.46",
     "@clerk/nextjs": "^5.6.4",
     "@formkit/tempo": "^0.1.2",
     "@internationalized/date": "^3.5.5",

@@ -3,7 +3,10 @@ import TripSchema from '@/lib/db/schemas/Trip.schema'
 import { Trip } from '@/types/types'
 
 export async function GET() {
-  // const { userId, getToken } = auth()
+  // const { userId, getToken, sessionClaims } = auth()
+  // const token = getToken()
+  //
+  // console.log('TOKEN', sessionClaims?.sub)
   // const user = await currentUser()
 
   // console.log(user)
@@ -15,7 +18,7 @@ export async function GET() {
 
   // Get many trips
   try {
-    const trips = await TripSchema.find({}).lean()
+    const trips = await TripSchema.find({})
 
     return Response.json({ trips })
   } catch (e) {

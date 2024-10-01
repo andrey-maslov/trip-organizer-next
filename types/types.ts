@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+import { UserResource } from '@clerk/types'
 
 import {
   currencyISONames,
@@ -189,11 +190,9 @@ export type GAPlace = {
   types: string[]
 }
 
-export type UserData = {
-  _id: string
-  firstName?: string
-  lastName?: string
-  displayName?: string
-  email: string
-  role: 'user' | 'admin'
+export type UserDB = Partial<UserResource> & {
+  _id?: string
+  userClerkId?: string
+  email?: string
+  role: string
 }

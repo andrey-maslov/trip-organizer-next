@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 
 import connectMongo from '@/lib/db/connectMongo'
 import UserSchema from '@/lib/db/schemas/User.schema'
-import { UserData } from '@/types/types'
+import { UserDB } from '@/types/types'
 
 // Get users
 export async function GET(req: NextRequest) {
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
   try {
     const data = await request.json()
-    const newUser: UserData = await UserSchema.create(data)
+    const newUser: UserDB = await UserSchema.create(data)
 
     // return Response.json({ id: newUser._id });
     return Response.json(newUser)
