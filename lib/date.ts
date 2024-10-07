@@ -1,11 +1,17 @@
 import { Format, format, FormatStyle } from '@formkit/tempo'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import isBetween from 'dayjs/plugin/isBetween'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { getLocalTimeZone } from '@internationalized/date'
 
 import { DEFAUT_LOCALE } from '@/constants/constants'
 
 dayjs.extend(duration)
+dayjs.extend(isBetween)
+dayjs.extend(relativeTime)
+dayjs.extend(isSameOrBefore)
 
 export const getFormattedDate = (
   date: Date | string | null | undefined,
@@ -17,6 +23,34 @@ export const getFormattedDate = (
   }
 
   return format(date, dateFormat, locale)
+}
+
+export const isNow = (time1: Date, time2: Date): boolean => {
+  if (!time1 || !time2) {
+    return false
+  }
+
+  return dayjs().isBetween(time1, time2, 'minute')
+}
+
+export const isTimeInFuture = (time: Date): boolean => {
+  if (!time) {
+    return false
+  }
+
+  return dayjs().isSameOrBefore(time, 'minute')
+}
+
+export const isDateExpired = (
+  time: number,
+  expirationDuration: number
+): boolean => {
+  if (!time || !expirationDuration) {
+    return true
+  }
+  const currentTimestamp = Math.floor(Date.now() / 1000) // in seconds
+
+  return time + expirationDuration < currentTimestamp
 }
 
 export const getFormattedTime = (
@@ -37,25 +71,10 @@ export const getFormattedTime = (
 }
 
 /**
- * Returns duration between two timestamps or convert duration in to string
- * @param startTime
- * @param endTime
+ *
+ * @param durationMs Ms
  */
-export const getHumanizedTimeDuration = (
-  startTime: string,
-  endTime: string
-): string => {
-  // Convert the date-time strings into Date objects
-  const startDate = new Date(startTime)
-  const endDate = new Date(endTime)
-
-  // Reset the seconds and milliseconds to 00 for both start and end times
-  startDate.setSeconds(0, 0)
-  endDate.setSeconds(0, 0)
-
-  // Calculate the difference in milliseconds
-  const durationMs = endDate.getTime() - startDate.getTime()
-
+export const timestampToDuration = (durationMs: number): string => {
   // Constants for time units in milliseconds
   const msInMinute = 1000 * 60
   const msInHour = msInMinute * 60
@@ -84,6 +103,29 @@ export const getHumanizedTimeDuration = (
 
   // Trim any trailing comma or space
   return result.trim().replace(/,\s*$/, '')
+}
+
+/**
+ * Returns duration between two timestamps or convert duration in to string
+ * @param startTime
+ * @param endTime
+ */
+export const getHumanizedTimeDuration = (
+  startTime: string,
+  endTime: string
+): string => {
+  // Convert the date-time strings into Date objects
+  const startDate = new Date(startTime)
+  const endDate = new Date(endTime)
+
+  // Reset the seconds and milliseconds to 00 for both start and end times
+  startDate.setSeconds(0, 0)
+  endDate.setSeconds(0, 0)
+
+  // Calculate the difference in milliseconds
+  const durationMs = endDate.getTime() - startDate.getTime()
+
+  return timestampToDuration(durationMs)
 }
 
 export const getTimeZone = () => {

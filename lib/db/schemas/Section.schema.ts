@@ -1,6 +1,9 @@
 import { Schema, model, models } from 'mongoose'
 
-import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
+import {
+  DEFAULT_SECTION_STATUS,
+  DEFAULT_SECTION_TYPE,
+} from '@/constants/constants'
 import { Payment, Section } from '@/types/types'
 
 export const PaymentSchema = new Schema<Payment>({
@@ -12,7 +15,7 @@ export const PaymentSchema = new Schema<Payment>({
 
 export const SectionSchema = new Schema<Section>({
   name: { type: String, required: true },
-  type: { type: String, required: false },
+  type: { type: String, required: false, default: DEFAULT_SECTION_TYPE },
   dateTimeStart: { type: Date, required: false },
   dateTimeEnd: { type: Date, required: false },
   transportType: { type: String, required: false },

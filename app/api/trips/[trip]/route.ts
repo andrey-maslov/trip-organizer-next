@@ -23,7 +23,7 @@ export async function GET(
       ],
     }).lean()
 
-    return Response.json({ ...trip })
+    return Response.json(trip)
   } catch (e) {
     return new Response('Get all error', {
       // TODO add 500 and 404 separation

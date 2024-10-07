@@ -1,4 +1,4 @@
-import ky from 'ky-universal'
+import ky from 'ky'
 
 import connectMongo from '@/lib/db/connectMongo'
 import NoteSchema from '@/lib/db/schemas/Note.schema'

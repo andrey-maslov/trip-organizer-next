@@ -11,6 +11,8 @@ import {
 import { toast } from 'react-toastify'
 import { FiSettings } from 'react-icons/fi'
 import { Tabs, Tab } from '@nextui-org/tabs'
+import { Spinner } from '@nextui-org/spinner'
+import React from 'react'
 
 import { deleteOneTrip, getOneTrip, updateTrip } from '@/queries/queries.db'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
@@ -19,11 +21,15 @@ import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripT
 import { getFormattedDate } from '@/lib/date'
 import { TripView } from '@/components/templates/one-trip-page/trip-view/TripView'
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
+import { useIsMobile } from '@/hooks/useIsMobile'
+import { TripSummary } from '@/components/templates/one-trip-page/TripSummary'
 
 export const OneTrip = () => {
   const { slug } = useParams()
   const router = useRouter()
   const queryClient = useQueryClient()
+
+  const isMobile = useIsMobile()
 
   // Fetch Trip
   const {
@@ -58,7 +64,13 @@ export const OneTrip = () => {
     }
   }
 
-  if (isPending) return 'Loading...'
+  if (isPending) {
+    return (
+      <div className='py-16 flex justify-center'>
+        <Spinner color='warning' size='md' />
+      </div>
+    )
+  }
 
   if (error) {
     return 'An error has occurred: ' + error?.message
@@ -132,7 +144,10 @@ export const OneTrip = () => {
         </Dropdown>
       </div>
 
-      <Tabs aria-label='Options'>
+      <Tabs
+        aria-label='Options'
+        defaultSelectedKey={isMobile ? 'view' : 'edit'}
+      >
         <Tab key='view' title='View mode'>
           <TripView trip={trip} />
         </Tab>
@@ -141,6 +156,8 @@ export const OneTrip = () => {
         </Tab>
       </Tabs>
 
+      {/* SUMMARY */}
+      <TripSummary trip={slug as string} />
       <NotesDrawer />
     </div>
   )

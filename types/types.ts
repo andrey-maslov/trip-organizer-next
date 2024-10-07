@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 import {
   currencyISONames,
   placementTypes,
-  sectionTypes,
+  serviceProviderTypes,
   statusTypes,
   transportTypes,
 } from '@/constants/constants'
@@ -27,7 +27,7 @@ export type Section = {
   id: string // for FE only
   name: string
   status: Status
-  type?: SectionType
+  type: string
   dateTimeStart?: string // TODO Remove after the TripPoint implementation
   dateTimeEnd?: string // TODO Remove after the TripPoint implementation
   startingPoint: TripPoint
@@ -47,7 +47,7 @@ export type SectionBE = Section & { _id?: string }
 
 export type TransportType = (typeof transportTypes)[number]
 export type Status = (typeof statusTypes)[number]
-export type SectionType = (typeof sectionTypes)[number]
+export type SectionType = (typeof serviceProviderTypes)[number]
 export type PlacementType = (typeof placementTypes)[number]
 export type CurrencyISOName = (typeof currencyISONames)[number]
 
@@ -64,7 +64,7 @@ export type CurrencyRates = {
   timestamp: number
   base: string
   date: string
-  rates: Record<Exclude<CurrencyISOName, string>, number>
+  rates: Record<Exclude<string, string>, number>
 }
 
 export type TripPoint = {

@@ -1,4 +1,4 @@
-import { Payment, Section } from '@/types/types'
+import { CurrencyRates, Payment, Section } from '@/types/types'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { defaultSection } from '@/constants/defaultEntities'
 
@@ -180,4 +180,45 @@ export const truncateSentence = (
   }
 
   return truncatedSentence
+}
+
+/**
+ * Numbers array => sum
+ * @param list
+ */
+export const getSum = (list: number[]): number => {
+  return list.length > 0 ? list.reduce((a, b) => a + b) : 0
+}
+
+/**
+ * Convert amount from one currency to base (user) currency
+ * @param amount
+ * @param currency
+ * @param currencyRates
+ */
+export const convertAmount = (
+  amount: number | undefined,
+  currency: string | undefined,
+  currencyRates: CurrencyRates
+): number => {
+  if (amount === undefined || !currency || !currencyRates.rates) {
+    return 0
+  }
+  if (currency === currencyRates.base) {
+    return amount
+  } else {
+    // @ts-ignore
+    const rate = currencyRates.rates[currency] // Guard ensures currency is defined
+
+    if (rate === undefined) {
+      throw new Error(`Rate for currency ${currency} is not available.`)
+    }
+    const result = amount / rate
+
+    return round(result, 2)
+  }
+}
+
+export const round = (num: number, digits = 0): number => {
+  return +num.toFixed(digits) || 0
 }

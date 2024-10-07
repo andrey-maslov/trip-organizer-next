@@ -1,6 +1,6 @@
 import ky from 'ky'
 
-import { Note, Section, Trip } from '@/types/types'
+import { Note, Section, Trip, TripSummaryValues } from '@/types/types'
 
 const api = ky.create({
   prefixUrl: '/api',
@@ -25,6 +25,12 @@ export const updateTrip = async (
   data: Partial<Trip>
 ): Promise<{ id: string }> =>
   api.put(`trips/${data._id}`, { json: data }).json()
+
+export const getTripSummary = async (
+  id: string,
+  currency: string
+): Promise<TripSummaryValues> =>
+  api(`trips/${id}/summary?currency=${currency}`).json()
 
 /******** SECTION ******/
 export const updateSection = async (
