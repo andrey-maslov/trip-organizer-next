@@ -5,31 +5,47 @@ import {
   NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
-  NavbarMenuItem,
 } from '@nextui-org/navbar'
+import { Image } from '@nextui-org/image'
 import { Link } from '@nextui-org/link'
 import { link as linkStyles } from '@nextui-org/theme'
 import NextLink from 'next/link'
 import clsx from 'clsx'
-import { FiTwitter } from 'react-icons/fi'
-import { useUser } from '@clerk/nextjs'
+import { useState } from 'react'
+import { useUser, SignedIn, SignedOut } from '@clerk/nextjs'
+import { Button } from '@nextui-org/button'
+import { FiLogIn } from 'react-icons/fi'
 
-import { ThemeSwitch } from '@/components/layouts/header/ThemeSwitch'
 import { siteConfig } from '@/config/site'
 import { UserPopup } from '@/components/layouts/header/UserPopup'
+import { MobileMenu } from '@/components/layouts/header/MobileMenu'
 
 export const Navbar = () => {
   const user = useUser()
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
-    <NextUINavbar maxWidth='xl' position='sticky'>
+    <NextUINavbar
+      isBordered
+      isMenuOpen={isMenuOpen}
+      maxWidth='xl'
+      position='sticky'
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarContent className='basis-1/5 sm:basis-full' justify='start'>
         <NavbarBrand as='li' className='gap-3 max-w-fit'>
           <NextLink
             className='flex justify-start items-center gap-1 text-foreground'
             href='/'
           >
-            <h3 className='font-bold text-xl'>TripOrg</h3>
+            <Image
+              alt='trip planr logo'
+              src='/trip_planr_logo.svg'
+              width={120}
+            />
+            {/*<BrandLogo />*/}
+            {/*<h3 className='font-bold text-xl'>TripOrg</h3>*/}
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
@@ -58,45 +74,34 @@ export const Navbar = () => {
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
-        {/*<NavbarItem className='hidden sm:flex gap-2'>*/}
-        {/*  <ThemeSwitch />*/}
-        {/*</NavbarItem>*/}
         <NavbarItem className='hidden md:flex'>
           <UserPopup />
         </NavbarItem>
       </NavbarContent>
 
+      {/*Mobile*/}
+
       <NavbarContent className='sm:hidden basis-1 pl-4' justify='end'>
-        <Link isExternal aria-label='Github' href={siteConfig.links.github}>
-          <FiTwitter className='text-default-500' />
-        </Link>
-        <ThemeSwitch />
-        <NavbarMenuToggle />
+        <SignedIn>
+          <NavbarMenuToggle />
+        </SignedIn>
+
+        <SignedOut>
+          <Button
+            as={Link}
+            className='text-sm font-normal text-default-600 bg-default-100'
+            href={'/sign-in'}
+            startContent={<FiLogIn className='text-yellow-600' />}
+            variant='flat'
+          >
+            Sign In
+          </Button>
+        </SignedOut>
       </NavbarContent>
 
+      {/*Mobile*/}
       <NavbarMenu>
-        <div className='mx-4 mt-2 flex flex-col gap-2'>
-          {siteConfig.navItems.map((item, index) => (
-            <NavbarMenuItem
-              key={`${item}-${index}`}
-              onClick={() => console.log('changed')}
-            >
-              <Link
-                color={
-                  index === 2
-                    ? 'primary'
-                    : index === siteConfig.navItems.length - 1
-                      ? 'danger'
-                      : 'foreground'
-                }
-                href={item.href}
-                size='lg'
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </div>
+        <MobileMenu setIsMenuOpen={setIsMenuOpen} />
       </NavbarMenu>
     </NextUINavbar>
   )

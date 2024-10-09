@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+
 import { nextui } from '@nextui-org/react'
 
 const config: Config = {
@@ -10,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        'custom-gray': '#e5e7eb',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -20,4 +24,5 @@ const config: Config = {
   darkMode: 'class',
   plugins: [nextui()],
 }
+
 export default config
