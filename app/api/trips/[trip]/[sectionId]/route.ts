@@ -9,14 +9,14 @@ export async function PUT(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       trip: string // slug
       sectionId: string
-    }
+    }>
   }
 ) {
   const payload = await request.json()
-  const { trip, sectionId } = params
+  const { trip, sectionId } = await params
 
   await connectMongo()
 

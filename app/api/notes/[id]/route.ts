@@ -1,15 +1,18 @@
+import { NextRequest } from 'next/server'
+
 import connectMongo from '@/lib/db/connectMongo'
 import NoteSchema from '@/lib/db/schemas/Note.schema'
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectMongo()
+  const id = (await params).id
 
   // Get one Note
   try {
-    const note = await NoteSchema.findById(params.id).lean()
+    const note = await NoteSchema.findById(id).lean()
 
     return Response.json(note)
   } catch (e) {

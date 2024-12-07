@@ -1,10 +1,12 @@
-import { Card, CardBody, Select, SelectItem } from '@nextui-org/react'
+'use client'
+
+import { Card, CardBody } from '@nextui-org/react'
 import { CardHeader } from '@nextui-org/card'
 import { Divider } from '@nextui-org/divider'
-import React, { useState } from 'react'
+import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { getTripSummary } from '@/queries/queries.db'
 import { getSummaryToDisplay } from '@/components/templates/one-trip-page/trip.utils'
 
@@ -13,18 +15,17 @@ type Props = {
 }
 
 export const TripSummary = ({ trip }: Props) => {
-  const [currencyISO, setCurrencyISO] = useState(
+  const currency =
     window.localStorage.getItem('app_currency_chosen') ?? DEFAULT_CURRENCY
-  )
 
   // Fetch Summary
   const { data } = useQuery({
-    queryKey: ['summary', trip, currencyISO],
-    queryFn: () => getTripSummary(trip as string, currencyISO),
-    enabled: Boolean(currencyISO),
+    queryKey: ['summary', trip, currency],
+    queryFn: () => getTripSummary(trip as string, currency),
+    enabled: Boolean(currency),
   })
 
-  const summaryToDisplay = getSummaryToDisplay(data)
+  const summaryToDisplay = getSummaryToDisplay(data, currency)
 
   return (
     <div>
@@ -34,31 +35,6 @@ export const TripSummary = ({ trip }: Props) => {
             <p className='text-lg font-bold'>Summary</p>
             <p className='text-small text-default-500'>Money and time spent</p>
           </div>
-          <Select
-            className='max-w-[200px]'
-            defaultSelectedKeys={[currencyISO]}
-            label='Select a currency'
-            startContent={
-              currencies[currencyISO as keyof typeof currencies]?.symbol ?? ''
-            }
-            onChange={(evt) => {
-              setCurrencyISO(evt.target.value as any)
-              window.localStorage.setItem(
-                'app_currency_chosen',
-                evt.target.value
-              )
-            }}
-          >
-            {Object.values(currencies).map((curr) => (
-              <SelectItem
-                key={curr.nameISO}
-                startContent={curr.symbol}
-                value={curr.nameISO}
-              >
-                {curr.name}
-              </SelectItem>
-            ))}
-          </Select>
         </CardHeader>
         <Divider />
         <CardBody>

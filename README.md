@@ -34,7 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - install **npm-check-updates** globally ``npm install -g npm-check-updates``
 - check updates ``ncu`` or with grouping ``ncu --format group``
 - upgrade package.json ``ncu -u``
-- install new versions ``yarn``
+- install new versions ``npm i``
   [Documentation](https://github.com/raineorshine/npm-check-updates)
 
 ### TipTap editor

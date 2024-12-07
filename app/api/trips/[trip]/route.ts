@@ -6,9 +6,9 @@ import connectMongo from '@/lib/db/connectMongo'
 
 export async function GET(
   request: Request,
-  { params }: { params: { trip: string } }
+  { params }: { params: Promise<{ trip: string }> }
 ) {
-  const { trip: slug } = params
+  const slug = (await params).trip
 
   await connectMongo()
 
@@ -33,7 +33,7 @@ export async function GET(
 }
 
 export async function PUT(request: Request) {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) {
     return new Response('Unauthorized', { status: 401 })

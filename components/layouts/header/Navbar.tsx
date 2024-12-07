@@ -11,7 +11,7 @@ import { Link } from '@nextui-org/link'
 import { link as linkStyles } from '@nextui-org/theme'
 import NextLink from 'next/link'
 import clsx from 'clsx'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useUser, SignedIn, SignedOut } from '@clerk/nextjs'
 import { Button } from '@nextui-org/button'
 import { FiLogIn } from 'react-icons/fi'
@@ -19,6 +19,7 @@ import { FiLogIn } from 'react-icons/fi'
 import { siteConfig } from '@/config/site'
 import { UserPopup } from '@/components/layouts/header/UserPopup'
 import { MobileMenu } from '@/components/layouts/header/MobileMenu'
+import { CurrencySelect } from '@/components/layouts/header/CurrencySelect'
 
 export const Navbar = () => {
   const user = useUser()
@@ -74,6 +75,9 @@ export const Navbar = () => {
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
+        <NavbarItem className='hidden md:flex'>
+          <CurrencySelect />
+        </NavbarItem>
         <NavbarItem className='hidden md:flex'>
           <UserPopup />
         </NavbarItem>

@@ -5,13 +5,9 @@ type SummaryItem = {
   value: string | number
 }
 
-type SummaryToDisplay = {
-  time: SummaryItem[]
-  money: SummaryItem[]
-}
-
 export const getSummaryToDisplay = (
-  summary?: TripSummaryValues
+  summary: TripSummaryValues | undefined,
+  currency: string
 ): SummaryToDisplay | null => {
   if (!summary) {
     return null
@@ -39,16 +35,21 @@ export const getSummaryToDisplay = (
     money: [
       {
         label: 'Spent on the road',
-        value: summary.roadCost,
+        value: `${summary.roadCost} ${currency}`,
       },
       {
         label: 'Spent on the stays',
-        value: summary.stayCost,
+        value: `${summary.stayCost} ${currency}`,
       },
       {
         label: 'Spent total',
-        value: summary.totalCost,
+        value: `${summary.totalCost} ${currency}`,
       },
     ],
   }
+}
+
+type SummaryToDisplay = {
+  time: SummaryItem[]
+  money: SummaryItem[]
 }

@@ -14,7 +14,7 @@ import { getCurrencyRates } from '@/services/currency.service'
 dayjs.extend(duration)
 
 export const getTripSummaryValues = async (
-  trip: Trip,
+  trip: Trip | null,
   userCurrency: string = DEFAULT_CURRENCY
 ): Promise<TripSummaryValues> => {
   if (!trip) {

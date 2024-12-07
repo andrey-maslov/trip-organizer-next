@@ -4,13 +4,12 @@ import { NextRequest } from 'next/server'
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
 import { getTripSummaryValues } from '@/services/TripSummaryService'
-import { Trip } from '@/types/types'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { trip: string } }
+  { params }: { params: Promise<{ trip: string }> }
 ) {
-  const { trip: slug } = params
+  const slug = (await params).trip
   const searchParams = request.nextUrl.searchParams
   const currencyISO = searchParams.get('currency')
 
@@ -18,7 +17,7 @@ export async function GET(
 
   // Get one trip
   try {
-    const trip = await TripSchema.findOne({
+    const trip: any = await TripSchema.findOne({
       $or: [
         {
           _id: isValidObjectId(slug) ? new Types.ObjectId(slug) : undefined,
@@ -27,10 +26,7 @@ export async function GET(
       ],
     }).lean()
 
-    const summary = await getTripSummaryValues(
-      trip as Trip,
-      currencyISO as string
-    )
+    const summary = await getTripSummaryValues(trip, currencyISO as string)
 
     return Response.json(summary)
   } catch (e) {

@@ -42,7 +42,7 @@ export default function TripsList() {
               fallbackSrc={defaultCoverImage}
               radius='lg'
               shadow='sm'
-              src={trip.cover ?? undefined}
+              src={trip.cover || defaultCoverImage}
               width='100%'
             />
           </CardBody>

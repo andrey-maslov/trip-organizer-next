@@ -5,7 +5,7 @@ import TripSchema from '@/lib/db/schemas/Trip.schema'
 import { Trip } from '@/types/types'
 
 export async function GET() {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) {
     return new Response('Unauthorized', { status: 401 })
@@ -31,7 +31,7 @@ export async function GET() {
 
 // Create new trip
 export async function POST(request: Request) {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) {
     return new Response('Unauthorized', { status: 401 })
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) {
     return new Response('Unauthorized', { status: 401 })
