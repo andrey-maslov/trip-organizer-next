@@ -1,4 +1,4 @@
-import { CurrencyRates, Payment, Section } from '@/types/types'
+import { CurrencyRates, Expense, Section } from '@/types/types'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { defaultSection } from '@/constants/defaultEntities'
 
@@ -83,7 +83,7 @@ export const swapElements = <T>(
   return array
 }
 
-export const getPrice = (payments: Payment[] | null): string => {
+export const getPrice = (payments: Expense[] | null): string => {
   if (!payments || !Array.isArray(payments) || payments.length === 0) {
     return 'n/d'
   }
@@ -98,7 +98,7 @@ export const getPrice = (payments: Payment[] | null): string => {
 }
 
 export const getTotalPriceFromSection = (
-  paymentsList: Payment[] | null | undefined
+  paymentsList: Expense[] | null | undefined
 ): string => {
   if (!paymentsList || paymentsList.length === 0) {
     return '-'

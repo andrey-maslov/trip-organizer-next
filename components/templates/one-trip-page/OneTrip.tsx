@@ -23,6 +23,7 @@ import { TripView } from '@/components/templates/one-trip-page/trip-view/TripVie
 import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { TripSummary } from '@/components/templates/one-trip-page/TripSummary'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export const OneTrip = () => {
   const { slug } = useParams()
@@ -31,6 +32,9 @@ export const OneTrip = () => {
 
   const isMobile = useIsMobile()
 
+  const userCurrency =
+    window.localStorage.getItem('app_currency_chosen') ?? DEFAULT_CURRENCY
+
   // Fetch Trip
   const {
     isPending,
@@ -38,7 +42,7 @@ export const OneTrip = () => {
     data: trip,
   } = useQuery({
     queryKey: ['trip', slug],
-    queryFn: () => getOneTrip(slug as string),
+    queryFn: () => getOneTrip(slug as string, userCurrency),
   })
 
   // Update Trip

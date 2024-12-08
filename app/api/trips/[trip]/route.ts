@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
+import { CurrencyRates, Expense } from '@/types/types'
 
 export async function GET(
   request: Request,
@@ -52,6 +53,8 @@ export async function PUT(request: Request) {
       new: true,
     }).lean()
 
+    // const totalExpense = getTotalExpense(trip.pay)
+
     return Response.json({ ...trip })
   } catch (e) {
     return new Response('Update trip error', {
@@ -59,4 +62,39 @@ export async function PUT(request: Request) {
       status: 404,
     })
   }
+}
+
+function getTotalExpense(
+  expenses: Expense[],
+  currency: string,
+  currencyRates: CurrencyRates
+) {
+  if (!currencyRates[currency as keyof CurrencyRates]) {
+    throw new Error(`Currency rate ${currency} not found.`)
+  }
+
+  return expenses.reduce((total, expense) => {
+    const { amount, currency: expenseCurrency } = expense
+
+    // Пропускаем записи, у которых amount или currency отсутствуют
+    if (amount === undefined || expenseCurrency === undefined) {
+      return total
+    }
+
+    if (expenseCurrency === currency) {
+      return total + amount
+    }
+
+    const conversionRate =
+      // @ts-ignore
+      currencyRates[expenseCurrency as keyof CurrencyRates]?.rates[currency]
+
+    if (!conversionRate) {
+      throw new Error(
+        `Conversion from ${expenseCurrency} to ${currency} impossible.`
+      )
+    }
+
+    return total + amount * conversionRate
+  }, 0)
 }

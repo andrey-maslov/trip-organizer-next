@@ -1,1 +1,30 @@
-{"USD":{"success":true,"timestamp":1733598303,"base":"USD","date":"2024-12-07","rates":{"EUR":0.94555,"PLN":4.03631,"BYN":3.276252}},"PLN":{"success":true,"timestamp":1733598303,"base":"PLN","date":"2024-12-07","rates":{"EUR":0.234261,"USD":0.247751,"BYN":0.811695}},"BYN":{"success":true,"timestamp":1733598303,"base":"BYN","date":"2024-12-07","rates":{"EUR":0.288607,"USD":0.305227,"PLN":1.23199}},"EUR":{"success":true,"timestamp":1733598303,"base":"EUR","date":"2024-12-07","rates":{"USD":1.057585,"PLN":4.268742,"BYN":3.464915}}}
+{
+  "USD": {
+    "success": true,
+    "timestamp": 1733686155,
+    "base": "USD",
+    "date": "2024-12-08",
+    "rates": { "EUR": 0.94555, "PLN": 4.04195, "BYN": 3.276252 }
+  },
+  "PLN": {
+    "success": true,
+    "timestamp": 1733686155,
+    "base": "PLN",
+    "date": "2024-12-08",
+    "rates": { "EUR": 0.233934, "USD": 0.247405, "BYN": 0.810562 }
+  },
+  "BYN": {
+    "success": true,
+    "timestamp": 1733686155,
+    "base": "BYN",
+    "date": "2024-12-08",
+    "rates": { "EUR": 0.288607, "USD": 0.305227, "PLN": 1.233712 }
+  },
+  "EUR": {
+    "success": true,
+    "timestamp": 1733686155,
+    "base": "EUR",
+    "date": "2024-12-08",
+    "rates": { "USD": 1.057585, "PLN": 4.274708, "BYN": 3.464916 }
+  }
+}

@@ -16,7 +16,7 @@ import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCel
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
 import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
 import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
-import { PaymentsCell } from '@/components/templates/one-trip-page/cells/PaymentsCell'
+import { ExpensesCell } from '@/components/templates/one-trip-page/cells/ExpensesCell'
 import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
 import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
 
@@ -100,7 +100,7 @@ export const RenderCell = ({
   }
   if (columnKey === 'payments') {
     return (
-      <PaymentsCell
+      <ExpensesCell
         data={section.payments}
         onSave={(newValue) => onSave(newValue, section.id, columnKey)}
       />

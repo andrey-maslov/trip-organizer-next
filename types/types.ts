@@ -39,7 +39,11 @@ export type Section = {
     name?: string
     url?: string
   }
-  payments?: Payment[] // TODO replace 'price' and 'payment' to one name: Expense/expenses
+  payments?: Expense[] // TODO replace 'price' and 'payment' to one name: Expense/expenses
+  allExpenses?: {
+    amount: number
+    currency: string
+  }
   note?: Types.ObjectId | string
 }
 
@@ -51,7 +55,7 @@ export type SectionType = (typeof serviceProviderTypes)[number]
 export type PlacementType = (typeof placementTypes)[number]
 export type CurrencyISOName = (typeof currencyISONames)[number]
 
-export type Payment = {
+export type Expense = {
   _id: string
   name?: string
   link?: string

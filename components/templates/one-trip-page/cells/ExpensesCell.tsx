@@ -10,15 +10,15 @@ import {
 import React, { useState } from 'react'
 
 import { getTotalPriceFromSection } from '@/lib/utils'
-import { Payment } from '@/types/types'
+import { Expense } from '@/types/types'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
 
 type Props = {
-  data: Payment[] | null | undefined
-  onSave: (data: Partial<Payment>[]) => void
+  data: Expense[] | null | undefined
+  onSave: (data: Partial<Expense>[]) => void
 }
 
-const defaultExpense: Partial<Payment> = {
+const defaultExpense: Partial<Expense> = {
   currency: DEFAULT_CURRENCY,
   amount: 0,
   name: '',
@@ -27,15 +27,18 @@ const defaultExpense: Partial<Payment> = {
 
 const currenciesList = Object.values(currencies)
 
-export const PaymentsCell: React.FC<Props> = ({ data, onSave }) => {
+export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
   const [isOpen, setOpen] = useState(false)
-  const [expenses, setExpenses] = useState<Partial<Payment>[]>(
+  const [expenses, setExpenses] = useState<Partial<Expense>[]>(
     data ?? [defaultExpense]
   )
 
+  const userCurrency =
+    window.localStorage.getItem('app_currency_chosen') ?? DEFAULT_CURRENCY
+
   const onDataChange = (
     index: number,
-    fieldName: keyof Payment,
+    fieldName: keyof Expense,
     value: string | number
   ) => {
     const newExpenses = [...expenses]

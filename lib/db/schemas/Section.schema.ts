@@ -4,9 +4,9 @@ import {
   DEFAULT_SECTION_STATUS,
   DEFAULT_SECTION_TYPE,
 } from '@/constants/constants'
-import { Payment, Section } from '@/types/types'
+import { Expense, Section } from '@/types/types'
 
-export const PaymentSchema = new Schema<Payment>({
+export const PaymentSchema = new Schema<Expense>({
   name: { type: String, required: false },
   link: { type: String, required: false },
   amount: { type: Number, required: false },
@@ -27,6 +27,7 @@ export const SectionSchema = new Schema<Section>({
   },
   status: { type: String, required: true, default: DEFAULT_SECTION_STATUS },
   payments: [PaymentSchema],
+  allExpenses: { type: Object, required: false },
   note: { type: Schema.Types.ObjectId, ref: 'Note', required: false },
   startingPoint: { type: Object, required: true, default: {} },
   endPoint: { type: Object, required: true, default: {} },

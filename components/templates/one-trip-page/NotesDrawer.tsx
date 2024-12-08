@@ -18,6 +18,7 @@ import 'react-modern-drawer/dist/index.css'
 
 import { title, subtitle } from '@/components/primitives'
 import { deleteOneNote, getOneNote, getOneTrip } from '@/queries/queries.db'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 const DynamicTiptapEditor = dynamic(
   () => import('../../tiptap-editor/TiptapEditor'),
@@ -36,6 +37,9 @@ export const NotesDrawer = () => {
   const [isOpen, setOpen] = useState(false)
   const [isFullscreen, setFullscreen] = useState(Boolean(searchObj.fullscreen))
 
+  const userCurrency =
+    window.localStorage.getItem('app_currency_chosen') ?? DEFAULT_CURRENCY
+
   useEffect(() => {
     setOpen(Boolean(searchObj.note))
   }, [searchObj, searchObj.note])
@@ -43,7 +47,7 @@ export const NotesDrawer = () => {
   // TODO check why the fetch is doubled
   const { data: trip } = useQuery({
     queryKey: ['trip', slug],
-    queryFn: () => getOneTrip(slug as string),
+    queryFn: () => getOneTrip(slug as string, userCurrency),
     enabled: Boolean(searchObj.note),
   })
 
