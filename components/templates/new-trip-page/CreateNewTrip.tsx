@@ -21,7 +21,9 @@ export const CreateNewTrip = () => {
   const [slugChanged, setSlugChanged] = useState(false)
   const [description, setDescription] = useState('')
   const [cover, setCover] = useState('')
-  const [date, setDate] = React.useState<RangeValue<DateValue> | null>(null)
+  const [date, setDate] = React.useState<RangeValue<DateValue | any> | null>(
+    null
+  )
 
   // Create New Trip
   const { mutate: createTripMutation, isPending } = useMutation({
