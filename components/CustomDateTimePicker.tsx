@@ -2,7 +2,7 @@ import React from 'react'
 import { DatePicker } from '@nextui-org/react'
 import { ZonedDateTime } from '@internationalized/date'
 
-export type CustomData = ZonedDateTime
+export type CustomData = ZonedDateTime | any
 
 type CustomDayPickerProps = {
   value: CustomData
