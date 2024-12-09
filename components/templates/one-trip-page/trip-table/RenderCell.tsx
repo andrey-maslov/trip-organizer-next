@@ -128,14 +128,20 @@ export const RenderCell = ({
             </Button>
           </DropdownTrigger>
           <DropdownMenu>
-            <DropdownItem onPress={() => onMoveSection(section.id, 'up')}>
+            <DropdownItem
+              key='up'
+              onPress={() => onMoveSection(section.id, 'up')}
+            >
               Move Up
             </DropdownItem>
-            <DropdownItem onPress={() => onMoveSection(section.id, 'down')}>
+            <DropdownItem
+              key='down'
+              onPress={() => onMoveSection(section.id, 'down')}
+            >
               Move Down
             </DropdownItem>
-            <DropdownItem>Disable</DropdownItem>
-            <DropdownItem onPress={() => onDeleteSection()}>
+            <DropdownItem key='disable'>Disable</DropdownItem>
+            <DropdownItem key='delete' onPress={() => onDeleteSection()}>
               Delete
             </DropdownItem>
           </DropdownMenu>

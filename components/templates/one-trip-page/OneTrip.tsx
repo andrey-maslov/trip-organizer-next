@@ -141,7 +141,7 @@ export const OneTrip = () => {
             </button>
           </DropdownTrigger>
           <DropdownMenu>
-            <DropdownItem color='danger' onPress={onDeleteTrip}>
+            <DropdownItem key='delete' color='danger' onPress={onDeleteTrip}>
               Delete
             </DropdownItem>
           </DropdownMenu>
