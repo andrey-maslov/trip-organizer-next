@@ -1,13 +1,5 @@
 import { Key } from 'react'
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  getKeyValue,
-} from '@nextui-org/react'
-import { FiMoreVertical } from 'react-icons/fi'
+import { getKeyValue } from '@nextui-org/react'
 
 import { Section } from '@/types/types'
 import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
@@ -25,18 +17,9 @@ type Props = {
   section: Section
   tripId: string
   onSave: (value: any, sectionId: string, columnKey: string) => void
-  onDeleteSection: () => void
-  onMoveSection: (sectionId: string, direction: 'up' | 'down') => void
 }
 
-export const RenderCell = ({
-  columnKey,
-  section,
-  tripId,
-  onSave,
-  onDeleteSection,
-  onMoveSection,
-}: Props) => {
+export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
   const cellValue = getKeyValue(section, columnKey as string | number)
 
@@ -116,37 +99,6 @@ export const RenderCell = ({
         sectionId={section.id}
         tripId={tripId}
       />
-    )
-  }
-  if (columnKey === 'actions') {
-    return (
-      <div className='relative flex justify-end items-center gap-2'>
-        <Dropdown className='bg-background border-1 border-default-200'>
-          <DropdownTrigger>
-            <Button isIconOnly radius='full' size='sm' variant='light'>
-              <FiMoreVertical className='text-default-400' />
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu>
-            <DropdownItem
-              key='up'
-              onPress={() => onMoveSection(section.id, 'up')}
-            >
-              Move Up
-            </DropdownItem>
-            <DropdownItem
-              key='down'
-              onPress={() => onMoveSection(section.id, 'down')}
-            >
-              Move Down
-            </DropdownItem>
-            <DropdownItem key='disable'>Disable</DropdownItem>
-            <DropdownItem key='delete' onPress={() => onDeleteSection()}>
-              Delete
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
     )
   }
 

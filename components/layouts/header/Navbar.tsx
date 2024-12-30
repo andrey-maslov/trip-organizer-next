@@ -26,6 +26,8 @@ export const Navbar = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  console.log('USR', user)
+
   return (
     <NextUINavbar
       isBordered
@@ -75,9 +77,11 @@ export const Navbar = () => {
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
-        <NavbarItem className='hidden md:flex'>
-          <CurrencySelect />
-        </NavbarItem>
+        {user.user && (
+          <NavbarItem className='hidden md:flex'>
+            <CurrencySelect />
+          </NavbarItem>
+        )}
         <NavbarItem className='hidden md:flex'>
           <UserPopup />
         </NavbarItem>

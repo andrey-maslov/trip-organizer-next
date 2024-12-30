@@ -1,5 +1,5 @@
 import { Button, Divider, Selection } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
@@ -11,8 +11,9 @@ import {
   columns,
   INITIAL_VISIBLE_COLUMNS,
 } from '@/components/templates/one-trip-page/trip-table.config'
-import { RenderCell } from '@/components/templates/one-trip-page/trip-table/RenderCell'
 import { defaultSection } from '@/constants/defaultEntities'
+import { SectionItem } from '@/components/templates/one-trip-page/trip-table/SectionItem'
+import { SortableList } from '@/components/templates/one-trip-page/trip-table/SortableList'
 
 type Props = {
   trip: Trip
@@ -63,7 +64,7 @@ export const TripTable = ({ trip }: Props) => {
     },
   })
 
-  const onSaveTableCell = (
+  const onSectionSave = (
     newValue: any,
     sectionId: string,
     columnKey: string
@@ -114,44 +115,29 @@ export const TripTable = ({ trip }: Props) => {
           </div>
           <div className='tbody'>
             {sectionsToDisplay?.length > 0 ? (
-              sectionsToDisplay.map((section, index) => (
-                <div key={index} className='tr'>
-                  {columns.map((column) => (
-                    <div
-                      key={column.uid + section.name}
-                      className='td'
-                      style={{ width: `${column.width}px` }}
-                    >
-                      <RenderCell
-                        columnKey={column.uid}
-                        section={section}
-                        tripId={trip._id}
-                        onDeleteSection={() => {
-                          updateTripMutation({
-                            _id: trip._id,
-                            sections: sectionsToDisplay.filter(
-                              (item) => item.id !== section.id
-                            ),
-                          })
-                        }}
-                        onMoveSection={(sectionId, direction) => {
-                          const rearrangedSections = moveObject(
-                            sectionsToDisplay,
-                            sectionId,
-                            direction
-                          )
-
-                          updateTripMutation({
-                            _id: trip._id,
-                            sections: rearrangedSections,
-                          })
-                        }}
-                        onSave={onSaveTableCell}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ))
+              <SortableList
+                items={sectionsToDisplay}
+                renderItem={(section) => (
+                  <SortableList.Item id={section.id}>
+                    <SectionItem
+                      key={section.id}
+                      columns={columns}
+                      section={section}
+                      trip={trip}
+                      onSectionDelete={() => {
+                        updateTripMutation({
+                          _id: trip._id,
+                          sections: sectionsToDisplay.filter(
+                            (item) => item.id !== section.id
+                          ),
+                        })
+                      }}
+                      onSectionSave={onSectionSave}
+                    />
+                  </SortableList.Item>
+                )}
+                onChange={setSectionsToDisplay}
+              />
             ) : (
               <div className='text-center py-10'>
                 <div className='mb-8'>You don&apos;t have any trip section</div>
