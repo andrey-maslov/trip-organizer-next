@@ -14,7 +14,7 @@ export type Trip = {
   _id: string
   name: string
   slug: string
-  sections: SectionBE[]
+  sections: Section[]
   dateTimeStart?: DateType
   dateTimeEnd?: DateType
   description?: string
@@ -23,8 +23,7 @@ export type Trip = {
 }
 
 export type Section = {
-  // _id: string // do not use in FE
-  id: string // for FE only
+  _id: string
   name: string
   status: Status
   type: string
@@ -47,7 +46,7 @@ export type Section = {
   note?: Types.ObjectId | string
 }
 
-export type SectionBE = Section & { _id?: string }
+export type SectionFE = Section & { id: string }
 
 export type TransportType = (typeof transportTypes)[number]
 export type Status = (typeof statusTypes)[number]

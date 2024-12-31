@@ -27,7 +27,7 @@ export const NameCell: FC<NameCellProps> = ({ name, onUpdate }) => {
   }, [])
 
   return (
-    <div className='flex items-center relative editable-elemenet min-w-[170px] font-bold px-3'>
+    <div className='flex items-center relative overflow-hidden font-bold pr-3'>
       <input
         ref={inputRef}
         className='outline-0 max-w-full'

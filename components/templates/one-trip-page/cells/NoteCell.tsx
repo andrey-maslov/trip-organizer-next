@@ -1,6 +1,8 @@
 import { FC } from 'react'
 import { Button } from '@nextui-org/button'
 import { useMutation } from '@tanstack/react-query'
+import { FaRegNoteSticky } from 'react-icons/fa6'
+import { IoAddOutline } from 'react-icons/io5'
 
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { createNote } from '@/queries/queries.db'
@@ -36,16 +38,17 @@ export const NoteCell: FC<Props> = ({ noteId, sectionId, tripId }) => {
   }
 
   return (
-    <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
+    <div className='flex items-center relative max-w-[140px] overflow-hidden p-1 mx-auto'>
       <Button
+        isIconOnly
         color='default'
         isLoading={isPending}
         size='sm'
+        startContent={noteId ? <FaRegNoteSticky /> : <IoAddOutline />}
+        title={noteId ? 'Read note' : 'Add note'}
         variant='light'
         onPress={() => onOpenNote()}
-      >
-        {noteId ? 'Note' : 'Add note'}
-      </Button>
+      />
     </div>
   )
 }

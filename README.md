@@ -57,3 +57,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ### Ngrok: exposing/tunneling
 - [Getting started](https://ngrok.com/docs/getting-started/#step-1-install)
 - [Dashboard](https://dashboard.ngrok.com/)
+
+### Drag and Drop - dnd kit
+- [dnd kit](https://dndkit.com/)
+- [Example on Codepen](https://codesandbox.io/p/sandbox/dnd-kit-sortable-starter-template-22x1ix)

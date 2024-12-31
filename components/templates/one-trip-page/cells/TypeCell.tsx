@@ -16,11 +16,8 @@ type TypeCellProps = {
 }
 
 export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
-  const iconClasses =
-    'text-xl text-default-500 pointer-events-none flex-shrink-0'
-
   return (
-    <div className='flex items-center relative editable-elemenet max-h-[43px]'>
+    <div className='flex items-center relative editable-elemenet max-h-[43px] mx-auto'>
       <Dropdown>
         <DropdownTrigger>
           <Button

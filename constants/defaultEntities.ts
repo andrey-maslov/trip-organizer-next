@@ -1,4 +1,4 @@
-import { Section, Trip, TripPoint } from '@/types/types'
+import { SectionFE, Trip, TripPoint } from '@/types/types'
 
 export const defaultTrip: Partial<Trip> = {
   name: 'new trip',
@@ -9,7 +9,7 @@ export const defaultPoint: TripPoint = {
   place: {},
 }
 
-export const defaultSection: Section = {
+export const defaultSection: Omit<SectionFE, '_id'> = {
   id: 'default',
   type: 'unknown',
   name: '',

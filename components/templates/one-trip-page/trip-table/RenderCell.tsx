@@ -27,7 +27,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     return (
       <TypeCell
         type={section.type ?? ''}
-        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
+        onUpdate={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -35,7 +35,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     return (
       <NameCell
         name={section?.name ?? ''}
-        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
+        onUpdate={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -43,7 +43,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     return (
       <StatusCell
         status={cellValue || DEFAULT_SECTION_STATUS}
-        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
+        onUpdate={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -51,7 +51,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     return (
       <ServiceProviderCell
         serviceProvider={section.serviceProvider}
-        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
+        onUpdate={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -64,7 +64,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
       <TripPointCell
         initialPoint={data}
         title='Set your starting point'
-        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
+        onUpdate={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -77,7 +77,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
       <TripPointCell
         initialPoint={data}
         title='Set your finishing point'
-        onUpdate={(newValue) => onSave(newValue, section.id, columnKey)}
+        onUpdate={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -85,7 +85,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     return (
       <ExpensesCell
         data={section.payments}
-        onSave={(newValue) => onSave(newValue, section.id, columnKey)}
+        onSave={(newValue) => onSave(newValue, section._id, columnKey)}
       />
     )
   }
@@ -96,7 +96,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     return (
       <NoteCell
         noteId={section.note as string}
-        sectionId={section.id}
+        sectionId={section._id}
         tripId={tripId}
       />
     )

@@ -5,6 +5,7 @@ import type {
 } from '@dnd-kit/core'
 
 import React, { createContext, useContext, useMemo } from 'react'
+import { MdDragIndicator } from 'react-icons/md'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
@@ -68,11 +69,9 @@ export function DragHandle() {
       {...attributes}
       {...listeners}
       ref={ref}
-      className='absolute left-0 z-10 top-[50%]'
+      className='absolute -left-3 z-10 top-[50%] -translate-y-5 bg-neutral-50 py-3 px-1 shadow-md text-center rounded-md'
     >
-      <svg viewBox='0 0 20 20' width='12'>
-        <path d='M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z' />
-      </svg>
+      <MdDragIndicator />
     </button>
   )
 }

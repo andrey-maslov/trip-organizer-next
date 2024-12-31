@@ -37,7 +37,7 @@ export const updateSection = async (
   trip: string, // slug or id
   sectionData: Partial<Section>
 ): Promise<any> =>
-  api.put(`trips/${trip}/${sectionData.id}`, { json: sectionData }).json()
+  api.put(`trips/${trip}/${sectionData._id}`, { json: sectionData }).json()
 
 /******** NOTES ******/
 export const getOneNote = async (id: string): Promise<Note> =>

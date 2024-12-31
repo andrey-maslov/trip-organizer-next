@@ -1,11 +1,11 @@
-import { Button, Divider, Selection } from '@nextui-org/react'
+import { Button, Selection } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { IoMdAdd } from 'react-icons/io'
 
-import { Section, Trip } from '@/types/types'
+import { Section, SectionFE, Trip } from '@/types/types'
 import { updateSection, updateTrip } from '@/queries/queries.db'
 import {
   columns,
@@ -22,11 +22,12 @@ type Props = {
 export const TripTable = ({ trip }: Props) => {
   const queryClient = useQueryClient()
   const { slug } = useParams()
-  const [sectionsToDisplay, setSectionsToDisplay] = useState<Section[]>([])
+  const [sectionsToDisplay, setSectionsToDisplay] = useState<SectionFE[]>([])
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
 
+  // add 'id' property to process Sections in Front-End
   useEffect(() => {
     setSectionsToDisplay(
       (trip.sections ?? []).map((section) => ({
@@ -94,6 +95,7 @@ export const TripTable = ({ trip }: Props) => {
   const onAddNewSection = () => {
     updateTripMutation({
       _id: trip._id,
+      // @ts-ignore
       sections: [...sectionsToDisplay, defaultSection],
     })
   }
@@ -136,7 +138,14 @@ export const TripTable = ({ trip }: Props) => {
                     />
                   </SortableList.Item>
                 )}
-                onChange={setSectionsToDisplay}
+                onChange={(value) => {
+                  setSectionsToDisplay(value)
+
+                  updateTripMutation({
+                    _id: trip._id,
+                    sections: value,
+                  })
+                }}
               />
             ) : (
               <div className='text-center py-10'>
@@ -149,11 +158,10 @@ export const TripTable = ({ trip }: Props) => {
           </div>
         </div>
 
-        <Divider />
         <div className='py-3 flex justify-center'>
           <Button
             isIconOnly
-            className='bg-gradient-to-tr from-yellow-400 to-yellow-600 text-white shadow-lg'
+            className='bg-gradient-to-tr from-yellow-400 to-yellow-600 text-white text-xl shadow-md'
             title='Add new section'
             onPress={onAddNewSection}
           >
@@ -163,47 +171,4 @@ export const TripTable = ({ trip }: Props) => {
       </div>
     </>
   )
-}
-
-const moveObject = (
-  items: Section[],
-  objectId: string,
-  direction: 'up' | 'down'
-): Section[] => {
-  // Найдем индекс объекта, который нужно переместить
-  const index = items.findIndex((item) => item.id === objectId)
-
-  // Если объект не найден, возвращаем массив без изменений
-  if (index === -1) {
-    return items
-  }
-
-  // Обработаем перемещение вверх
-  if (direction === 'up' && index > 0) {
-    const newItems = [...items]
-
-    // Меняем местами текущий объект и объект выше по списку
-    ;[newItems[index], newItems[index - 1]] = [
-      newItems[index - 1],
-      newItems[index],
-    ]
-
-    return newItems
-  }
-
-  // Обработаем перемещение вниз
-  if (direction === 'down' && index < items.length - 1) {
-    const newItems = [...items]
-
-    // Меняем местами текущий объект и объект ниже по списку
-    ;[newItems[index], newItems[index + 1]] = [
-      newItems[index + 1],
-      newItems[index],
-    ]
-
-    return newItems
-  }
-
-  // Если объект на границе списка и не может быть перемещен, возвращаем массив без изменений
-  return items
 }

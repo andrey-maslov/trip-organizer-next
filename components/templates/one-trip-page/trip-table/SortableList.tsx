@@ -18,6 +18,8 @@ import {
 import { SortableOverlay } from './SortableOverlay'
 import { DragHandle, SortableItem } from './SortableItem'
 
+import { SectionFE } from '@/types/types'
+
 interface BaseItem {
   id: UniqueIdentifier
 }
@@ -32,7 +34,7 @@ export function SortableList<T extends BaseItem>({
   items,
   onChange,
   renderItem,
-}: Props<T>) {
+}: Props<SectionFE>) {
   const [active, setActive] = useState<Active | null>(null)
   const activeItem = useMemo(
     () => items.find((item) => item.id === active?.id),
