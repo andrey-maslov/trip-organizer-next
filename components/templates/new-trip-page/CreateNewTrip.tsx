@@ -122,7 +122,7 @@ export const CreateNewTrip = () => {
         </div>
       </div>
 
-      <div className='mb-14'>
+      <div className='mb-4'>
         <DateRangePicker
           label='Trip duration'
           labelPlacement='outside'
@@ -130,6 +130,12 @@ export const CreateNewTrip = () => {
           visibleMonths={2}
           onChange={setDate}
         />
+      </div>
+
+      <div className='mb-14'>
+        {
+          "Don't forget to select your preferred currency in the navigation bar. It will be used for all trip payment conversions."
+        }
       </div>
 
       <div className='flex justify-center'>

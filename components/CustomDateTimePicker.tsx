@@ -17,8 +17,6 @@ export const CustomDateTimePicker = ({
   label,
   classNames,
 }: CustomDayPickerProps) => {
-  console.log(value)
-
   return (
     <DatePicker
       className={classNames}
