@@ -30,7 +30,7 @@ export const PagesLayout = ({ children }: PagesLayoutProps) => {
             <Divider />
             <footer className='w-full flex items-center justify-center py-4'>
               <span className='flex items-center gap-1 text-sm text-foreground-500'>
-                Trip Organizer © 2024
+                Trip Organizer © 2025
               </span>
             </footer>
           </div>

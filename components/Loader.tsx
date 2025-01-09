@@ -1,20 +1,20 @@
 'use client'
 
 import clsx from 'clsx'
-import { CgSpinnerTwoAlt } from 'react-icons/cg'
+import { Spinner } from '@nextui-org/spinner'
+import React from 'react'
 
 type LoaderProps = {
   type?: string
   className?: string
 }
 
-const Loader: React.FC<LoaderProps> = ({ className }) => (
+export const Loader: React.FC<LoaderProps> = ({ className }) => (
   <div className={clsx('flex justify-center align-middle', className)}>
-    <CgSpinnerTwoAlt
-      className='spinner text-primary'
-      style={{ fontSize: '28px' }}
-    />
+    {/*<CgSpinnerTwoAlt*/}
+    {/*  className='spinner text-primary'*/}
+    {/*  style={{ fontSize: '28px' }}*/}
+    {/*/>*/}
+    <Spinner color='warning' size='md' />
   </div>
 )
-
-export default Loader

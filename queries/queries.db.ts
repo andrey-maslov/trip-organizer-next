@@ -10,11 +10,11 @@ const api = ky.create({
 export const getAllTrips = async (): Promise<{ trips: Trip[] }> =>
   api('trips').json()
 
-export const getOneTrip = async (id: string, currency: string): Promise<Trip> =>
-  api(`trips/${id}?currency=${currency}`).json()
+export const getOneTrip = async (id: string): Promise<Trip> =>
+  api(`trips/${id}`).json()
 
 export const createTrip = async (
-  data: Partial<Trip>
+  data: Partial<Trip> & { tripCurrency: string }
 ): Promise<{ id: string; slug: string }> =>
   api.post('trips', { json: data }).json()
 

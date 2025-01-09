@@ -3,6 +3,8 @@ import { auth } from '@clerk/nextjs/server'
 import connectMongo from '@/lib/db/connectMongo'
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import { Trip } from '@/types/types'
+import { getExchangeRates } from '@/services/currency.service'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export async function GET() {
   const { userId } = await auth()
@@ -37,11 +39,24 @@ export async function POST(request: Request) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  await connectMongo()
+  const data: Trip & { tripCurrency: string } = await request.json()
+
+  const connectMongoPromise = connectMongo()
+  const exchangeRatesPromise = getExchangeRates(
+    data.tripCurrency || DEFAULT_CURRENCY
+  )
+
+  const [mongoConnection, exchangeRates] = await Promise.all([
+    connectMongoPromise,
+    exchangeRatesPromise,
+  ])
 
   try {
-    const data = await request.json()
-    const newTrip: Trip = await TripSchema.create({ ...data, user: userId })
+    const newTrip: Trip = await TripSchema.create({
+      ...data,
+      exchangeRates,
+      user: userId,
+    })
 
     return Response.json({ id: newTrip._id, slug: newTrip.slug })
   } catch (error: any) {

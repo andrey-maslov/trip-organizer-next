@@ -6,7 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import { getLocalTimeZone } from '@internationalized/date'
 
-import { DEFAUT_LOCALE } from '@/constants/constants'
+import { DEFAULT_LOCALE } from '@/constants/constants'
 
 dayjs.extend(duration)
 dayjs.extend(isBetween)
@@ -66,7 +66,7 @@ export const getFormattedTime = (
     date,
     format: { time: options.timeFormat ?? 'short' },
     tz: options.tz,
-    locale: options.locale ?? DEFAUT_LOCALE,
+    locale: options.locale ?? DEFAULT_LOCALE,
   })
 }
 

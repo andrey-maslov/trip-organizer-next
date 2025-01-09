@@ -158,16 +158,18 @@ export const TripTable = ({ trip }: Props) => {
           </div>
         </div>
 
-        <div className='py-3 flex justify-center'>
-          <Button
-            isIconOnly
-            className='bg-gradient-to-tr from-yellow-400 to-yellow-600 text-white text-xl shadow-md'
-            title='Add new section'
-            onPress={onAddNewSection}
-          >
-            <IoMdAdd />
-          </Button>
-        </div>
+        {sectionsToDisplay.length > 0 && (
+          <div className='py-3 flex justify-center'>
+            <Button
+              isIconOnly
+              className='bg-gradient-to-tr from-yellow-400 to-yellow-600 text-white text-xl shadow-md'
+              title='Add new section'
+              onPress={onAddNewSection}
+            >
+              <IoMdAdd />
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

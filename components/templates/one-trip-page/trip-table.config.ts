@@ -17,7 +17,7 @@ export const columns: Column[] = [
   { name: 'Start', uid: 'startingPoint', width: 130 },
   { name: 'End', uid: 'endPoint', width: 130 },
   { name: 'Duration', uid: 'duration', width: 100 },
-  { name: 'Payments', uid: 'payments', width: 100 },
+  { name: 'Expenses', uid: 'payments', width: 100 },
   { name: 'Notes', uid: 'note', width: 100 },
   { name: 'Actions', uid: 'actions', width: 60 },
 ]

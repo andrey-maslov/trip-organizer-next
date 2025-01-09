@@ -1,7 +1,14 @@
 'use client'
 
 import { useMutation } from '@tanstack/react-query'
-import { DateRangePicker, Input, RangeValue, Textarea } from '@nextui-org/react'
+import {
+  DateRangePicker,
+  Input,
+  RangeValue,
+  Select,
+  SelectItem,
+  Textarea,
+} from '@nextui-org/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/button'
@@ -12,6 +19,7 @@ import { createTrip } from '@/queries/queries.db'
 import { isEmptyObject } from '@/lib/utils'
 import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
 import { getFormattedDate } from '@/lib/date'
+import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
 
 export const CreateNewTrip = () => {
   const router = useRouter()
@@ -20,6 +28,7 @@ export const CreateNewTrip = () => {
   const [slug, setSlug] = useState('')
   const [slugChanged, setSlugChanged] = useState(false)
   const [description, setDescription] = useState('')
+  const [currencyISO, setCurrencyISO] = useState(DEFAULT_CURRENCY)
   const [cover, setCover] = useState('')
   const [date, setDate] = React.useState<RangeValue<DateValue | any> | null>(
     null
@@ -42,6 +51,7 @@ export const CreateNewTrip = () => {
       slug,
       description,
       cover,
+      tripCurrency: currencyISO,
       dateTimeStart: date?.start ? date.start.toString() : '',
       dateTimeEnd: date?.end ? date.end.toString() : '',
     })
@@ -68,86 +78,87 @@ export const CreateNewTrip = () => {
               {`From ${date?.start ? getFormattedDate(date?.start.toString()) : ' ? '} to ${date.end ? getFormattedDate(date.end.toString()) : ' ? '}`}
             </h2>
           )}
-          <div className='mb-8'>
-            <div className='flex gap-4'>
-              <div className='w-full'>
-                <Input
-                  className='mb-4'
-                  label='Name'
-                  labelPlacement='outside'
-                  placeholder='Enter name of your trip here'
-                  type='text'
-                  value={name}
-                  onChange={(event) => {
-                    // TODO improve - sanitize
-                    setName(event.target.value)
-                    if (!slugChanged) {
-                      setSlug(
-                        event.target.value
-                          .replaceAll(/ +|\./gi, '-')
-                          .toLowerCase()
-                          .trim()
-                      )
-                    }
-                  }}
-                />
-              </div>
-              <div className='w-full'>
-                <Input
-                  className='mb-4'
-                  label='Slug'
-                  labelPlacement='outside'
-                  type='text'
-                  value={slug}
-                  onChange={(event) => {
-                    if (!slugChanged) {
-                      setSlugChanged(true)
-                    }
-                    // TODO improve - sanitize, use slugify or create the same ???
-                    setSlug(
-                      event.target.value.replaceAll(/ /gi, '-').toLowerCase()
-                    )
-                  }}
-                />
-              </div>
-            </div>
+          <div className='flex gap-4 mb-8 flex-wrap justify-between'>
+            <Input
+              className='w-1/2'
+              label='Name'
+              labelPlacement='outside'
+              placeholder='Enter name of your trip here'
+              type='text'
+              value={name}
+              onChange={(event) => {
+                // TODO improve - sanitize
+                setName(event.target.value)
+                if (!slugChanged) {
+                  setSlug(
+                    event.target.value
+                      .replaceAll(/ +|\./gi, '-')
+                      .toLowerCase()
+                      .trim()
+                  )
+                }
+              }}
+            />
+            <Input
+              className='w-2/5'
+              label='Slug'
+              labelPlacement='outside'
+              type='text'
+              value={slug}
+              onChange={(event) => {
+                if (!slugChanged) {
+                  setSlugChanged(true)
+                }
+                // TODO improve - sanitize, use slugify or create the same ???
+                setSlug(event.target.value.replaceAll(/ /gi, '-').toLowerCase())
+              }}
+            />
             <Textarea
               fullWidth
               label='Description'
+              labelPlacement='outside'
               placeholder='Enter your description'
               value={description}
               onChange={(event) => setDescription(event.target.value)}
             />
+            <DateRangePicker
+              label='Trip duration'
+              labelPlacement='outside'
+              value={date}
+              visibleMonths={2}
+              onChange={setDate}
+            />
+            <div className='flex gap-4'>
+              <Select
+                aria-label='currency'
+                className='w-[100px] flex-shrink-0'
+                defaultSelectedKeys={[currencyISO]}
+                size='sm'
+                onChange={(evt) => setCurrencyISO(evt.target.value)}
+              >
+                {Object.values(currencies).map((curr) => (
+                  <SelectItem key={curr.nameISO} value={curr.nameISO}>
+                    {curr.nameISO}
+                  </SelectItem>
+                ))}
+              </Select>
+              <small className='leading-1'>
+                Select your preferred currency. It will be used for all trip
+                payment conversions. It will be fixed without an ability to
+                change further
+              </small>
+            </div>
           </div>
+          <Button
+            className='bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg uppercase'
+            isLoading={isPending}
+            radius='full'
+            size='lg'
+            onPress={() => onCreateNewTrip()}
+          >
+            Create trip
+          </Button>
         </div>
-      </div>
-
-      <div className='mb-4'>
-        <DateRangePicker
-          label='Trip duration'
-          labelPlacement='outside'
-          value={date}
-          visibleMonths={2}
-          onChange={setDate}
-        />
-      </div>
-
-      <div className='mb-14'>
-        {
-          "Don't forget to select your preferred currency in the navigation bar. It will be used for all trip payment conversions."
-        }
-      </div>
-
-      <div className='flex justify-center'>
-        <Button
-          className='bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg uppercase'
-          isLoading={isPending}
-          radius='full'
-          size='lg'
-          onPress={() => onCreateNewTrip()}
-        >
-          Create trip
-        </Button>
       </div>
     </div>
   )

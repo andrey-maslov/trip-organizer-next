@@ -2,27 +2,27 @@ import path from 'node:path'
 
 import ky from 'ky'
 
-import { AllCurrencyRates, CurrencyISOName, CurrencyRates } from '@/types/types'
+import { AllExchangeRates, ExchangeRates } from '@/types/types'
 import {
-  currencyISONames,
+  currencies,
   DEFAULT_CURRENCY,
-  defaultCurrencyRates,
+  defaultExchangeRates,
   SECONDS_IN_DAY,
 } from '@/constants/constants'
 import { safelyParseJSON } from '@/lib/utils'
 import { isDateExpired } from '@/lib/date'
 import { readFile, saveFile } from '@/services/file.service'
 
-const CURRENCY_DATA_FILE_NAME = 'currencyRates.json'
-const CURRENCY_DATA_FILE_PATH = path.join(
+const EXCHANGE_RATES_FILE_NAME = 'exchangeRates.json'
+const EXCHANGE_RATES_FILE_PATH = path.join(
   process.cwd(),
   './data/',
-  CURRENCY_DATA_FILE_NAME
+  EXCHANGE_RATES_FILE_NAME
 )
 
-export const getCurrencyRatesUrl = (
-  base: CurrencyISOName = DEFAULT_CURRENCY,
-  currenciesList = currencyISONames
+export const getExchangeRatesUrl = (
+  base = DEFAULT_CURRENCY,
+  currenciesList: string[] // ISO names list, e.g [EUR, USD, etc]
 ): string => {
   const currenciesStr = currenciesList
     .filter((curr: string) => curr !== base)
@@ -38,7 +38,7 @@ export /**
  * @param expirationDuration time in seconds to update
  */
 const needToUpdateCurrencyRates = (
-  data: AllCurrencyRates,
+  data: AllExchangeRates,
   expirationDuration = SECONDS_IN_DAY
 ): boolean => {
   if (!data) {
@@ -55,9 +55,9 @@ const needToUpdateCurrencyRates = (
   return isDateExpired(presentRatesDate, expirationDuration)
 }
 
-export const fetchCurrencyRates = async (
+export const fetchExchangeRates = async (
   url: string
-): Promise<CurrencyRates | null> => {
+): Promise<ExchangeRates | null> => {
   if (!process.env.APILAYER_CURRENCY_API_KEY) {
     console.error('You need to add Apilayer API key')
 
@@ -73,60 +73,67 @@ export const fetchCurrencyRates = async (
   }
 
   try {
-    return await ky.get<CurrencyRates>(url, config).json()
+    return await ky.get<ExchangeRates>(url, config).json()
   } catch (err: any) {
-    console.error('Error when fetch currency rates: ', err?.message)
+    console.error('Error when fetch exchange rates: ', err?.message)
 
     return null
   }
 }
 
-export const getCurrencyRates = async (
-  userCurrency: CurrencyISOName
-): Promise<CurrencyRates> => {
+export const getExchangeRates = async (
+  userCurrency: string
+): Promise<ExchangeRates> => {
   // Check - if we have valid data in file
-  const str = await readFile(CURRENCY_DATA_FILE_PATH)
-  const data = safelyParseJSON<AllCurrencyRates>(str)
+  const str = await readFile(EXCHANGE_RATES_FILE_PATH)
+  const data = safelyParseJSON<AllExchangeRates>(str)
 
   if (!data || needToUpdateCurrencyRates(data)) {
     // Fetch data from API
-    console.log('Need to fetch currency rates')
+    console.log('Need to fetch exchange rates')
 
-    const currencyRates = await fetchCurrencyRates(
-      getCurrencyRatesUrl(userCurrency)
+    const currencyISONames = Object.values(currencies).map(
+      (item) => item.nameISO
     )
 
-    console.log('CURR', currencyRates)
+    // Get only necessary exchange rate
+    const exchangeRatesData = await fetchExchangeRates(
+      getExchangeRatesUrl(userCurrency, currencyISONames)
+    )
 
-    if (!currencyRates) {
-      return defaultCurrencyRates
+    console.log('CURR', exchangeRatesData)
+
+    if (!exchangeRatesData) {
+      return defaultExchangeRates
     }
 
-    // Asynchronously Get data with all currencies as base to file(
+    // Get exchange rates for all supported bases and save in the json file
     Promise.all(
       currencyISONames
         .filter((item) => item !== userCurrency)
-        .map((item) => fetchCurrencyRates(getCurrencyRatesUrl(item)))
+        .map((item) =>
+          fetchExchangeRates(getExchangeRatesUrl(item, currencyISONames))
+        )
     )
       .then((dataList) => {
         const dataForSave = {}
 
         // Add previously fetched result for avoid extra request
-        ;[...dataList, currencyRates].forEach(
+        ;[...dataList, exchangeRatesData].forEach(
           // @ts-ignore
           (item) => (dataForSave[item.base] = item)
         )
 
-        // Save all rates
-        saveFile('data', 'currencyRates.json', dataForSave)
+        // Save all exchange rates for fast reuse
+        saveFile('data', EXCHANGE_RATES_FILE_NAME, dataForSave)
       })
       .catch((err) => console.log('Error all promises', err))
 
-    return currencyRates
+    return exchangeRatesData
   } else {
-    const obj = safelyParseJSON<AllCurrencyRates>(str)
+    const obj = safelyParseJSON<AllExchangeRates>(str)
 
     // @ts-ignore
-    return obj[userCurrency]
+    return obj[userCurrency] ?? defaultExchangeRates
   }
 }

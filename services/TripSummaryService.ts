@@ -6,10 +6,10 @@ import {
   placementTypes,
   transportTypes,
 } from '@/constants/constants'
-import { CurrencyISOName, Trip, TripSummaryValues } from '@/types/types'
+import { Trip, TripSummaryValues } from '@/types/types'
 import { timestampToDuration } from '@/lib/date'
 import { convertAmount, getSum, round } from '@/lib/utils'
-import { getCurrencyRates } from '@/services/currency.service'
+import { getExchangeRates } from '@/services/currency.service'
 
 dayjs.extend(duration)
 
@@ -24,10 +24,9 @@ export const getTripSummaryValues = async (
   const { sections, dateTimeStart, dateTimeEnd } = trip
 
   // Firstly get only necessary currency rates data with base currency chosen by user
-  const currency = userCurrency.toUpperCase() as CurrencyISOName
+  const currency = userCurrency.toUpperCase()
 
-  // const currencyRates = defaultCurrencyRates
-  const currencyRates = await getCurrencyRates(currency)
+  const exchangeRates = await getExchangeRates(currency)
 
   // Duration between start trip date and end trip date
   const totalTripTime = dayjs(dateTimeEnd).diff(dayjs(dateTimeStart))
@@ -43,7 +42,7 @@ export const getTripSummaryValues = async (
       // Payments
       if (payments) {
         payments.forEach(({ amount, currency }) => {
-          roadCostsList.push(convertAmount(amount, currency, currencyRates))
+          roadCostsList.push(convertAmount(amount, currency, exchangeRates))
         })
       }
 
@@ -63,7 +62,7 @@ export const getTripSummaryValues = async (
       // Payments
       if (payments) {
         payments.forEach(({ amount, currency }) => {
-          stayCostsList.push(convertAmount(amount, currency, currencyRates))
+          stayCostsList.push(convertAmount(amount, currency, exchangeRates))
         })
       }
 

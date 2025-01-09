@@ -19,14 +19,11 @@ import { FiLogIn } from 'react-icons/fi'
 import { siteConfig } from '@/config/site'
 import { UserPopup } from '@/components/layouts/header/UserPopup'
 import { MobileMenu } from '@/components/layouts/header/MobileMenu'
-import { CurrencySelect } from '@/components/layouts/header/CurrencySelect'
 
 export const Navbar = () => {
   const user = useUser()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  console.log('USR', user)
 
   return (
     <NextUINavbar
@@ -77,11 +74,6 @@ export const Navbar = () => {
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
-        {user.user && (
-          <NavbarItem className='hidden md:flex'>
-            <CurrencySelect />
-          </NavbarItem>
-        )}
         <NavbarItem className='hidden md:flex'>
           <UserPopup />
         </NavbarItem>

@@ -28,7 +28,7 @@ export const CurrencySelect = () => {
     <div>
       <Select
         aria-label='currency'
-        className='w-[70px]'
+        className='w-[100px]'
         defaultSelectedKeys={[currencyISO]}
         size='sm'
         onChange={onChange}

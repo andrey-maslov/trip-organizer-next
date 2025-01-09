@@ -3,6 +3,7 @@ import { Schema, model, models } from 'mongoose'
 import { SectionSchema } from './Section.schema'
 
 import { Trip } from '@/types/types'
+import { defaultExchangeRates } from '@/constants/constants'
 
 const TripSchema = new Schema<Trip>({
   name: { type: String, required: true },
@@ -13,6 +14,11 @@ const TripSchema = new Schema<Trip>({
   cover: { type: String, required: false },
   user: { type: String, required: true, default: null },
   sections: [SectionSchema],
+  exchangeRates: {
+    type: Object,
+    required: false,
+    default: defaultExchangeRates,
+  },
 })
 
 const TripModel = models.TripModel || model('TripModel', TripSchema, 'trips')

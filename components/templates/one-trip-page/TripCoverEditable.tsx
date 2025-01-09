@@ -33,16 +33,20 @@ export const TripCoverEditable = ({
     enabled: canFetchPics,
   })
 
+  const img = coverSrc || defaultCoverImage
+
   return (
     <div className='relative editable-elemenet'>
-      <Image
-        alt='Trip cover'
-        className='max-h-[200px] object-cover'
-        fallbackSrc={defaultCoverImage}
-        height={200}
-        src={coverSrc}
-        width={200}
-      />
+      {img && (
+        <Image
+          alt='Trip cover'
+          className='max-h-[200px] object-cover'
+          fallbackSrc={defaultCoverImage}
+          height={200}
+          src={img}
+          width={200}
+        />
+      )}
       {tripName.length >= 5 && (
         <ButtonEdit
           classNames='btn-edit bg-white shadow-md'

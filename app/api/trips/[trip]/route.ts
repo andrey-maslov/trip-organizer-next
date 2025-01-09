@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 
 import TripSchema from '@/lib/db/schemas/Trip.schema'
 import connectMongo from '@/lib/db/connectMongo'
-import { CurrencyRates, Expense } from '@/types/types'
+import { ExchangeRates, Expense } from '@/types/types'
 
 export async function GET(
   request: Request,
@@ -67,9 +67,9 @@ export async function PUT(request: Request) {
 function getTotalExpense(
   expenses: Expense[],
   currency: string,
-  currencyRates: CurrencyRates
+  exchangeRates: ExchangeRates
 ) {
-  if (!currencyRates[currency as keyof CurrencyRates]) {
+  if (!exchangeRates[currency as keyof ExchangeRates]) {
     throw new Error(`Currency rate ${currency} not found.`)
   }
 
@@ -87,7 +87,7 @@ function getTotalExpense(
 
     const conversionRate =
       // @ts-ignore
-      currencyRates[expenseCurrency as keyof CurrencyRates]?.rates[currency]
+      exchangeRates[expenseCurrency as keyof ExchangeRates]?.rates[currency]
 
     if (!conversionRate) {
       throw new Error(

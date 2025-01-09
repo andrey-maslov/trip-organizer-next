@@ -1,7 +1,6 @@
 import { Types } from 'mongoose'
 
 import {
-  currencyISONames,
   placementTypes,
   serviceProviderTypes,
   statusTypes,
@@ -15,6 +14,7 @@ export type Trip = {
   name: string
   slug: string
   sections: Section[]
+  exchangeRates: ExchangeRates
   dateTimeStart?: DateType
   dateTimeEnd?: DateType
   description?: string
@@ -52,17 +52,16 @@ export type TransportType = (typeof transportTypes)[number]
 export type Status = (typeof statusTypes)[number]
 export type SectionType = (typeof serviceProviderTypes)[number]
 export type PlacementType = (typeof placementTypes)[number]
-export type CurrencyISOName = (typeof currencyISONames)[number]
 
 export type Expense = {
   _id: string
   name?: string
   link?: string
   amount?: number
-  currency?: CurrencyISOName
+  currency?: string
 }
 
-export type CurrencyRates = {
+export type ExchangeRates = {
   success: boolean
   timestamp: number
   base: string
@@ -81,7 +80,7 @@ export type TripPoint = {
   timeZone?: string
 }
 
-export type AllCurrencyRates = Record<CurrencyISOName, CurrencyRates>
+export type AllExchangeRates = Record<string, ExchangeRates>
 
 export type TripSummaryValues = {
   totalTimeMs: number
@@ -95,11 +94,7 @@ export type TripSummaryValues = {
   totalCost: number
   roadCost: number
   stayCost: number
-  currency: CurrencyISOName
-}
-
-export type GetOneTripParams = {
-  currency: CurrencyISOName
+  currency: string
 }
 
 export type UnsplashPhoto = {

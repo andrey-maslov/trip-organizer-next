@@ -1,4 +1,4 @@
-import { CurrencyISOName, CurrencyRates, Status } from '@/types/types'
+import { ExchangeRates, Status } from '@/types/types'
 
 export const transportTypes = ['bus', 'flight', 'train', 'car', 'ferry']
 
@@ -17,14 +17,13 @@ export const serviceProviderTypes = [...transportTypes, ...placementTypes]
 export const DEFAULT_SECTION_STATUS: Status = 'to_find'
 export const DEFAULT_SECTION_TYPE = 'unknown'
 
-export const DEFAUT_LOCALE = 'en'
+export const DEFAULT_LOCALE = 'en'
 
-export const currencyISONames = ['EUR', 'USD', 'PLN', 'BYN'] as const
-export const DEFAULT_CURRENCY: CurrencyISOName = 'EUR'
+export const DEFAULT_CURRENCY = 'EUR'
 
 export const currencies: Record<
-  CurrencyISOName,
-  { name: string; symbol: string; nameISO: CurrencyISOName }
+  string,
+  { name: string; symbol: string; nameISO: string }
 > = {
   EUR: {
     name: 'Euro',
@@ -46,9 +45,14 @@ export const currencies: Record<
     symbol: 'Br',
     nameISO: 'BYN',
   },
+  RUB: {
+    name: 'Rusian rouble',
+    symbol: '₽',
+    nameISO: 'RUB',
+  },
 }
 
-export const defaultCurrencyRates: CurrencyRates = {
+export const defaultExchangeRates: ExchangeRates = {
   success: true,
   timestamp: 1674737763,
   base: 'EUR',
@@ -62,7 +66,7 @@ export const defaultCurrencyRates: CurrencyRates = {
 
 export const SECONDS_IN_DAY = 86400
 
-export const currencyRatesList: CurrencyRates[] = [
+export const exchangeRatesList: ExchangeRates[] = [
   {
     success: true,
     timestamp: 1674737763,

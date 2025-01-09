@@ -1,4 +1,4 @@
-import { CurrencyRates, Expense } from '@/types/types'
+import { ExchangeRates, Expense } from '@/types/types'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export function capitalize(str: string): string {
@@ -61,21 +61,23 @@ export const convertArrayToObject = <T>(
 // }
 
 export const getTotalPriceFromSection = (
-  paymentsList: Expense[] | null | undefined
+  paymentsList: Expense[] | null | undefined,
+  tripCurrency: string | undefined = DEFAULT_CURRENCY,
+  exchangeRates: ExchangeRates | undefined
 ): string => {
-  if (!paymentsList || paymentsList.length === 0) {
-    return '-'
+  if (!paymentsList || paymentsList.length === 0 || !exchangeRates) {
+    return '0'
   }
 
   const paymentTotalAmount = paymentsList
-    .map((payment) => payment?.amount || 0)
+    .map((payment) => {
+      console.log(typeof payment?.amount)
+
+      return convertAmount(payment?.amount, tripCurrency, exchangeRates)
+    })
     .reduce((a, b) => a + b)
 
-  // TODO fix approach of choosing currency inside one section (???)
-  // user should chose one currency ... or ...
-  const currency = paymentsList[0]?.currency || DEFAULT_CURRENCY
-
-  return `${paymentTotalAmount} ${currency}`
+  return `${paymentTotalAmount} ${tripCurrency}`
 }
 
 export const safelyParseJSON = <T>(json: unknown): T | null => {
@@ -147,23 +149,23 @@ export const getSum = (list: number[]): number => {
 
 /**
  * Convert amount from one currency to base (user) currency
- * @param amount
- * @param currency
- * @param currencyRates
+ * @param amount in current currency
+ * @param currency target convert
+ * @param exchangeRates with the 'currency' as a base
  */
 export const convertAmount = (
   amount: number | undefined,
   currency: string | undefined,
-  currencyRates: CurrencyRates
+  exchangeRates: ExchangeRates | undefined
 ): number => {
-  if (amount === undefined || !currency || !currencyRates.rates) {
+  if (amount === undefined || !currency || !exchangeRates?.rates) {
     return 0
   }
-  if (currency === currencyRates.base) {
+  if (currency === exchangeRates.base) {
     return amount
   } else {
     // @ts-ignore
-    const rate = currencyRates.rates[currency] // Guard ensures currency is defined
+    const rate = exchangeRates.rates[currency] // Guard ensures currency is defined
 
     if (rate === undefined) {
       throw new Error(`Rate for currency ${currency} is not available.`)
