@@ -28,6 +28,7 @@ import { TripView } from '@/components/one-trip-page/trip-view/TripView'
 import { NotesDrawer } from '@/components/one-trip-page/NotesDrawer'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { Loader } from '@/components/Loader'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export const OneTrip = () => {
   const { slug } = useParams()
@@ -155,10 +156,10 @@ export const OneTrip = () => {
           <div className='mt-4'>
             <h3 className='font-bold'>Trip currency</h3>
             <div className='flex gap-2 items-end leading-1'>
-              <div>{trip?.exchangeRates.base}</div>
+              <div>{trip?.exchangeRates?.base || DEFAULT_CURRENCY}</div>
               <div className='text-foreground-500 text-xs'>
                 Exchange rates current on{' '}
-                {getFormattedDate(trip?.exchangeRates.date, 'medium')}
+                {getFormattedDate(trip?.exchangeRates?.date, 'medium')}
               </div>
               <Button
                 isLoading={isUpdatePending}

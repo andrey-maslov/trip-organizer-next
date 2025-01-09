@@ -102,15 +102,13 @@ export const TripPointCell: FC<PointCellProps> = ({
 
   const pointAddress = point.place?.address ?? place?.value?.description
 
-  return (
-    <div className='flex items-center relative max-w-[140px] overflow-hidden p-1'>
-      <Button
-        className='h-auto'
-        color='default'
-        size='sm'
-        variant='light'
-        onPress={onOpen}
-      >
+  const renderButtonContent = () => {
+    if (!initialPoint.place) {
+      return '+'
+    }
+
+    return (
+      <>
         {truncateSentence(initialPoint?.['place']?.name, 2) ?? '-'}
         <br />
         {getFormattedDate(initialPoint?.dateTime, 'medium')} <br />
@@ -118,6 +116,21 @@ export const TripPointCell: FC<PointCellProps> = ({
           locale: 'ru',
           tz: initialPoint?.timeZone,
         })}
+      </>
+    )
+  }
+
+  return (
+    <div className='flex items-center relative max-w-[140px] w-full overflow-hidden p-1'>
+      <Button
+        fullWidth
+        className='h-auto'
+        color='default'
+        size='sm'
+        variant='light'
+        onPress={onOpen}
+      >
+        {renderButtonContent()}
       </Button>
 
       <Modal

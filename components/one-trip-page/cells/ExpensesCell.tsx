@@ -57,6 +57,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
   return (
     <div className='flex items-center relative editable-elemenet w-full'>
       <Button
+        fullWidth
         color='default'
         size='sm'
         title={convertedAmount}

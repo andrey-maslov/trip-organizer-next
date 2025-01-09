@@ -11,8 +11,8 @@ export const DurationCell: React.FC<DurationCellProps> = ({ start, end }) => {
   const dateTimeEnd = end?.dateTime
 
   return (
-    <div className='flex items-center relative'>
-      <div className='text-nowrap'>
+    <div className='flex items-center relative text-center w-full'>
+      <div className='text-nowrap w-full'>
         {dateTimeStart && dateTimeEnd
           ? getHumanizedTimeDuration(dateTimeStart, dateTimeEnd)
           : '-'}

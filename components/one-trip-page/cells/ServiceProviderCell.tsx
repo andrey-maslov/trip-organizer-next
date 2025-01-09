@@ -24,8 +24,9 @@ export const ServiceProviderCell: React.FC<Props> = ({
   const [data, setData] = useState<Section['serviceProvider']>(serviceProvider)
 
   return (
-    <div className='flex items-center relative '>
+    <div className='flex items-center relative w-full'>
       <Button
+        fullWidth
         color='default'
         size='sm'
         variant='light'

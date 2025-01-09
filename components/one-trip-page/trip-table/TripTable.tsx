@@ -104,7 +104,7 @@ export const TripTable = ({ trip }: Props) => {
     <>
       <div className='table-wrapper'>
         <div className='table'>
-          <div className='thead'>
+          <div className='thead bg-default-100'>
             {columns.map((column) => (
               <div
                 key={column.uid}
