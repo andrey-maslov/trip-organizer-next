@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { getTripSummary } from '@/queries/queries.db'
-import { getSummaryToDisplay } from '@/components/templates/one-trip-page/trip.utils'
+import { getSummaryToDisplay } from '@/components/one-trip-page/trip.utils'
 
 type Props = {
   trip: string // slug

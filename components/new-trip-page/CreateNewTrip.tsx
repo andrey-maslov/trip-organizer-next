@@ -17,7 +17,7 @@ import { DateValue } from '@internationalized/date'
 import { defaultTrip } from '@/constants/defaultEntities'
 import { createTrip } from '@/queries/queries.db'
 import { isEmptyObject } from '@/lib/utils'
-import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
+import { TripCoverEditable } from '@/components/one-trip-page/TripCoverEditable'
 import { getFormattedDate } from '@/lib/date'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
 

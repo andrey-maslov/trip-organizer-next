@@ -10,10 +10,10 @@ import { updateSection, updateTrip } from '@/queries/queries.db'
 import {
   columns,
   INITIAL_VISIBLE_COLUMNS,
-} from '@/components/templates/one-trip-page/trip-table.config'
+} from '@/components/one-trip-page/trip-table.config'
 import { defaultSection } from '@/constants/defaultEntities'
-import { SectionItem } from '@/components/templates/one-trip-page/trip-table/SectionItem'
-import { SortableList } from '@/components/templates/one-trip-page/trip-table/SortableList'
+import { SectionItem } from '@/components/one-trip-page/trip-table/SectionItem'
+import { SortableList } from '@/components/one-trip-page/trip-table/SortableList'
 
 type Props = {
   trip: Trip

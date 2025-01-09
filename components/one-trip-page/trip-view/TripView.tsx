@@ -20,7 +20,7 @@ import {
 import {
   statusColorMap,
   statusOptionsMap,
-} from '@/components/templates/one-trip-page/trip-table.config'
+} from '@/components/one-trip-page/trip-table.config'
 import { CopyToClipboard } from '@/components/CopyToClipboard'
 import { useQueryParams } from '@/hooks/useQueryParams'
 import { createNote } from '@/queries/queries.db'

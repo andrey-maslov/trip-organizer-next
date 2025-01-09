@@ -1,6 +1,12 @@
 import ky from 'ky'
 
-import { Note, Section, Trip, TripSummaryValues } from '@/types/types'
+import {
+  ExchangeRates,
+  Note,
+  Section,
+  Trip,
+  TripSummaryValues,
+} from '@/types/types'
 
 const api = ky.create({
   prefixUrl: '/api',
@@ -60,3 +66,9 @@ export const deleteOneNote = async ({
   tripId: string
 }): Promise<any> =>
   api.delete('notes', { json: { noteId, sectionId, tripId } }).text()
+
+/******** CURRENCY / EXCHANGE ******/
+export const getNewExchangeRates = async (
+  baseCurrency: string
+): Promise<ExchangeRates> =>
+  api(`exchangeRates?baseCurrency=${baseCurrency}`).json()

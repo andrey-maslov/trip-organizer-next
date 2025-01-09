@@ -1,5 +1,4 @@
 import { ExchangeRates, Expense } from '@/types/types'
-import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -62,7 +61,6 @@ export const convertArrayToObject = <T>(
 
 export const getTotalPriceFromSection = (
   paymentsList: Expense[] | null | undefined,
-  tripCurrency: string | undefined = DEFAULT_CURRENCY,
   exchangeRates: ExchangeRates | undefined
 ): string => {
   if (!paymentsList || paymentsList.length === 0 || !exchangeRates) {
@@ -70,14 +68,12 @@ export const getTotalPriceFromSection = (
   }
 
   const paymentTotalAmount = paymentsList
-    .map((payment) => {
-      console.log(typeof payment?.amount)
-
-      return convertAmount(payment?.amount, tripCurrency, exchangeRates)
-    })
+    .map((payment) =>
+      convertAmount(payment?.amount, payment.currency, exchangeRates)
+    )
     .reduce((a, b) => a + b)
 
-  return `${paymentTotalAmount} ${tripCurrency}`
+  return `${paymentTotalAmount.toFixed()} ${exchangeRates.base}`
 }
 
 export const safelyParseJSON = <T>(json: unknown): T | null => {

@@ -13,7 +13,7 @@ import { useParams } from 'next/navigation'
 
 import { convertAmount, getTotalPriceFromSection } from '@/lib/utils'
 import { Expense } from '@/types/types'
-import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { getOneTrip } from '@/queries/queries.db'
 import { Loader } from '@/components/Loader'
 
@@ -21,8 +21,6 @@ type Props = {
   data: Expense[] | null | undefined
   onSave: (data: Partial<Expense>[]) => void
 }
-
-const currenciesList = Object.values(currencies)
 
 export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
   const { slug } = useParams()
@@ -51,19 +49,21 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
     setExpenses(newExpenses)
   }
 
+  const convertedAmount = getTotalPriceFromSection(data, trip?.exchangeRates)
+  const currenciesList = trip?.exchangeRates
+    ? [trip?.exchangeRates.base, ...Object.keys(trip.exchangeRates.rates)]
+    : []
+
   return (
     <div className='flex items-center relative editable-elemenet w-full'>
       <Button
         color='default'
         size='sm'
+        title={convertedAmount}
         variant='light'
         onPress={() => setOpen(true)}
       >
-        {getTotalPriceFromSection(
-          data,
-          trip?.exchangeRates.base,
-          trip?.exchangeRates
-        )}
+        {convertedAmount}
       </Button>
 
       <Modal
@@ -110,6 +110,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                       {/*  }*/}
                       {/*/>*/}
                       <Input
+                        className='max-w-[150px]'
                         endContent={
                           <div className='flex items-center'>
                             {payment.amount &&
@@ -137,14 +138,13 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                                 onDataChange(index, 'currency', e.target.value)
                               }
                             >
-                              {currenciesList.map(({ nameISO }) => (
+                              {currenciesList.map((nameISO) => (
                                 <option key={nameISO}>{nameISO}</option>
                               ))}
                             </select>
                           </div>
                         }
                         name={`amount-${index}`}
-                        placeholder='0.00'
                         size='sm'
                         // startContent={
                         //   <div className='pointer-events-none flex items-center'>

@@ -9,8 +9,8 @@ import {
 import { FiMoreVertical } from 'react-icons/fi'
 
 import { Section, Trip } from '@/types/types'
-import { Column } from '@/components/templates/one-trip-page/trip-table.config'
-import { RenderCell } from '@/components/templates/one-trip-page/trip-table/RenderCell'
+import { Column } from '@/components/one-trip-page/trip-table.config'
+import { RenderCell } from '@/components/one-trip-page/trip-table/RenderCell'
 
 type SectionItemProps = {
   columns: Column[]

@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 
 import { Loader } from '@/components/Loader'
-import TripsList from '@/components/templates/trips-page/TripsList'
+import TripsList from '@/components/trips-page/TripsList'
 
 export const metadata = {
   title: 'My trips-page',

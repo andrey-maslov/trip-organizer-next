@@ -2,15 +2,15 @@ import { Key } from 'react'
 import { getKeyValue } from '@nextui-org/react'
 
 import { Section } from '@/types/types'
-import { TypeCell } from '@/components/templates/one-trip-page/cells/TypeCell'
-import { NameCell } from '@/components/templates/one-trip-page/cells/NameCell'
-import { StatusCell } from '@/components/templates/one-trip-page/cells/StatusCell'
+import { TypeCell } from '@/components/one-trip-page/cells/TypeCell'
+import { NameCell } from '@/components/one-trip-page/cells/NameCell'
+import { StatusCell } from '@/components/one-trip-page/cells/StatusCell'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
-import { ServiceProviderCell } from '@/components/templates/one-trip-page/cells/ServiceProviderCell'
-import { TripPointCell } from '@/components/templates/one-trip-page/cells/TripPointCell'
-import { ExpensesCell } from '@/components/templates/one-trip-page/cells/ExpensesCell'
-import { DurationCell } from '@/components/templates/one-trip-page/cells/DurationCell'
-import { NoteCell } from '@/components/templates/one-trip-page/cells/NoteCell'
+import { ServiceProviderCell } from '@/components/one-trip-page/cells/ServiceProviderCell'
+import { TripPointCell } from '@/components/one-trip-page/cells/TripPointCell'
+import { ExpensesCell } from '@/components/one-trip-page/cells/ExpensesCell'
+import { DurationCell } from '@/components/one-trip-page/cells/DurationCell'
+import { NoteCell } from '@/components/one-trip-page/cells/NoteCell'
 
 type Props = {
   columnKey: Key

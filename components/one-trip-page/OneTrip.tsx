@@ -12,14 +12,20 @@ import { toast } from 'react-toastify'
 import { FiSettings } from 'react-icons/fi'
 import { Tabs, Tab } from '@nextui-org/tabs'
 import React from 'react'
+import { Button } from '@nextui-org/button'
 
-import { deleteOneTrip, getOneTrip, updateTrip } from '@/queries/queries.db'
-import { TripCoverEditable } from '@/components/templates/one-trip-page/TripCoverEditable'
+import {
+  deleteOneTrip,
+  getNewExchangeRates,
+  getOneTrip,
+  updateTrip,
+} from '@/queries/queries.db'
+import { TripCoverEditable } from '@/components/one-trip-page/TripCoverEditable'
 import { Editable } from '@/components/Editable'
-import { TripTable } from '@/components/templates/one-trip-page/trip-table/TripTable'
+import { TripTable } from '@/components/one-trip-page/trip-table/TripTable'
 import { getFormattedDate } from '@/lib/date'
-import { TripView } from '@/components/templates/one-trip-page/trip-view/TripView'
-import { NotesDrawer } from '@/components/templates/one-trip-page/NotesDrawer'
+import { TripView } from '@/components/one-trip-page/trip-view/TripView'
+import { NotesDrawer } from '@/components/one-trip-page/NotesDrawer'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { Loader } from '@/components/Loader'
 
@@ -41,17 +47,40 @@ export const OneTrip = () => {
   })
 
   // Update Trip
-  const { mutate: updateTripMutation } = useMutation({
-    mutationFn: updateTrip,
-    onSuccess: async () => {
-      toast.success('Trip successfully updated!')
-      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
-    },
-    onError: (err) => {
-      console.error(err)
-      toast.error('Trip updating failed')
-    },
-  })
+  const { mutate: updateTripMutation, isPending: isUpdatePending } =
+    useMutation({
+      mutationFn: updateTrip,
+      onSuccess: async () => {
+        toast.success('Trip successfully updated!')
+        await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
+      },
+      onError: (err) => {
+        console.error(err)
+        toast.error('Trip updating failed')
+      },
+    })
+
+  const updateExchangeRates = async () => {
+    if (!trip?.exchangeRates?.base) {
+      toast.error(
+        'Base currency is not defined — cannot update exchange rates.'
+      )
+
+      return
+    }
+
+    try {
+      const newRates = await getNewExchangeRates(trip.exchangeRates.base)
+
+      updateTripMutation({
+        _id: trip._id,
+        exchangeRates: newRates,
+      })
+    } catch (err) {
+      console.error('Failed to update exchange rates:', err)
+      toast.error('Failed to update exchange rates')
+    }
+  }
 
   const onDeleteTrip = () => {
     if (confirm('Do you really want to delete your trip data?')) {
@@ -123,6 +152,24 @@ export const OneTrip = () => {
               ? `to ${getFormattedDate(trip.dateTimeEnd)}`
               : ''}
           </h2>
+          <div className='mt-4'>
+            <h3 className='font-bold'>Trip currency</h3>
+            <div className='flex gap-2 items-end leading-1'>
+              <div>{trip?.exchangeRates.base}</div>
+              <div className='text-foreground-500 text-xs'>
+                Exchange rates current on{' '}
+                {getFormattedDate(trip?.exchangeRates.date, 'medium')}
+              </div>
+              <Button
+                isLoading={isUpdatePending}
+                size='sm'
+                variant='bordered'
+                onPress={updateExchangeRates}
+              >
+                Update
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/*Settings*/}

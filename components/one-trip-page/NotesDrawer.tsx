@@ -20,7 +20,7 @@ import { title, subtitle } from '@/components/primitives'
 import { deleteOneNote, getOneNote, getOneTrip } from '@/queries/queries.db'
 
 const DynamicTiptapEditor = dynamic(
-  () => import('../../tiptap-editor/TiptapEditor'),
+  () => import('../tiptap-editor/TiptapEditor'),
   {
     ssr: false,
     loading: () => <p>Loading editor...</p>,
