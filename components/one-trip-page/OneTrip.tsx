@@ -29,6 +29,7 @@ import { NotesDrawer } from '@/components/one-trip-page/NotesDrawer'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { Loader } from '@/components/Loader'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
+import { TripSummary } from '@/components/one-trip-page/TripSummary'
 
 export const OneTrip = () => {
   const { slug } = useParams()
@@ -204,7 +205,7 @@ export const OneTrip = () => {
       </Tabs>
 
       {/* SUMMARY */}
-      {/*<TripSummary trip={slug as string} />*/}
+      <TripSummary currency={trip?.exchangeRates.base} trip={slug as string} />
       <NotesDrawer />
     </div>
   )

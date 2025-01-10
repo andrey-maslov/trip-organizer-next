@@ -28,11 +28,13 @@ export async function GET(
 
     const summary = await getTripSummaryValues(trip, currencyISO as string)
 
+    console.log('SMR', summary)
+
     return Response.json(summary)
   } catch (e) {
-    return new Response('Get all error', {
+    return new Response('Get summary failed', {
       // TODO add 500 and 404 separation
-      status: 404,
+      status: 500,
     })
   }
 }

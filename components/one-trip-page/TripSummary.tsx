@@ -6,18 +6,16 @@ import { Divider } from '@nextui-org/divider'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { getTripSummary } from '@/queries/queries.db'
 import { getSummaryToDisplay } from '@/components/one-trip-page/trip.utils'
+import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 type Props = {
   trip: string // slug
+  currency: string
 }
 
-export const TripSummary = ({ trip }: Props) => {
-  const currency =
-    window.localStorage.getItem('app_currency_chosen') ?? DEFAULT_CURRENCY
-
+export const TripSummary = ({ trip, currency = DEFAULT_CURRENCY }: Props) => {
   // Fetch Summary
   const { data } = useQuery({
     queryKey: ['summary', trip, currency],

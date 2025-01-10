@@ -14,8 +14,8 @@ import {
   arrayMove,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
-import { SortableOverlay } from './SortableOverlay'
 import { DragHandle, SortableItem } from './SortableItem'
 
 import { SectionFE } from '@/types/types'
@@ -30,7 +30,7 @@ interface Props<T extends BaseItem> {
   renderItem(item: T): ReactNode
 }
 
-export function SortableList<T extends BaseItem>({
+export function SortableList({
   items,
   onChange,
   renderItem,
@@ -49,6 +49,7 @@ export function SortableList<T extends BaseItem>({
 
   return (
     <DndContext
+      modifiers={[restrictToVerticalAxis]}
       sensors={sensors}
       onDragCancel={() => {
         setActive(null)
@@ -71,9 +72,6 @@ export function SortableList<T extends BaseItem>({
           <React.Fragment key={item.id}>{renderItem(item)}</React.Fragment>
         ))}
       </SortableContext>
-      <SortableOverlay>
-        {activeItem ? renderItem(activeItem) : null}
-      </SortableOverlay>
     </DndContext>
   )
 }

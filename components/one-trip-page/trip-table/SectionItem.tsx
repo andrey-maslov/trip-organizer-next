@@ -28,7 +28,7 @@ export const SectionItem: FC<SectionItemProps> = ({
   onSectionDelete,
 }) => {
   return (
-    <div className='tr bg-white shadow-sm my-1 px-2 rounded-md border-1 border-solid border-foreground-100'>
+    <div className='tr'>
       {columns.map((column) => (
         <div
           key={column.uid + section.name}

@@ -61,3 +61,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ### Drag and Drop - dnd kit
 - [dnd kit](https://dndkit.com/)
 - [Example on Codepen](https://codesandbox.io/p/sandbox/dnd-kit-sortable-starter-template-22x1ix)
+- [multiple contexts](https://stackoverflow.com/questions/78486777/dnd-kit-nested-sortablecontext-components-overlapping-context)
