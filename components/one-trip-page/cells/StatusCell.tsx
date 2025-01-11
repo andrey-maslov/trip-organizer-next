@@ -15,7 +15,7 @@ import { Status } from '@/types/types'
 
 type StatusCellProps = {
   status: Status
-  onUpdate: (value: string) => void
+  onUpdate: (value: Status) => void
 }
 
 const items = statusTypes.map((key) => ({
@@ -41,7 +41,7 @@ export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => (
         aria-label='Dynamic Actions'
         items={items}
         selectedKeys={['bought']}
-        onAction={(value) => onUpdate(value as string)}
+        onAction={(value) => onUpdate(value as Status)}
       >
         {(item) => (
           <DropdownItem

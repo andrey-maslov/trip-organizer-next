@@ -1,32 +1,66 @@
 import { FC } from 'react'
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from '@nextui-org/react'
-import { FiMoreVertical } from 'react-icons/fi'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { useParams } from 'next/navigation'
 
 import { Section, Trip } from '@/types/types'
 import { Column } from '@/components/one-trip-page/trip-table.config'
 import { RenderCell } from '@/components/one-trip-page/trip-table/RenderCell'
+import { SectionActions } from '@/components/one-trip-page/trip-table/SectionActions'
+import { deleteSection, updateSection } from '@/queries/queries.db'
 
 type SectionItemProps = {
   columns: Column[]
   section: Section
   trip: Trip
-  onSectionSave: (newValue: any, sectionId: string, columnKey: string) => void
-  onSectionDelete: () => void
 }
 
 export const SectionItem: FC<SectionItemProps> = ({
   section,
   columns,
   trip,
-  onSectionSave,
-  onSectionDelete,
 }) => {
+  const queryClient = useQueryClient()
+  const { slug } = useParams()
+
+  // Update Section mutation
+  const { mutate: updateSectionMutation } = useMutation({
+    mutationFn: (data: { tripId: string; data: Partial<Section> }) =>
+      updateSection(data.tripId, data.data),
+    onSuccess: async () => {
+      toast.success('Section successfully updated')
+      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
+    },
+    onError: (err) => {
+      console.error(err)
+      toast.error('Section updating failed')
+    },
+  })
+
+  // Delete Section mutation
+  const { mutate: deleteSectionMutation } = useMutation({
+    mutationFn: (data: { tripId: string; sectionId: string }) =>
+      deleteSection(data.tripId, data.sectionId),
+    onSuccess: async () => {
+      toast.success('Section successfully deleted')
+      await queryClient.invalidateQueries({ queryKey: ['trip', slug] })
+    },
+    onError: (err) => {
+      console.error(err)
+      toast.error('Section deletion failed')
+    },
+  })
+
+  if (typeof slug !== 'string') {
+    return <div>Slug of trip ID in URL is not simple string</div>
+  }
+
+  const onSectionUpdate = (newValue: any) =>
+    updateSectionMutation({
+      tripId: trip._id,
+      data: { _id: section._id, ...newValue },
+    })
+
   return (
     <div className='tr'>
       {columns.map((column) => (
@@ -36,32 +70,21 @@ export const SectionItem: FC<SectionItemProps> = ({
           style={{ width: `${column.width}px` }}
         >
           {column.uid === 'actions' ? (
-            <div className='relative flex justify-end items-center gap-2 mx-auto'>
-              <Dropdown className='bg-background border-1 border-default-200'>
-                <DropdownTrigger>
-                  <Button isIconOnly size='sm' variant='light'>
-                    <FiMoreVertical className='text-default-400' />
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu>
-                  <DropdownItem key='disable'>Disable</DropdownItem>
-                  <DropdownItem
-                    key='delete'
-                    color='danger'
-                    // variant='solid'
-                    onPress={onSectionDelete}
-                  >
-                    Delete
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
+            <SectionActions
+              onSectionDelete={() =>
+                deleteSectionMutation({
+                  tripId: trip._id,
+                  sectionId: section._id,
+                })
+              }
+              onSectionUpdate={onSectionUpdate}
+            />
           ) : (
             <RenderCell
               columnKey={column.uid}
               section={section}
               tripId={trip._id}
-              onSave={onSectionSave}
+              onSave={onSectionUpdate}
             />
           )}
         </div>

@@ -27,7 +27,6 @@ export const SectionSchema = new Schema<Section>({
   },
   status: { type: String, required: true, default: DEFAULT_SECTION_STATUS },
   payments: [PaymentSchema],
-  allExpenses: { type: Object, required: false },
   note: { type: Schema.Types.ObjectId, ref: 'Note', required: false },
   startingPoint: { type: Object, required: true, default: {} },
   endPoint: { type: Object, required: true, default: {} },

@@ -39,11 +39,8 @@ export type Section = {
     url?: string
   }
   payments?: Expense[] // TODO replace 'price' and 'payment' to one name: Expense/expenses
-  allExpenses?: {
-    amount: number
-    currency: string
-  }
   note?: Types.ObjectId | string
+  isActive: boolean
 }
 
 export type SectionFE = Section & { id: string }

@@ -1,8 +1,9 @@
-import ky from 'ky'
+import { isValidObjectId, Types } from 'mongoose'
 
 import connectMongo from '@/lib/db/connectMongo'
 import NoteSchema from '@/lib/db/schemas/Note.schema'
 import { Note } from '@/types/types'
+import TripSchema from '@/lib/db/schemas/Trip.schema'
 
 const host = process.env.NEXT_PUBLIC_HOST
 
@@ -19,11 +20,20 @@ export async function POST(request: Request) {
       trip: tripId,
     })
 
-    await ky
-      .put(`${host}/api/trips/${tripId}/${sectionId}`, {
-        json: { noteId: newNote._id },
-      })
-      .json()
+    // Add note ID to section
+    const findTripQuery = isValidObjectId(tripId)
+      ? { _id: new Types.ObjectId(tripId) }
+      : { slug: tripId }
+
+    await TripSchema.updateOne(
+      {
+        ...findTripQuery,
+        'sections._id': sectionId,
+      },
+      { $set: { 'sections.$.note': newNote._id } }
+    ).lean()
+
+    // TODO add response when failed
 
     return Response.json(newNote)
   } catch (error: any) {
@@ -42,11 +52,20 @@ export async function DELETE(request: Request) {
 
     await NoteSchema.deleteOne({ _id: noteId })
 
-    await ky
-      .put(`${host}/api/trips/${tripId}/${sectionId}`, {
-        json: { noteId: null },
-      })
-      .json()
+    // Add note ID to section
+    const findTripQuery = isValidObjectId(tripId)
+      ? { _id: new Types.ObjectId(tripId) }
+      : { slug: tripId }
+
+    await TripSchema.updateOne(
+      {
+        ...findTripQuery,
+        'sections._id': sectionId,
+      },
+      { $set: { 'sections.$.note': null } }
+    ).lean()
+
+    // TODO add response when failed
 
     return new Response('Note deleted', {
       status: 200,

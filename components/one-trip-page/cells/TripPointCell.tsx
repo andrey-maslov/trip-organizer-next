@@ -143,14 +143,14 @@ export const TripPointCell: FC<PointCellProps> = ({
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>{title}</ModalHeader>
-              <ModalBody>
+              <ModalBody className='relative'>
                 {pointAddress && !editPlace ? (
                   <div className='flex items-center justify-between'>
                     <div>{pointAddress}</div>
                     <ButtonEdit onClick={() => setEditPlace(!editPlace)} />
                   </div>
                 ) : (
-                  <div className='h-10'>
+                  <div className='h-10 relative z-30'>
                     <GooglePlacesAutocomplete
                       apiKey={API_KEY}
                       selectProps={{
@@ -208,6 +208,7 @@ export const TripPointCell: FC<PointCellProps> = ({
                 </Autocomplete>
                 <div className='flex justify-end'>
                   <Button
+                    className='mb-6'
                     color='primary'
                     onPress={() => {
                       savePoint()

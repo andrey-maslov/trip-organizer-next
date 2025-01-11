@@ -28,8 +28,6 @@ export async function GET(
 
     const summary = await getTripSummaryValues(trip, currencyISO as string)
 
-    console.log('SMR', summary)
-
     return Response.json(summary)
   } catch (e) {
     return new Response('Get summary failed', {

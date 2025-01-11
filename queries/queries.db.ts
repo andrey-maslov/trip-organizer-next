@@ -40,10 +40,14 @@ export const getTripSummary = async (
 
 /******** SECTION ******/
 export const updateSection = async (
+  tripId: string, // slug or id
+  data: Partial<Section>
+): Promise<any> => api.put(`trips/${tripId}/${data._id}`, { json: data }).json()
+
+export const deleteSection = async (
   trip: string, // slug or id
-  sectionData: Partial<Section>
-): Promise<any> =>
-  api.put(`trips/${trip}/${sectionData._id}`, { json: sectionData }).json()
+  sectionId: string
+): Promise<any> => api.delete(`trips/${trip}/${sectionId}`).json()
 
 /******** NOTES ******/
 export const getOneNote = async (id: string): Promise<Note> =>
