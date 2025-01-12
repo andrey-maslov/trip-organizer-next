@@ -53,13 +53,11 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
     transition,
   }
 
+  console.log(context)
+
   return (
     <SortableItemContext.Provider value={context}>
-      <div
-        ref={setNodeRef}
-        className='relative bg-white shadow-sm my-1 px-2 rounded-md border-1 border-solid border-foreground-100'
-        style={style}
-      >
+      <div ref={setNodeRef} className='relative' style={style}>
         {children}
         <DragHandle />
       </div>

@@ -16,6 +16,7 @@ export const defaultSection: Omit<SectionFE, '_id'> = {
   status: 'to_find',
   startingPoint: defaultPoint,
   endPoint: defaultPoint,
+  isEnabled: true,
 }
 
 export const defaultCoverImage =

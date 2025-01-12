@@ -27,6 +27,7 @@ export type Section = {
   name: string
   status: Status
   type: string
+  isEnabled: boolean
   dateTimeStart?: string // TODO Remove after the TripPoint implementation
   dateTimeEnd?: string // TODO Remove after the TripPoint implementation
   startingPoint: TripPoint
@@ -40,7 +41,6 @@ export type Section = {
   }
   payments?: Expense[] // TODO replace 'price' and 'payment' to one name: Expense/expenses
   note?: Types.ObjectId | string
-  isActive: boolean
 }
 
 export type SectionFE = Section & { id: string }

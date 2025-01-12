@@ -15,6 +15,7 @@ export const PaymentSchema = new Schema<Expense>({
 
 export const SectionSchema = new Schema<Section>({
   name: { type: String, required: true },
+  isEnabled: { type: Boolean, required: true, default: false },
   type: { type: String, required: false, default: DEFAULT_SECTION_TYPE },
   dateTimeStart: { type: Date, required: false },
   dateTimeEnd: { type: Date, required: false },

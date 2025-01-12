@@ -8,19 +8,17 @@ import { useQuery } from '@tanstack/react-query'
 
 import { getTripSummary } from '@/queries/queries.db'
 import { getSummaryToDisplay } from '@/components/one-trip-page/trip.utils'
-import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 type Props = {
   trip: string // slug
   currency: string
 }
 
-export const TripSummary = ({ trip, currency = DEFAULT_CURRENCY }: Props) => {
+export const TripSummary = ({ trip, currency }: Props) => {
   // Fetch Summary
   const { data } = useQuery({
-    queryKey: ['summary', trip, currency],
+    queryKey: ['summary', trip],
     queryFn: () => getTripSummary(trip as string, currency),
-    enabled: Boolean(currency),
   })
 
   const summaryToDisplay = getSummaryToDisplay(data, currency)

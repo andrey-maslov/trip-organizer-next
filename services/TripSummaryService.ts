@@ -40,47 +40,55 @@ export const getTripSummaryValues = async (
     const roadDurationsList: number[] = []
     const stayDurationsList: number[] = []
 
-    sections.forEach(({ payments, type, startingPoint, endPoint }) => {
-      // ROAD
-      if (transportTypes.includes(type)) {
-        // Payments
-        if (payments) {
-          payments.forEach(({ amount, currency }) => {
-            roadCostsList.push(convertAmount(amount, currency, exchangeRates))
-          })
+    sections.forEach(
+      ({ payments, type, startingPoint, endPoint, isEnabled }) => {
+        if (!isEnabled) {
+          return
         }
 
-        // Duration
-        if (startingPoint?.dateTime && endPoint?.dateTime) {
-          const [time1, time2] = [
-            dayjs(startingPoint.dateTime),
-            dayjs(endPoint.dateTime),
-          ]
+        // ROAD
+        if (transportTypes.includes(type)) {
+          // Payments
+          if (payments) {
+            payments.forEach(({ amount, currency }) => {
+              roadCostsList.push(convertAmount(amount, currency, exchangeRates))
+            })
+          }
 
-          roadDurationsList.push(time2.diff(time1))
+          // Duration
+          if (startingPoint?.dateTime && endPoint?.dateTime) {
+            const [time1, time2] = [
+              dayjs(startingPoint.dateTime),
+              dayjs(endPoint.dateTime),
+            ]
+
+            roadDurationsList.push(time2.diff(time1))
+          }
         }
+
+        // STAY
+        if (placementTypes.includes(type)) {
+          // Payments
+          if (payments) {
+            payments.forEach(({ amount, currency }) => {
+              stayCostsList.push(convertAmount(amount, currency, exchangeRates))
+            })
+          }
+
+          // Duration
+          if (startingPoint?.dateTime && endPoint?.dateTime) {
+            const [time1, time2] = [
+              dayjs(startingPoint.dateTime),
+              dayjs(endPoint.dateTime),
+            ]
+
+            stayDurationsList.push(time2.diff(time1))
+          }
+        }
+
+        // TODO: calculate Uncategorized - if the user hadn't defined to type yet
       }
-
-      // STAY
-      if (placementTypes.includes(type)) {
-        // Payments
-        if (payments) {
-          payments.forEach(({ amount, currency }) => {
-            stayCostsList.push(convertAmount(amount, currency, exchangeRates))
-          })
-        }
-
-        // Duration
-        if (startingPoint?.dateTime && endPoint?.dateTime) {
-          const [time1, time2] = [
-            dayjs(startingPoint.dateTime),
-            dayjs(endPoint.dateTime),
-          ]
-
-          stayDurationsList.push(time2.diff(time1))
-        }
-      }
-    })
+    )
 
     const roadCost = getSum(roadCostsList)
     const stayCost = getSum(stayCostsList)

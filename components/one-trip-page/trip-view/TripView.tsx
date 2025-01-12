@@ -55,6 +55,10 @@ export const TripView = ({ trip }: Props) => {
   return (
     <div>
       {trip.sections.map((section) => {
+        if (!section.isEnabled) {
+          return null
+        }
+
         const startTime = section.startingPoint?.dateTime
         const endTime = section.endPoint?.dateTime
         const startAddress = section.startingPoint?.place?.address

@@ -33,7 +33,7 @@ export const updateTrip = async (
   api.put(`trips/${data._id}`, { json: data }).json()
 
 export const getTripSummary = async (
-  id: string,
+  id: string, // slug
   currency: string
 ): Promise<TripSummaryValues> =>
   api(`trips/${id}/summary?currency=${currency}`).json()
