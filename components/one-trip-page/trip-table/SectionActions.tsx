@@ -4,7 +4,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { FiMoreVertical, FiTrash2, FiPower } from 'react-icons/fi'
 
 import { Section } from '@/types/types'

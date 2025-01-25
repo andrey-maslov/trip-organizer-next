@@ -1,4 +1,4 @@
-import { button as buttonStyles } from '@nextui-org/theme'
+import { button as buttonStyles } from "@heroui/theme"
 import NextLink from 'next/link'
 
 import { mainSubtitle } from '@/config/site'

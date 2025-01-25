@@ -1,4 +1,4 @@
-import { ChipProps } from '@nextui-org/react'
+import { ChipProps } from "@heroui/react"
 
 import { Status } from '@/types/types'
 

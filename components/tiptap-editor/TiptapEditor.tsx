@@ -14,7 +14,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 // TODO https://tiptap.dev/docs/editor/examples/savvy
 // TODO activate task list ext https://tiptap.dev/docs/editor/api/nodes/task-list
 
-import { Divider } from '@nextui-org/divider'
+import { Divider } from "@heroui/divider"
 import { useMutation } from '@tanstack/react-query'
 
 import { Toolbar } from './Toolbar'

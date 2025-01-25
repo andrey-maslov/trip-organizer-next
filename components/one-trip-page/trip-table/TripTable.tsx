@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'

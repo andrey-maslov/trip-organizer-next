@@ -1,9 +1,9 @@
 'use client'
 
 import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import { FiLogIn } from 'react-icons/fi'
-import { Link } from '@nextui-org/link'
+import { Link } from "@heroui/link"
 
 export const UserPopup = () => {
   const { user } = useUser()

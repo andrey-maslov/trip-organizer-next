@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { NextUIProvider } from '@nextui-org/system'
+import { HeroUIProvider } from "@heroui/system"
 import { useRouter } from 'next/navigation'
 import {
   ThemeProvider as NextThemesProvider,
@@ -31,12 +31,12 @@ export function Providers({
   const router = useRouter()
 
   return (
-    <NextUIProvider navigate={router.push}>
+    <HeroUIProvider navigate={router.push}>
       <ClerkProvider>
         <QueryClientProvider client={queryClient}>
           <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
         </QueryClientProvider>
       </ClerkProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   )
 }

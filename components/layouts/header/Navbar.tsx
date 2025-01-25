@@ -5,15 +5,15 @@ import {
   NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
-} from '@nextui-org/navbar'
-import { Image } from '@nextui-org/image'
-import { Link } from '@nextui-org/link'
-import { link as linkStyles } from '@nextui-org/theme'
+} from "@heroui/navbar"
+import { Image } from "@heroui/image"
+import { Link } from "@heroui/link"
+import { link as linkStyles } from "@heroui/theme"
 import NextLink from 'next/link'
 import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useUser, SignedIn, SignedOut } from '@clerk/nextjs'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import { FiLogIn } from 'react-icons/fi'
 
 import { siteConfig } from '@/config/site'

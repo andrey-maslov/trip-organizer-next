@@ -1,5 +1,5 @@
 import { Key } from 'react'
-import { getKeyValue } from '@nextui-org/react'
+import { getKeyValue } from "@heroui/react"
 
 import { Expense, Section, Status } from '@/types/types'
 import { TypeCell } from '@/components/one-trip-page/cells/TypeCell'

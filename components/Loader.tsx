@@ -1,7 +1,7 @@
 'use client'
 
 import clsx from 'clsx'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from "@heroui/spinner"
 import React from 'react'
 
 type LoaderProps = {

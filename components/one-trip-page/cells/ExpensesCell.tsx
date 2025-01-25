@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import {
   Input,
   Modal,
@@ -6,7 +6,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from '@nextui-org/react'
+} from "@heroui/react"
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'

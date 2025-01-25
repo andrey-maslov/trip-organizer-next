@@ -1,12 +1,12 @@
 import React from 'react'
-import { Button, Card, CardBody } from '@nextui-org/react'
-import { CardHeader } from '@nextui-org/card'
+import { Button, Card, CardBody } from "@heroui/react"
+import { CardHeader } from "@heroui/card"
 import { IoMdTimer } from 'react-icons/io'
 import { GiDuration } from 'react-icons/gi'
 import { FaExpand } from 'react-icons/fa'
 import { BsGeoAlt } from 'react-icons/bs'
-import { Link } from '@nextui-org/link'
-import { Divider } from '@nextui-org/divider'
+import { Link } from "@heroui/link"
+import { Divider } from "@heroui/divider"
 import { toast } from 'react-toastify'
 import { useMutation } from '@tanstack/react-query'
 

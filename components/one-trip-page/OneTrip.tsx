@@ -7,12 +7,12 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/react'
+} from "@heroui/react"
 import { toast } from 'react-toastify'
 import { FiSettings } from 'react-icons/fi'
-import { Tabs, Tab } from '@nextui-org/tabs'
+import { Tabs, Tab } from "@heroui/tabs"
 import React from 'react'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 
 import {
   deleteOneTrip,
@@ -107,7 +107,7 @@ export const OneTrip = () => {
   }
 
   return (
-    <div className=''>
+    (<div className=''>
       <div className='flex gap-4 mb-4 flex-wrap md:flex-nowrap items-start'>
         <div className='flex min-w-[200px]'>
           <TripCoverEditable
@@ -191,7 +191,6 @@ export const OneTrip = () => {
           </DropdownMenu>
         </Dropdown>
       </div>
-
       <Tabs
         aria-label='Options'
         defaultSelectedKey={isMobile ? 'view' : 'edit'}
@@ -203,10 +202,9 @@ export const OneTrip = () => {
           <TripTable trip={trip} />
         </Tab>
       </Tabs>
-
       {/* SUMMARY */}
       <TripSummary currency={trip?.exchangeRates.base} trip={slug as string} />
       <NotesDrawer />
-    </div>
-  )
+    </div>)
+  );
 }

@@ -8,10 +8,10 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from '@nextui-org/react'
+} from "@heroui/react"
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import { DateValue } from '@internationalized/date'
 
 import { defaultTrip } from '@/constants/defaultEntities'
@@ -58,7 +58,7 @@ export const CreateNewTrip = () => {
   }
 
   return (
-    <div className='max-w-[800px] m-auto'>
+    (<div className='max-w-[800px] m-auto'>
       <div className='flex gap-8'>
         <div className='w-[200px] h-[200px]'>
           <TripCoverEditable
@@ -160,6 +160,6 @@ export const CreateNewTrip = () => {
           </Button>
         </div>
       </div>
-    </div>
-  )
+    </div>)
+  );
 }

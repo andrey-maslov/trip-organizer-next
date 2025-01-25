@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import { useMutation } from '@tanstack/react-query'
 import { FaRegNoteSticky } from 'react-icons/fa6'
 import { IoAddOutline } from 'react-icons/io5'

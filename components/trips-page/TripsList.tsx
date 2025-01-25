@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { Card, CardBody, CardFooter, Image } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, Image } from "@heroui/react"
 import { FiPlus } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
 

@@ -1,7 +1,7 @@
-import { NavbarMenuItem } from '@nextui-org/navbar'
-import { Link } from '@nextui-org/link'
+import { NavbarMenuItem } from "@heroui/navbar"
+import { Link } from "@heroui/link"
 import { useClerk } from '@clerk/nextjs'
-import { Divider } from '@nextui-org/divider'
+import { Divider } from "@heroui/divider"
 
 import { siteConfig } from '@/config/site'
 

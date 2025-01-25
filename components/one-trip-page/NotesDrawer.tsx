@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { BsChevronDoubleLeft } from 'react-icons/bs'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import dynamic from 'next/dynamic'
 import clsx from 'clsx'
 import { MdOutlineDelete } from 'react-icons/md'
