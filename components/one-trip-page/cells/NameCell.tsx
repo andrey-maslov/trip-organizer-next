@@ -1,4 +1,5 @@
 import { useState, FC, useRef, useEffect } from 'react'
+import { sanitizeInput } from '@/lib/sanitizeInput'
 
 type NameCellProps = {
   name: string
@@ -35,7 +36,7 @@ export const NameCell: FC<NameCellProps> = ({ name, onUpdate }) => {
         type='text'
         value={value}
         onBlur={() => onUpdate(value)}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => setValue(sanitizeInput(event.target.value))}
       />
       {hasHorizontalScroll && (
         <div className='absolute right-3 h-full w-6 bg-gradient-to-r from-transparent to-white' />

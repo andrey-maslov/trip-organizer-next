@@ -7,6 +7,9 @@ import {
   transportTypes,
 } from '@/constants/constants'
 
+export type MakeOptional<T, K extends keyof T> =
+  Omit<T, K> & Partial<Pick<T, K>>;
+
 export type DateType = Date | string | undefined
 
 export type Trip = {
@@ -43,7 +46,7 @@ export type Section = {
   note?: Types.ObjectId | string
 }
 
-export type SectionFE = Section & { id: string }
+export type SectionFE = MakeOptional<Section, "_id"> & { id: string }
 
 export type TransportType = (typeof transportTypes)[number]
 export type Status = (typeof statusTypes)[number]

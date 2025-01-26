@@ -45,21 +45,18 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
   )
   const style: CSSProperties = {
     zIndex: isDragging ? 100 : 1,
-    boxShadow: isDragging
-      ? 'rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px'
-      : undefined,
-    backgroundColor: isDragging ? 'rgb(250, 250, 250)' : '#fff',
+    // boxShadow: isDragging
+    //   ? 'rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px'
+    //   : undefined,
+    // backgroundColor: '#fff',
     transform: CSS.Translate.toString(transform),
     transition,
   }
-
-  console.log(context)
 
   return (
     <SortableItemContext.Provider value={context}>
       <div ref={setNodeRef} className='relative' style={style}>
         {children}
-        <DragHandle />
       </div>
     </SortableItemContext.Provider>
   )

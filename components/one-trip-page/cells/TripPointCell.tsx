@@ -24,6 +24,7 @@ import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
 import { defaultPoint } from '@/constants/defaultEntities'
 import { truncateSentence } from '@/lib/utils'
 import { ButtonEdit } from '@/components/ButtonEdit'
+import { ButtonClear } from '@/components/ButtonClear'
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
 // const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
@@ -33,6 +34,8 @@ type PointCellProps = {
   onUpdate: (value: TripPoint) => void
   title: string
 }
+
+const POINT_DEFAULT: TripPoint = { place: {} }
 
 const placeAutocompleteStyles = {
   input: (provided: any) => ({
@@ -103,7 +106,7 @@ export const TripPointCell: FC<PointCellProps> = ({
   const pointAddress = point.place?.address ?? place?.value?.description
 
   const renderButtonContent = () => {
-    if (!initialPoint.place) {
+    if (!initialPoint.place && !initialPoint.dateTime) {
       return '+'
     }
 
@@ -124,8 +127,8 @@ export const TripPointCell: FC<PointCellProps> = ({
     <div className='flex items-center relative max-w-[140px] w-full overflow-hidden p-1'>
       <Button
         fullWidth
-        className='h-auto'
         color='default'
+        className='h-auto min-h-2 text-inherit'
         size='sm'
         variant='light'
         onPress={onOpen}
@@ -148,6 +151,7 @@ export const TripPointCell: FC<PointCellProps> = ({
                   <div className='flex items-center justify-between'>
                     <div>{pointAddress}</div>
                     <ButtonEdit onClick={() => setEditPlace(!editPlace)} />
+                    {/*<ButtonClear onClick={() => setEditPlace(!editPlace)} />*/}
                   </div>
                 ) : (
                   <div className='h-10 relative z-30'>
@@ -206,7 +210,17 @@ export const TripPointCell: FC<PointCellProps> = ({
                     </AutocompleteItem>
                   )}
                 </Autocomplete>
-                <div className='flex justify-end'>
+                <div className='flex justify-end gap-4 mt-4'>
+                  <Button
+                    className='mb-6'
+                    color='warning'
+                    onPress={() => {
+                      onUpdate(POINT_DEFAULT)
+                      onClose()
+                    }}
+                  >
+                    Clear
+                  </Button>
                   <Button
                     className='mb-6'
                     color='primary'

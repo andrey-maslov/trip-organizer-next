@@ -1,16 +1,10 @@
-import { SectionFE, Trip, TripPoint } from '@/types/types'
-
-export const defaultTrip: Partial<Trip> = {
-  name: 'new trip',
-  sections: [],
-}
+import { Section, SectionFE, Trip, TripPoint } from '@/types/types'
 
 export const defaultPoint: TripPoint = {
   place: {},
 }
 
-export const defaultSection: Omit<SectionFE, '_id'> = {
-  id: 'default',
+export const defaultSection: Omit<Section, '_id'> = {
   type: 'unknown',
   name: '',
   status: 'to_find',
@@ -18,6 +12,21 @@ export const defaultSection: Omit<SectionFE, '_id'> = {
   endPoint: defaultPoint,
   isEnabled: true,
 }
+
+export const defaultTrip: Partial<Trip> = {
+  name: 'new trip',
+  sections: [defaultSection] as Section[],
+}
+
+export const getDefaultSection = (): SectionFE => ({
+  id: Date.now().toString(),
+  type: 'unknown',
+  name: '',
+  status: 'to_find',
+  startingPoint: defaultPoint,
+  endPoint: defaultPoint,
+  isEnabled: true,
+})
 
 export const defaultCoverImage =
   'https://images.unsplash.com/photo-1541665728259-94dc0f5964d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1NzY5NzB8MHwxfHNlYXJjaHw1fHxqb3VybmV5JTIwM3xlbnwwfHx8fDE3MTYxMzYwNzh8MA&ixlib=rb-4.0.3&q=80&w=400'

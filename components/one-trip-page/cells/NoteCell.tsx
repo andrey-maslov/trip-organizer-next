@@ -9,7 +9,7 @@ import { createNote } from '@/queries/queries.db'
 
 type Props = {
   noteId: string | undefined
-  sectionId: string
+  sectionId: string | undefined
   tripId: string
 }
 
@@ -31,7 +31,7 @@ export const NoteCell: FC<Props> = ({ noteId, sectionId, tripId }) => {
     } else {
       // create note and set noteId as query param
       createNoteMutation({
-        sectionId,
+        sectionId: sectionId ?? '',
         tripId: tripId,
       })
     }
@@ -48,6 +48,7 @@ export const NoteCell: FC<Props> = ({ noteId, sectionId, tripId }) => {
         title={noteId ? 'Read note' : 'Add note'}
         variant='light'
         onPress={() => onOpenNote()}
+        className="text-inherit"
       />
     </div>
   )

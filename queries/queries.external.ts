@@ -9,5 +9,5 @@ export const searchPictures = async (
   query: string
 ): Promise<UnsplashApiResponse> =>
   ky(
-    `${unsplashUrl}?page=1&per_page=5&query=${query}&client_id=${unsplashKey}`
+    `${unsplashUrl}?page=1&per_page=12&query=${query}&client_id=${unsplashKey}`
   ).json()

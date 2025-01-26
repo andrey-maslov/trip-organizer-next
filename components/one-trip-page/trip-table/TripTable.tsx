@@ -5,12 +5,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { IoMdAdd } from 'react-icons/io'
 
-import { SectionFE, Trip } from '@/types/types'
+import { Section, SectionFE, Trip } from '@/types/types'
 import { updateTrip } from '@/queries/queries.db'
 import { columns } from '@/components/one-trip-page/trip-table.config'
-import { defaultSection } from '@/constants/defaultEntities'
 import { SectionItem } from '@/components/one-trip-page/trip-table/SectionItem'
 import { SortableList } from '@/components/one-trip-page/trip-table/SortableList'
+import { defaultSection } from '@/constants/defaultEntities'
 
 type Props = {
   trip: Trip
@@ -24,9 +24,9 @@ export const TripTable = ({ trip }: Props) => {
   // add 'id' property to process Sections in Front-End
   useEffect(() => {
     setSectionsToDisplay(
-      (trip.sections ?? []).map((section) => ({
+      trip.sections.map((section) => ({
         ...section,
-        id: section._id ?? '',
+        id: section?._id ?? '',
       }))
     )
   }, [trip.sections])
@@ -47,8 +47,7 @@ export const TripTable = ({ trip }: Props) => {
   const onAddNewSection = () => {
     updateTripMutation({
       _id: trip._id,
-      // @ts-ignore
-      sections: [...sectionsToDisplay, defaultSection],
+      sections: [...sectionsToDisplay, defaultSection] as Section[],
     })
   }
 
@@ -86,7 +85,7 @@ export const TripTable = ({ trip }: Props) => {
 
                   updateTripMutation({
                     _id: trip._id,
-                    sections: value,
+                    sections: value as Section[],
                   })
                 }}
               />

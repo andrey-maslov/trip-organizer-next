@@ -28,6 +28,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
       <Button
         fullWidth
         color='default'
+        className="text-inherit"
         size='sm'
         variant='light'
         onPress={() => setOpen(true)}

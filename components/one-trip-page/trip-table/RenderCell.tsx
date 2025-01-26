@@ -1,7 +1,7 @@
 import { Key } from 'react'
 import { getKeyValue } from "@heroui/react"
 
-import { Expense, Section, Status } from '@/types/types'
+import { Expense, Section, SectionFE, Status } from '@/types/types'
 import { TypeCell } from '@/components/one-trip-page/cells/TypeCell'
 import { NameCell } from '@/components/one-trip-page/cells/NameCell'
 import { StatusCell } from '@/components/one-trip-page/cells/StatusCell'
@@ -14,7 +14,7 @@ import { NoteCell } from '@/components/one-trip-page/cells/NoteCell'
 
 type Props = {
   columnKey: Key
-  section: Section
+  section: SectionFE
   tripId: string
   onSave: (data: Partial<Section>) => void
 }

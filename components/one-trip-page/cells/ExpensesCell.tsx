@@ -1,4 +1,4 @@
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 import {
   Input,
   Modal,
@@ -6,7 +6,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@heroui/react"
+} from '@heroui/react'
 import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
@@ -16,11 +16,21 @@ import { Expense } from '@/types/types'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { getOneTrip } from '@/queries/queries.db'
 import { Loader } from '@/components/Loader'
+import { ButtonClear } from '@/components/ButtonClear'
 
 type Props = {
   data: Expense[] | null | undefined
   onSave: (data: Partial<Expense>[]) => void
 }
+
+const getDefaultExpense = (
+  baseCurrency: string | undefined
+): Omit<Expense, '_id'> => ({
+  currency: baseCurrency || DEFAULT_CURRENCY,
+  amount: 0,
+  name: '',
+  link: '',
+})
 
 export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
   const { slug } = useParams()
@@ -35,7 +45,15 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
     data: trip,
   } = useQuery({
     queryKey: ['trip', slug],
-    queryFn: () => getOneTrip(slug as string),
+    queryFn: async () => {
+      const res = await getOneTrip(slug as string)
+
+      if (expenses.length === 0 && res?.exchangeRates?.base) {
+        setExpenses([getDefaultExpense(res.exchangeRates.base)])
+      }
+
+      return res
+    },
   })
 
   const onDataChange = (
@@ -63,6 +81,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
         title={convertedAmount}
         variant='light'
         onPress={() => setOpen(true)}
+        className="text-inherit"
       >
         {convertedAmount}
       </Button>
@@ -86,14 +105,14 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                 {isPending ? (
                   <Loader />
                 ) : (
-                  (expenses || []).map((payment, index) => (
-                    <div key={index} className='flex gap-1 items-end mb-4'>
+                  (expenses || []).map((expense, index) => (
+                    <div key={index} className='flex gap-2 items-end mb-4'>
                       <Input
                         name={`name-${index}`}
                         placeholder='Expense name'
                         size='sm'
                         type='text'
-                        value={payment.name}
+                        value={expense.name}
                         variant='underlined'
                         onChange={(e) =>
                           onDataChange(index, 'name', e.target.value)
@@ -114,13 +133,13 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                         className='max-w-[150px]'
                         endContent={
                           <div className='flex items-center'>
-                            {payment.amount &&
-                              trip?.exchangeRates.base !== payment.currency && (
+                            {expense.amount &&
+                              trip?.exchangeRates.base !== expense.currency && (
                                 <small className='text-orange-500 absolute -top-[14px] right-2 flex gap-1'>
                                   <span className='font-semibold'>
                                     {convertAmount(
-                                      payment.amount,
-                                      payment.currency,
+                                      expense.amount,
+                                      expense.currency,
                                       trip?.exchangeRates
                                     )}
                                   </span>
@@ -134,7 +153,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                               className='outline-none border-0 bg-transparent text-default-400 text-small'
                               id='currency'
                               name={`currency-${index}`}
-                              value={payment.currency}
+                              value={expense.currency}
                               onChange={(e) =>
                                 onDataChange(index, 'currency', e.target.value)
                               }
@@ -161,7 +180,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                         //   </div>
                         // }
                         type='number'
-                        value={payment.amount?.toString()}
+                        value={expense.amount?.toString()}
                         variant='underlined'
                         onChange={(e) =>
                           onDataChange(
@@ -170,6 +189,15 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                             Number.parseFloat(e.target.value)
                           )
                         }
+                      />
+                      <ButtonClear
+                        onClick={() => {
+                          setExpenses(
+                            expenses.filter((item) => item._id !== expense._id)
+                          )
+                        }}
+                        title='remove expense'
+                        classNames="opacity-50"
                       />
                     </div>
                   ))
@@ -183,12 +211,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                   size='sm'
                   onPress={() => {
                     setExpenses((prev) => [
-                      {
-                        currency: trip?.exchangeRates?.base || DEFAULT_CURRENCY,
-                        amount: 0,
-                        name: '',
-                        link: '',
-                      },
+                      getDefaultExpense(trip?.exchangeRates?.base),
                       ...prev,
                     ])
                   }}

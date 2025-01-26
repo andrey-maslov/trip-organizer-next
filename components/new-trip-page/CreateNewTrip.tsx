@@ -20,6 +20,8 @@ import { isEmptyObject } from '@/lib/utils'
 import { TripCoverEditable } from '@/components/one-trip-page/TripCoverEditable'
 import { getFormattedDate } from '@/lib/date'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
+import { slugify } from 'transliteration';
+import { sanitizeInput } from '@/lib/sanitizeInput'
 
 export const CreateNewTrip = () => {
   const router = useRouter()
@@ -58,9 +60,9 @@ export const CreateNewTrip = () => {
   }
 
   return (
-    (<div className='max-w-[800px] m-auto'>
+    <div className='max-w-[800px] m-auto'>
       <div className='flex gap-8'>
-        <div className='w-[200px] h-[200px]'>
+        <div className='w-[200px] h-[200px] flex-shrink-0'>
           <TripCoverEditable
             coverSrc={cover}
             setCoverSrc={setCover}
@@ -69,7 +71,9 @@ export const CreateNewTrip = () => {
         </div>
 
         <div className='flex-grow'>
-          <h1 className='text-4xl font-bold mb-6'>{name}</h1>
+          <h1 className='text-4xl font-bold mb-6 min-h-[40px] truncate max-w-[500px]'>
+            {name}
+          </h1>
           {description.length > 5 ? (
             <h2 className='text-xl mb-4 text-foreground-500'>{description}</h2>
           ) : null}
@@ -86,16 +90,17 @@ export const CreateNewTrip = () => {
               placeholder='Enter name of your trip here'
               type='text'
               value={name}
+              description='20 symbols max'
               onChange={(event) => {
-                // TODO improve - sanitize
-                setName(event.target.value)
+                const text = event.target.value
+                if (text.length > 20) {
+                  return
+                }
+
+                setName(sanitizeInput(text))
+
                 if (!slugChanged) {
-                  setSlug(
-                    event.target.value
-                      .replaceAll(/ +|\./gi, '-')
-                      .toLowerCase()
-                      .trim()
-                  )
+                  setSlug(slugify(text))
                 }
               }}
             />
@@ -105,12 +110,16 @@ export const CreateNewTrip = () => {
               labelPlacement='outside'
               type='text'
               value={slug}
+              description='20 symbols max'
               onChange={(event) => {
                 if (!slugChanged) {
                   setSlugChanged(true)
                 }
-                // TODO improve - sanitize, use slugify or create the same ???
-                setSlug(event.target.value.replaceAll(/ /gi, '-').toLowerCase())
+                const text = event.target.value
+                if (text.length > 20) {
+                  return
+                }
+                setSlug(slugify(text))
               }}
             />
             <Textarea
@@ -119,7 +128,9 @@ export const CreateNewTrip = () => {
               labelPlacement='outside'
               placeholder='Enter your description'
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => {
+                setDescription(sanitizeInput(event.target.value))
+              }}
             />
             <DateRangePicker
               label='Trip duration'
@@ -160,6 +171,6 @@ export const CreateNewTrip = () => {
           </Button>
         </div>
       </div>
-    </div>)
-  );
+    </div>
+  )
 }
