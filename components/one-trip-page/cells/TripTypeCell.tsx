@@ -10,12 +10,12 @@ import {
 import { serviceProviderTypes } from '@/constants/constants'
 import { SectionTypeIcon } from '@/components/SectionTypeIcon'
 
-type TypeCellProps = {
+type Props = {
   type: string
   onUpdate: (value: string) => void
 }
 
-export const TypeCell: React.FC<TypeCellProps> = ({ type, onUpdate }) => {
+export const TripTypeCell: React.FC<Props> = ({ type, onUpdate }) => {
   return (
     <div className='flex items-center relative editable-elemenet max-h-[43px] mx-auto'>
       <Dropdown>

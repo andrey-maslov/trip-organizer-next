@@ -2,7 +2,7 @@ import { ExchangeRates, Status } from '@/types/types'
 
 export const transportTypes = ['bus', 'flight', 'train', 'car', 'ferry']
 
-export const placementTypes = ['hotel', 'flat']
+export const placementTypes = ['hotel', 'flat', 'event']
 
 export const statusTypes = [
   'to_find',

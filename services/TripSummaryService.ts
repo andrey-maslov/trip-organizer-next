@@ -6,111 +6,98 @@ import {
   placementTypes,
   transportTypes,
 } from '@/constants/constants'
-import { Trip, TripSummaryValues } from '@/types/types'
+import { ExchangeRates, Section, Trip, TripSummaryValues } from '@/types/types'
 import { timestampToDuration } from '@/lib/date'
 import { convertAmount, getSum, round } from '@/lib/utils'
 
 dayjs.extend(duration)
 
-export const getTripSummaryValues = async (
+
+type Summary = {
+  cost: number;
+  duration: number;
+  baseCurrency: string;
+}
+
+/**
+ *
+ * @param sections trip section that you'd like to summarize
+ * @param exchangeRates currency and exchange rates data
+ * @param filterTypes types of section you'd like to summarize (serviceProviderTypes). If types = [] -> all section, even without type defined will be processed
+ */
+export const getSummaryByType = (sections: Section[], exchangeRates: ExchangeRates, filterTypes: string[],): Summary => {
+
+  // Initiation
+  const costs: number[] = []
+  const durations: number[] = []
+
+  sections.forEach(
+    ({ payments, type, startingPoint, endPoint, isEnabled }) => {
+      if (!isEnabled) {
+        return
+      }
+
+      if (filterTypes.length > 0 && !filterTypes.includes(type)) return
+
+      // Payments
+      payments?.forEach(({ amount, currency }) => {
+        costs.push(convertAmount(amount, currency, exchangeRates))
+      })
+
+      // Duration
+      if (startingPoint?.dateTime && endPoint?.dateTime) {
+        const start = dayjs(startingPoint.dateTime)
+        const end = dayjs(endPoint.dateTime)
+        durations.push(end.diff(start))
+      }
+    }
+  )
+
+  return {
+    cost: getSum(costs),
+    duration: getSum(durations),
+    baseCurrency: exchangeRates.base
+  }
+}
+
+export const getTripSummaryValues = (
   trip: Trip | null,
   userCurrency: string = DEFAULT_CURRENCY
-): Promise<TripSummaryValues> => {
+): TripSummaryValues => {
   if (!trip) {
     return {} as TripSummaryValues
   }
 
   try {
-    const { sections, dateTimeStart, dateTimeEnd } = trip
+    const { sections, exchangeRates, dateTimeStart, dateTimeEnd } = trip
 
     // Firstly get only necessary currency rates data with base currency chosen by user
     const currency = userCurrency.toUpperCase()
 
-    const exchangeRates = trip.exchangeRates
-
     // Duration between start trip date and end trip date
     const totalTripTime =
-      dateTimeStart && dateTimeEnd
+      (dateTimeStart && dateTimeEnd)
         ? dayjs(dateTimeEnd).diff(dayjs(dateTimeStart))
         : 0
 
-    // Initiation
-    const roadCostsList: number[] = []
-    const stayCostsList: number[] = []
-    const roadDurationsList: number[] = []
-    const stayDurationsList: number[] = []
-
-    sections.forEach(
-      ({ payments, type, startingPoint, endPoint, isEnabled }) => {
-        if (!isEnabled) {
-          return
-        }
-
-        // ROAD
-        if (transportTypes.includes(type)) {
-          // Payments
-          if (payments) {
-            payments.forEach(({ amount, currency }) => {
-              roadCostsList.push(convertAmount(amount, currency, exchangeRates))
-            })
-          }
-
-          // Duration
-          if (startingPoint?.dateTime && endPoint?.dateTime) {
-            const [time1, time2] = [
-              dayjs(startingPoint.dateTime),
-              dayjs(endPoint.dateTime),
-            ]
-
-            roadDurationsList.push(time2.diff(time1))
-          }
-        }
-
-        // STAY
-        if (placementTypes.includes(type)) {
-          // Payments
-          if (payments) {
-            payments.forEach(({ amount, currency }) => {
-              stayCostsList.push(convertAmount(amount, currency, exchangeRates))
-            })
-          }
-
-          // Duration
-          if (startingPoint?.dateTime && endPoint?.dateTime) {
-            const [time1, time2] = [
-              dayjs(startingPoint.dateTime),
-              dayjs(endPoint.dateTime),
-            ]
-
-            stayDurationsList.push(time2.diff(time1))
-          }
-        }
-
-        // TODO: calculate Uncategorized - if the user hadn't defined to type yet
-      }
-    )
-
-    const roadCost = getSum(roadCostsList)
-    const stayCost = getSum(stayCostsList)
-    const roadTimeMs = getSum(roadDurationsList) || 0
-    const roadTimeStr = timestampToDuration(roadTimeMs)
-    const stayTimeMs = getSum(stayDurationsList) || 0
-    const stayTimeStr = timestampToDuration(stayTimeMs)
+    const road = getSummaryByType(sections, exchangeRates, transportTypes)
+    const stay = getSummaryByType(sections, exchangeRates, placementTypes)
+    const total = getSummaryByType(sections, exchangeRates, [])
 
     return {
-      totalTimeMs: roadTimeMs + stayTimeMs,
-      totalTimeStr: timestampToDuration(roadTimeMs + stayTimeMs),
-      roadTimeMs,
-      roadTimeStr,
-      stayTimeMs,
-      stayTimeStr,
-      waitingTimeMs: totalTripTime - roadTimeMs - stayTimeMs,
+      totalTimeMs: total.duration,
+      totalTimeStr: timestampToDuration(total.duration),
+      roadTimeMs: road.duration,
+      roadTimeStr: timestampToDuration(road.duration),
+      stayTimeMs: stay.duration,
+      stayTimeStr: timestampToDuration(stay.duration),
+      waitingTimeMs: totalTripTime - road.duration - stay.duration,
       waitingTimeStr: timestampToDuration(
-        totalTripTime - roadTimeMs - stayTimeMs
+        totalTripTime - road.duration - stay.duration
       ),
-      totalCost: round(roadCost + stayCost, 0),
-      roadCost: round(roadCost, 0),
-      stayCost: round(stayCost, 0),
+      totalCost: round(total.cost, 0),
+      roadCost: round(road.cost, 0),
+      stayCost: round(stay.cost, 0),
       currency,
     }
   } catch (e) {

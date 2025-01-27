@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { FaBus, FaCarSide, FaHotel, FaQuestion, FaTrain } from 'react-icons/fa'
 import { FaFerry } from 'react-icons/fa6'
 import { ImAirplane } from 'react-icons/im'
+import { MdEvent } from "react-icons/md";
 
 type Props = {
   type?: string
@@ -17,6 +18,7 @@ const typeIcons: Record<string, ReactNode> = {
   ferry: <FaFerry />,
   hotel: <FaHotel />,
   flat: <FaHotel />,
+  event: <MdEvent />,
   unknown: <FaQuestion />,
 }
 

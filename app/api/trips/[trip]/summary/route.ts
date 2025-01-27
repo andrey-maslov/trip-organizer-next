@@ -26,7 +26,7 @@ export async function GET(
       ],
     }).lean()
 
-    const summary = await getTripSummaryValues(trip, currencyISO as string)
+    const summary = getTripSummaryValues(trip, currencyISO as string)
 
     return Response.json(summary)
   } catch (e) {

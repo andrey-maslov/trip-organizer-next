@@ -2,7 +2,7 @@ import { Key } from 'react'
 import { getKeyValue } from "@heroui/react"
 
 import { Expense, Section, SectionFE, Status } from '@/types/types'
-import { TypeCell } from '@/components/one-trip-page/cells/TypeCell'
+import { TripTypeCell } from '@/components/one-trip-page/cells/TripTypeCell'
 import { NameCell } from '@/components/one-trip-page/cells/NameCell'
 import { StatusCell } from '@/components/one-trip-page/cells/StatusCell'
 import { DEFAULT_SECTION_STATUS } from '@/constants/constants'
@@ -25,7 +25,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
 
   if (columnKey === 'type') {
     return (
-      <TypeCell
+      <TripTypeCell
         type={section.type ?? ''}
         onUpdate={(type) => onSave({ type })}
       />
