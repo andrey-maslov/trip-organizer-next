@@ -9,7 +9,7 @@ import {
   defaultExchangeRates,
   SECONDS_IN_DAY,
 } from '@/constants/constants'
-import { safelyParseJSON } from '@/lib/utils'
+import { safelyParseJSON } from '@/utils/utils'
 import { isDateExpired } from '@/lib/date'
 import { readFile, saveFile } from '@/services/file.service'
 

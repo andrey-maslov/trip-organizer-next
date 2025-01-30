@@ -11,7 +11,7 @@ import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 
-import { convertAmount, getTotalPriceFromSection } from '@/lib/utils'
+import { convertAmount, getTotalPriceFromSection } from '@/utils/utils'
 import { Expense } from '@/types/types'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { getOneTrip } from '@/queries/queries.db'

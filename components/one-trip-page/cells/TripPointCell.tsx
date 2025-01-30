@@ -22,7 +22,7 @@ import {
 } from '@/components/CustomDateTimePicker'
 import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
 import { defaultPoint } from '@/constants/defaultEntities'
-import { truncateSentence } from '@/lib/utils'
+import { truncateSentence } from '@/utils/utils'
 import { ButtonEdit } from '@/components/ButtonEdit'
 import { ButtonClear } from '@/components/ButtonClear'
 

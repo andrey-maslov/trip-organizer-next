@@ -8,7 +8,7 @@ import {
 } from '@/constants/constants'
 import { ExchangeRates, Section, Trip, TripSummaryValues } from '@/types/types'
 import { timestampToDuration } from '@/lib/date'
-import { convertAmount, getSum, round } from '@/lib/utils'
+import { convertAmount, getSum, round } from '@/utils/utils'
 
 dayjs.extend(duration)
 

@@ -19,6 +19,6 @@ const NoteSchema = new Schema<Note>({
 })
 
 const NoteModel =
-  models.NoteModel || model('NoteModel', NoteSchema, 'documentation.md')
+  models.NoteModel || model('NoteModel', NoteSchema, 'notes')
 
 export default NoteModel

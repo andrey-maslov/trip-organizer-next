@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'node:fs/promises'
 
-import { safelyStringifyJSON } from '@/lib/utils'
+import { safelyStringifyJSON } from '@/utils/utils'
 
 export const isFileExists = async (path: string): Promise<boolean> => {
   try {
