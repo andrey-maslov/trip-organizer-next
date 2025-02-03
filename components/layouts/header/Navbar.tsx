@@ -24,7 +24,8 @@ export const Navbar = () => {
   const user = useUser()
   const auth = useAuth()
 
-  console.log(auth)
+  console.log("USR", user)
+  console.log('AUTH', auth)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 

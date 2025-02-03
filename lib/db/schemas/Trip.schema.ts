@@ -13,6 +13,11 @@ const TripSchema = new Schema<Trip>({
   description: { type: String, required: false },
   cover: { type: String, required: false },
   user: { type: String, required: true, default: null },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: false, // TODO change to true
+  }, // to connect with mongoDB
   sections: [SectionSchema],
   exchangeRates: {
     type: Object,

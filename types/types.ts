@@ -22,7 +22,8 @@ export type Trip = {
   dateTimeEnd?: DateType
   description?: string
   cover?: string
-  user?: string
+  user?: string // TODO change to userId
+  userId?: string // to connect with mongoDB
 }
 
 export type Section = {
