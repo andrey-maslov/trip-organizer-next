@@ -12,7 +12,7 @@ import { link as linkStyles } from "@heroui/theme"
 import NextLink from 'next/link'
 import clsx from 'clsx'
 import React, { useState } from 'react'
-import { useUser, SignedIn, SignedOut, useAuth } from '@clerk/nextjs'
+import { useUser, SignedIn, SignedOut } from '@clerk/nextjs'
 import { Button } from "@heroui/button"
 import { FiLogIn } from 'react-icons/fi'
 
@@ -22,10 +22,8 @@ import { MobileMenu } from '@/components/layouts/header/MobileMenu'
 
 export const Navbar = () => {
   const user = useUser()
-  const auth = useAuth()
 
   console.log("USR", user)
-  console.log('AUTH', auth)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 

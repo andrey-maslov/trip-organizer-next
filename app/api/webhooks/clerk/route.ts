@@ -2,7 +2,7 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { clerkClient, WebhookEvent } from '@clerk/nextjs/server'
 import connectMongo from '@/lib/db/connectMongo'
-import UserSchema from '@/lib/db/schemas/User.schema'
+import UserModel from '@/lib/db/schemas/User.schema'
 import { Role, UserDB } from '@/types/user.types'
 
 export async function POST(req: Request) {
@@ -40,8 +40,6 @@ export async function POST(req: Request) {
 
   const clerk = await clerkClient()
 
-  console.log('EVT', event.type)
-
   switch (event.type) {
     case 'user.created': {
       const {
@@ -55,11 +53,9 @@ export async function POST(req: Request) {
         created_at,
       } = event.data
 
-      console.log('CLERK DATA', event.data.id)
-
       // To save in MongoDB
       const newUser: UserDB = {
-        clerkId: id ?? 'test_1',
+        clerkId: id,
         email: email_addresses[0].email_address,
         firstName: first_name,
         lastName: last_name,
@@ -72,15 +68,14 @@ export async function POST(req: Request) {
       let mongoUserId = ''
 
       try {
-        const userCreated = await UserSchema.create(newUser)
+        const userCreated = await UserModel.create(newUser)
         mongoUserId = userCreated._id
-        console.log('MUID', mongoUserId)
 
         await clerk.users.updateUser(id, {
           publicMetadata: {
-            externalId: mongoUserId,
             roles: ['user'],
           },
+          externalId: mongoUserId,
         })
       } catch (error) {
         console.error('Error saving user to MongoDB:', error)
@@ -105,9 +100,9 @@ export async function POST(req: Request) {
       const createdTime = new Date(created_at).getTime()
       const updatedTime = new Date(updated_at).getTime()
 
-      // If diff < 1 sec (1000ms) skip sync
+      // If diff < 2 sec (2000ms) skip sync
       // TODO check it
-      const checkTimeDiff = 1000 // 1 sec
+      const checkTimeDiff = 2000 // 2 sec
       if (updatedTime - createdTime < checkTimeDiff) {
         console.log(
           `Skipping redundant update event for user ${id} (time diff < ${checkTimeDiff}ms)`
@@ -128,7 +123,7 @@ export async function POST(req: Request) {
       }
 
       try {
-        await UserSchema.findOneAndUpdate({ clerkId: id }, updatedUser, {
+        await UserModel.findOneAndUpdate({ clerkId: id }, updatedUser, {
           new: true,
           upsert: true,
         })
@@ -143,7 +138,7 @@ export async function POST(req: Request) {
       const { id } = event.data
 
       try {
-        await UserSchema.findOneAndDelete({ clerkId: id })
+        await UserModel.findOneAndDelete({ clerkId: id })
         console.log(`User ${id} deleted from MongoDB`)
       } catch (error) {
         console.error('Error deleting user from MongoDB:', error)
