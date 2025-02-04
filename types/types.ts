@@ -14,6 +14,7 @@ export type DateType = Date | string | undefined
 
 export type Trip = {
   _id: string
+  userId: Types.ObjectId | string // to connect with mongoDB
   name: string
   slug: string
   sections: Section[]
@@ -22,8 +23,6 @@ export type Trip = {
   dateTimeEnd?: DateType
   description?: string
   cover?: string
-  user?: string // TODO change to userId
-  userId?: string // to connect with mongoDB
 }
 
 export type Section = {

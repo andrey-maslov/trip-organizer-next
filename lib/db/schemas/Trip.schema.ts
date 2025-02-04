@@ -12,11 +12,10 @@ const TripSchema = new Schema<Trip>({
   dateTimeEnd: { type: Date, required: false },
   description: { type: String, required: false },
   cover: { type: String, required: false },
-  user: { type: String, required: true, default: null },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: false, // TODO change to true
+    required: true, // TODO change to true
   }, // to connect with mongoDB
   sections: [SectionSchema],
   exchangeRates: {

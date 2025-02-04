@@ -33,9 +33,10 @@ export async function GET(
 }
 
 export async function PUT(request: Request) {
-  const { userId } = await auth()
+  const { sessionClaims } = await auth()
+  const mongoId = sessionClaims?.externalId;
 
-  if (!userId) {
+  if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })
   }
 
@@ -44,7 +45,7 @@ export async function PUT(request: Request) {
   const payload = await request.json()
 
   // temp solution
-  payload.user = userId
+  payload.userId = mongoId
 
   // Update one trip
   try {

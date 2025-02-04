@@ -57,9 +57,9 @@ const ROLES = {
   },
   user: {
     trips: {
-      view: (user, trip) => user.mongoId === trip.user,
+      view: (user, trip) => user.mongoId === trip.userId,
       create: true,
-      update: (user, trip) => trip.user === user.mongoId,
+      update: (user, trip) => trip.userId === user.mongoId,
       delete: (user, todo) => todo.userId === user.mongoId,
     },
     // comments: {

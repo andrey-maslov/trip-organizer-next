@@ -12,7 +12,7 @@ export default async function TripsPageTemplate() {
 
   const { sessionClaims } = await auth()
 
-  console.log('SC', sessionClaims)
+  // console.log('SC', sessionClaims)
 
   return (
     <div>

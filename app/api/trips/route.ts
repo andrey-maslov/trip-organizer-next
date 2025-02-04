@@ -7,9 +7,10 @@ import { getExchangeRates } from '@/services/currency.service'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export async function GET() {
-  const { userId } = await auth()
+  const { sessionClaims } = await auth()
+  const mongoId = sessionClaims?.externalId;
 
-  if (!userId) {
+  if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })
   }
 
@@ -17,7 +18,7 @@ export async function GET() {
 
   // Get many trips
   try {
-    const filter = { user: userId }
+    const filter = { userId: mongoId }
     // const filter = {}
     const trips = await TripSchema.find(filter).lean()
 
@@ -33,9 +34,10 @@ export async function GET() {
 
 // Create new trip
 export async function POST(request: Request) {
-  const { userId } = await auth()
+  const { sessionClaims } = await auth()
+  const mongoId = sessionClaims?.externalId;
 
-  if (!userId) {
+  if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })
   }
 
@@ -55,7 +57,7 @@ export async function POST(request: Request) {
     const newTrip: Trip = await TripSchema.create({
       ...data,
       exchangeRates,
-      user: userId,
+      userId: mongoId,
     })
 
     return Response.json({ id: newTrip._id, slug: newTrip.slug })
@@ -67,9 +69,10 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const { userId } = await auth()
+  const { sessionClaims } = await auth()
+  const mongoId = sessionClaims?.externalId;
 
-  if (!userId) {
+  if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })
   }
 
