@@ -57,10 +57,10 @@ const ROLES = {
   },
   user: {
     trips: {
-      view: (user, trip) => user.id === trip.user,
+      view: (user, trip) => user.mongoId === trip.user,
       create: true,
-      update: (user, trip) => trip.user === user.id,
-      delete: (user, todo) => todo.userId === user.id,
+      update: (user, trip) => trip.user === user.mongoId,
+      delete: (user, todo) => todo.userId === user.mongoId,
     },
     // comments: {
     //   view: (user, comment) => !user.blockedBy.includes(comment.authorId),

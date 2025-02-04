@@ -2,8 +2,7 @@ export type Role = 'admin' | 'user'
 
 // What we have in MongoDB
 export type UserDB = {
-  // _id: string // Clerk id
-  clerkId: string // MongoDB id
+  clerkId: string
   email: string | null
   firstName: string | null
   lastName: string | null
@@ -14,7 +13,11 @@ export type UserDB = {
 }
 
 // What we retrieve from Clerk and have in session
-export type UserData = Omit<UserDB, 'clerkId'> & {
+export type UserClerk = Omit<UserDB, 'clerkId'> & {
   id: string
   externalId: string
+}
+
+export type UserData = Omit<UserDB, 'createdAt' | 'updatedAt'> & {
+  mongoId: string; // MongoDB ID
 }

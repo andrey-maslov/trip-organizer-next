@@ -19,11 +19,10 @@ import { FiLogIn } from 'react-icons/fi'
 import { siteConfig } from '@/config/site'
 import { UserPopup } from '@/components/layouts/header/UserPopup'
 import { MobileMenu } from '@/components/layouts/header/MobileMenu'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 export const Navbar = () => {
-  const user = useUser()
-
-  console.log("USR", user)
+  const currentUser = useCurrentUser()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -54,7 +53,7 @@ export const Navbar = () => {
 
       <NavbarContent>
         <ul className='hidden lg:flex gap-4 justify-start ml-2'>
-          {user.user &&
+          {currentUser &&
             siteConfig.navItems.map((item) => (
               <NavbarItem key={item.href}>
                 <NextLink
