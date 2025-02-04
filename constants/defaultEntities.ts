@@ -13,9 +13,11 @@ export const defaultSection: Omit<Section, '_id'> = {
   isEnabled: true,
 }
 
+const defaultSections: Section[] = new Array(5).fill(defaultSection)
+
 export const defaultTrip: Partial<Trip> = {
   name: 'new trip',
-  sections: [defaultSection] as Section[],
+  sections: defaultSections,
 }
 
 export const getDefaultSection = (): SectionFE => ({
