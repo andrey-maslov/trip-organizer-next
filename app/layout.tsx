@@ -19,6 +19,14 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
   },
+  verification: {
+    google: '3xFLRhuHLISlf9kRNyiZj6pcyb1PQ7r2vbdt_X-RXpA',
+    // yandex: 'yandex',
+    // yahoo: 'yahoo',
+    // other: {
+    //   me: ['my-email', 'my-link'],
+    // },
+  },
 }
 
 export default function RootLayout({
