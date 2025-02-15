@@ -1,4 +1,4 @@
-import { Button } from "@heroui/react"
+import { Button } from '@heroui/react'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -60,7 +60,10 @@ export const TripTable = ({ trip }: Props) => {
               <div
                 key={column.uid}
                 className='th justify-center'
-                style={{ width: `${column.width}px` }}
+                style={{
+                  width: `${column.width}px`,
+                  maxWidth: `${column.width}px`,
+                }}
               >
                 <span>{column.name}</span>
               </div>

@@ -6,7 +6,11 @@ type Props = {
   classNames?: string
 }
 
-export const ButtonClear = ({ onClick, classNames, title = 'clear' }: Props) => (
+export const ButtonClear = ({
+  onClick,
+  classNames,
+  title = 'clear',
+}: Props) => (
   <button
     className={`hover:bg-foreground-100 rounded-lg text-center p-2 ${classNames}`}
     title={title}

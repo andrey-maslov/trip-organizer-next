@@ -78,14 +78,14 @@ export const SectionItem: FC<SectionItemProps> = ({
         <div
           key={column.uid + section.name}
           className='td bg-white'
-          style={{ width: `${column.width}px` }}
+          style={{ width: `${column.width}px`, maxWidth: `${column.width}px` }}
         >
           {column.uid === 'actions' ? (
             <SectionActions
               isEnabled={section.isEnabled}
               onSectionDelete={() => {
                 if (!section._id) {
-                  return;
+                  return
                 }
 
                 deleteSectionMutation({

@@ -1,5 +1,5 @@
 import React from 'react'
-import { DatePicker } from "@heroui/react"
+import { DatePicker } from '@heroui/react'
 import { ZonedDateTime } from '@internationalized/date'
 
 export type CustomData = ZonedDateTime | any

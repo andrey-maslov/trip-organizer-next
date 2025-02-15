@@ -1,4 +1,4 @@
-import { ChipProps } from "@heroui/react"
+import { ChipProps } from '@heroui/react'
 
 import { Status } from '@/types/types'
 
@@ -10,13 +10,13 @@ export type Column = {
 
 export const columns: Column[] = [
   { name: 'Type', uid: 'type', width: 40 },
-  { name: 'Name', uid: 'name', width: 150 },
-  { name: 'Status', uid: 'status', width: 100 },
-  { name: 'Provider', uid: 'serviceProvider', width: 100 },
+  { name: 'Name', uid: 'name', width: 230 },
+  { name: 'Status', uid: 'status', width: 80 },
+  { name: 'Provider', uid: 'serviceProvider', width: 120 },
   // { name: 'Placement', uid: 'placementType', sortable: true },
-  { name: 'Start', uid: 'startingPoint', width: 130 },
-  { name: 'End', uid: 'endPoint', width: 130 },
-  { name: 'Duration', uid: 'duration', width: 100 },
+  { name: 'Start', uid: 'startingPoint', width: 180 },
+  { name: 'End', uid: 'endPoint', width: 180 },
+  { name: 'Duration', uid: 'duration', width: 80 },
   { name: 'Expenses', uid: 'payments', width: 100 },
   { name: 'Notes', uid: 'note', width: 100 },
   { name: 'Actions', uid: 'actions', width: 60 },

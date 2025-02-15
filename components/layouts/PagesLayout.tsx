@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Divider } from "@heroui/divider"
+import { Divider } from '@heroui/divider'
 
 import { Providers } from '@/app/providers'
 import { Navbar } from '@/components/layouts/header/Navbar'

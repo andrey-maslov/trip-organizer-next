@@ -34,7 +34,7 @@ export async function GET(
 
 export async function PUT(request: Request) {
   const { sessionClaims } = await auth()
-  const mongoId = sessionClaims?.externalId;
+  const mongoId = sessionClaims?.externalId
 
   if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })

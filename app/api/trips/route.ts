@@ -8,7 +8,7 @@ import { DEFAULT_CURRENCY } from '@/constants/constants'
 
 export async function GET() {
   const { sessionClaims } = await auth()
-  const mongoId = sessionClaims?.externalId;
+  const mongoId = sessionClaims?.externalId
 
   if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })
@@ -35,7 +35,7 @@ export async function GET() {
 // Create new trip
 export async function POST(request: Request) {
   const { sessionClaims } = await auth()
-  const mongoId = sessionClaims?.externalId;
+  const mongoId = sessionClaims?.externalId
 
   if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   const { sessionClaims } = await auth()
-  const mongoId = sessionClaims?.externalId;
+  const mongoId = sessionClaims?.externalId
 
   if (!mongoId) {
     return new Response('Unauthorized', { status: 401 })

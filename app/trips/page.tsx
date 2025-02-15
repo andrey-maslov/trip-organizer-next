@@ -9,7 +9,6 @@ export const metadata = {
 }
 
 export default async function TripsPageTemplate() {
-
   const { sessionClaims } = await auth()
 
   // console.log('SC', sessionClaims)

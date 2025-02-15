@@ -31,8 +31,6 @@ export type Section = {
   status: Status
   type: string
   isEnabled: boolean
-  dateTimeStart?: string // TODO Remove after the TripPoint implementation
-  dateTimeEnd?: string // TODO Remove after the TripPoint implementation
   startingPoint: TripPoint
   endPoint: TripPoint
   transportType?: TransportType

@@ -1,11 +1,11 @@
 import React from 'react'
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@heroui/react"
+} from '@heroui/react'
 
 import { serviceProviderTypes } from '@/constants/constants'
 import { SectionTypeIcon } from '@/components/SectionTypeIcon'

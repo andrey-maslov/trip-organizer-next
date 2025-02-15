@@ -2,7 +2,14 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { debounce } from 'throttle-debounce'
 
-import { Image, Modal, ModalBody, ModalContent, ModalHeader, Input } from "@heroui/react"
+import {
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  Input,
+} from '@heroui/react'
 import { searchPictures } from '@/queries/queries.external'
 import { defaultCoverImage } from '@/constants/defaultEntities'
 import { sanitizeInput } from '@/lib/sanitizeInput'
@@ -29,9 +36,9 @@ export const TripCoverEditable = ({
   const [picsLoaded, setPicsLoaded] = useState<UnsplashPhoto[]>([])
 
   useEffect(() => {
-    setQuery(tripName);
-    setInputValue(tripName);
-  }, [tripName]);
+    setQuery(tripName)
+    setInputValue(tripName)
+  }, [tripName])
 
   // Настраиваем задержку (debounce) на 500 мс
   const debouncedSetQuery = useMemo(
@@ -63,7 +70,7 @@ export const TripCoverEditable = ({
   const { data, isLoading } = useQuery({
     queryKey: ['pictures', query],
     queryFn: async () => {
-      const res = await searchPictures(query);
+      const res = await searchPictures(query)
 
       if (res.results.length > 0) {
         setPicsLoaded(res.results)
@@ -107,9 +114,9 @@ export const TripCoverEditable = ({
               <ModalHeader className='flex flex-col gap-1'>
                 Choose your cover image
               </ModalHeader>
-              <ModalBody className="p-4 min-h-[300px] relative">
+              <ModalBody className='p-4 min-h-[300px] relative'>
                 {isLoading && (
-                  <div className="absolute w-full h-full flex items-center justify-center z-30">
+                  <div className='absolute w-full h-full flex items-center justify-center z-30'>
                     <Loader />
                   </div>
                 )}
@@ -126,8 +133,13 @@ export const TripCoverEditable = ({
                     disabled={isLoading}
                   />
                 </div>
-                <div className={clsx('grid grid-cols-2 md:grid-cols-4 gap-4', isLoading && 'opacity-30')}>
-                  {(picsLoaded).map((picture) => (
+                <div
+                  className={clsx(
+                    'grid grid-cols-2 md:grid-cols-4 gap-4',
+                    isLoading && 'opacity-30'
+                  )}
+                >
+                  {picsLoaded.map((picture) => (
                     <img
                       key={picture.id}
                       alt='Trip cover'

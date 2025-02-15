@@ -1,12 +1,13 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { Card, CardBody, CardFooter, Image } from "@heroui/react"
+import { Card, CardBody, CardFooter, Image } from '@heroui/react'
 import { FiPlus } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
 
 import { getAllTrips } from '@/queries/queries.db'
 import { defaultCoverImage } from '@/constants/defaultEntities'
+import { getFormattedDate } from '@/lib/date'
 
 export default function TripsList() {
   const router = useRouter()
@@ -35,7 +36,7 @@ export default function TripsList() {
       )}
       <div className='gap-2 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
         {trips.trips.length > 0
-          ? trips?.trips.map((trip) => (
+          ? trips?.trips.toReversed().map((trip) => (
               <Card
                 key={trip._id}
                 isPressable
@@ -53,10 +54,22 @@ export default function TripsList() {
                     width='100%'
                   />
                 </CardBody>
-                <CardFooter className='text-small justify-between'>
-                  <b>{trip.name}</b>
+                <div className='p-3 text-left'>
+                  <div className='font-bold mb-2'>{trip.name}</div>
+                  {trip.dateTimeStart ? (
+                    <div className='text-foreground-600'>
+                      <span>
+                        {getFormattedDate(trip.dateTimeStart, 'medium')} -{' '}
+                      </span>
+                      <span>
+                        {getFormattedDate(trip.dateTimeEnd, 'medium')}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className='opacity-0'>_</div>
+                  )}
                   {/*<p className='text-default-500'>{item.price}</p>*/}
-                </CardFooter>
+                </div>
               </Card>
             ))
           : null}

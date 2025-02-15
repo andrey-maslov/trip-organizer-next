@@ -5,15 +5,15 @@ import {
   NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
-} from "@heroui/navbar"
-import { Image } from "@heroui/image"
-import { Link } from "@heroui/link"
-import { link as linkStyles } from "@heroui/theme"
+} from '@heroui/navbar'
+import { Image } from '@heroui/image'
+import { Link } from '@heroui/link'
+import { link as linkStyles } from '@heroui/theme'
 import NextLink from 'next/link'
 import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useUser, SignedIn, SignedOut } from '@clerk/nextjs'
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 import { FiLogIn } from 'react-icons/fi'
 
 import { siteConfig } from '@/config/site'
@@ -51,25 +51,23 @@ export const Navbar = () => {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent>
-        <ul className='hidden lg:flex gap-4 justify-start ml-2'>
-          {currentUser &&
-            siteConfig.navItems.map((item) => (
-              <NavbarItem key={item.href}>
-                <NextLink
-                  className={clsx(
-                    linkStyles({ color: 'foreground' }),
-                    'data-[active=true]:text-primary data-[active=true]:font-medium'
-                  )}
-                  color='foreground'
-                  href={item.href}
-                >
-                  {item.label}
-                </NextLink>
-              </NavbarItem>
-            ))}
-        </ul>
-      </NavbarContent>
+      <ul className='hidden lg:flex gap-4 justify-start ml-2'>
+        {currentUser &&
+          siteConfig.navItems.map((item) => (
+            <NavbarItem key={item.href}>
+              <NextLink
+                className={clsx(
+                  linkStyles({ color: 'foreground' }),
+                  'data-[active=true]:text-primary data-[active=true]:font-medium px-6'
+                )}
+                color='foreground'
+                href={item.href}
+              >
+                {item.label}
+              </NextLink>
+            </NavbarItem>
+          ))}
+      </ul>
 
       <NavbarContent
         className='hidden sm:flex basis-1/5 sm:basis-full'

@@ -28,10 +28,10 @@ export const NameCell: FC<NameCellProps> = ({ name, onUpdate }) => {
   }, [])
 
   return (
-    <div className='flex items-center relative overflow-hidden font-bold pr-3'>
+    <div className='flex items-center relative overflow-hidden font-bold pr-3 w-full'>
       <input
         ref={inputRef}
-        className='outline-0 max-w-full bg-transparent'
+        className='outline-0 max-w-full bg-transparent w-full'
         title={name}
         type='text'
         value={value}

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 import { useMutation } from '@tanstack/react-query'
 import { FaRegNoteSticky } from 'react-icons/fa6'
 import { IoAddOutline } from 'react-icons/io5'
@@ -48,7 +48,7 @@ export const NoteCell: FC<Props> = ({ noteId, sectionId, tripId }) => {
         title={noteId ? 'Read note' : 'Add note'}
         variant='light'
         onPress={() => onOpenNote()}
-        className="text-inherit"
+        className='text-inherit'
       />
     </div>
   )

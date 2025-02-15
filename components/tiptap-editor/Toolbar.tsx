@@ -26,7 +26,7 @@ import {
 } from 'react-icons/ri'
 
 import './toolbar.scss'
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 
 import { setLink } from '@/components/tiptap-editor/set-link'
 

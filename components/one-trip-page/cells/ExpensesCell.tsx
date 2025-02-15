@@ -81,7 +81,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
         title={convertedAmount}
         variant='light'
         onPress={() => setOpen(true)}
-        className="text-inherit"
+        className='text-inherit'
       >
         {convertedAmount}
       </Button>
@@ -197,7 +197,7 @@ export const ExpensesCell: React.FC<Props> = ({ data, onSave }) => {
                           )
                         }}
                         title='remove expense'
-                        classNames="opacity-50"
+                        classNames='opacity-50'
                       />
                     </div>
                   ))

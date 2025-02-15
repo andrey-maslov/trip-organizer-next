@@ -9,8 +9,8 @@ import {
   ModalContent,
   ModalHeader,
   useDisclosure,
-} from "@heroui/react"
-import { Button } from "@heroui/react"
+} from '@heroui/react'
+import { Button } from '@heroui/react'
 import { parseAbsolute, toTimeZone } from '@internationalized/date'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 
@@ -67,7 +67,7 @@ export const TripPointCell: FC<PointCellProps> = ({
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const [editPlace, setEditPlace] = useState(
-    !Boolean(initialPoint.place?.address)
+    !Boolean(initialPoint?.place?.address)
   )
   const [point, setPoint] = useState(
     initialPoint ? initialPoint : { ...defaultPoint, timeZone: getTimeZone() }
@@ -106,13 +106,13 @@ export const TripPointCell: FC<PointCellProps> = ({
   const pointAddress = point.place?.address ?? place?.value?.description
 
   const renderButtonContent = () => {
-    if (!initialPoint.place && !initialPoint.dateTime) {
+    if (!initialPoint?.place && !initialPoint?.dateTime) {
       return '+'
     }
 
     return (
       <>
-        {truncateSentence(initialPoint?.['place']?.name, 2) ?? '-'}
+        {truncateSentence(initialPoint?.['place']?.name, 20) ?? '-'}
         <br />
         {getFormattedDate(initialPoint?.dateTime, 'medium')} <br />
         {getFormattedTime(initialPoint?.dateTime, {
@@ -124,14 +124,15 @@ export const TripPointCell: FC<PointCellProps> = ({
   }
 
   return (
-    <div className='flex items-center relative max-w-[140px] w-full overflow-hidden p-1'>
+    <div className='flex items-center relative w-full overflow-hidden p-1'>
       <Button
         fullWidth
         color='default'
-        className='h-auto min-h-2 text-inherit'
+        className='h-auto min-h-2 text-inherit w-full'
         size='sm'
         variant='light'
         onPress={onOpen}
+        title={initialPoint?.place?.name}
       >
         {renderButtonContent()}
       </Button>

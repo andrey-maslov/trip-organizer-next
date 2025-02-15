@@ -17,8 +17,6 @@ export const SectionSchema = new Schema<Section>({
   name: { type: String, required: false },
   isEnabled: { type: Boolean, required: true, default: false },
   type: { type: String, required: false, default: DEFAULT_SECTION_TYPE },
-  dateTimeStart: { type: Date, required: false },
-  dateTimeEnd: { type: Date, required: false },
   transportType: { type: String, required: false },
   placementType: { type: String, required: false },
   serviceProvider: {

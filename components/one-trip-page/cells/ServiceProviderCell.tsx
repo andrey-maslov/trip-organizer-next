@@ -6,7 +6,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
-} from "@heroui/react"
+} from '@heroui/react'
 
 import { Section } from '@/types/types'
 
@@ -28,7 +28,7 @@ export const ServiceProviderCell: React.FC<Props> = ({
       <Button
         fullWidth
         color='default'
-        className="text-inherit"
+        className='text-inherit'
         size='sm'
         variant='light'
         onPress={() => setOpen(true)}

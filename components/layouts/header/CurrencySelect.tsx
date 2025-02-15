@@ -1,4 +1,4 @@
-import { Select, SelectItem } from "@heroui/react"
+import { Select, SelectItem } from '@heroui/react'
 import React, { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'

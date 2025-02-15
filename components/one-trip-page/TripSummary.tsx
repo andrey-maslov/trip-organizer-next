@@ -1,8 +1,8 @@
 'use client'
 
-import { Card, CardBody } from "@heroui/react"
-import { CardHeader } from "@heroui/card"
-import { Divider } from "@heroui/divider"
+import { Card, CardBody } from '@heroui/react'
+import { CardHeader } from '@heroui/card'
+import { Divider } from '@heroui/divider'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 

@@ -4,7 +4,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@heroui/react"
+} from '@heroui/react'
 
 import {
   statusColorMap,
@@ -12,6 +12,7 @@ import {
 } from '@/components/one-trip-page/trip-table.config'
 import { statusTypes } from '@/constants/constants'
 import { Status } from '@/types/types'
+import { StatusButton } from '@/components/one-trip-page/cells/StatusButton'
 
 type StatusCellProps = {
   status: Status
@@ -27,15 +28,7 @@ export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => (
   <div className='flex items-center relative editable-elemenet max-h-[43px] w-full'>
     <Dropdown>
       <DropdownTrigger>
-        <Button
-          fullWidth
-          size='sm'
-          variant='flat'
-          color={statusColorMap[status as keyof typeof statusOptionsMap]}
-          // isLoading={isPending}
-        >
-          {statusOptionsMap[status as keyof typeof statusOptionsMap]}
-        </Button>
+        <StatusButton status={status} />
       </DropdownTrigger>
       <DropdownMenu
         aria-label='Dynamic Actions'

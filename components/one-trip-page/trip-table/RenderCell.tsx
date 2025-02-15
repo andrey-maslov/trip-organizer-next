@@ -1,5 +1,5 @@
 import { Key } from 'react'
-import { getKeyValue } from "@heroui/react"
+import { getKeyValue } from '@heroui/react'
 
 import { Expense, Section, SectionFE, Status } from '@/types/types'
 import { TripTypeCell } from '@/components/one-trip-page/cells/TripTypeCell'
@@ -56,9 +56,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     )
   }
   if (columnKey === 'startingPoint') {
-    const data = section.startingPoint?.dateTime
-      ? section.startingPoint
-      : { ...section.startingPoint, dateTime: section.dateTimeStart }
+    const data = section.startingPoint
 
     return (
       <TripPointCell
@@ -69,9 +67,7 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     )
   }
   if (columnKey === 'endPoint') {
-    const data = section.endPoint?.dateTime
-      ? section.endPoint
-      : { ...section.endPoint, dateTime: section.dateTimeStart }
+    const data = section.endPoint
 
     return (
       <TripPointCell

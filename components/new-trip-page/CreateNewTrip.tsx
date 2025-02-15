@@ -8,10 +8,10 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@heroui/react"
+} from '@heroui/react'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 import { DateValue } from '@internationalized/date'
 
 import { defaultTrip } from '@/constants/defaultEntities'
@@ -20,7 +20,7 @@ import { isEmptyObject } from '@/utils/utils'
 import { TripCoverEditable } from '@/components/one-trip-page/TripCoverEditable'
 import { getFormattedDate } from '@/lib/date'
 import { currencies, DEFAULT_CURRENCY } from '@/constants/constants'
-import { slugify } from 'transliteration';
+import { slugify } from 'transliteration'
 import { sanitizeInput } from '@/lib/sanitizeInput'
 
 export const CreateNewTrip = () => {
