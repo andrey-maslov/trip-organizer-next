@@ -22,7 +22,11 @@ export const getFormattedDate = (
     return ''
   }
 
-  return format(date, dateFormat, locale)
+  try {
+    return format(date, dateFormat, locale)
+  } catch (e) {
+    return '';
+  }
 }
 
 export const isNow = (time1: Date, time2: Date): boolean => {
