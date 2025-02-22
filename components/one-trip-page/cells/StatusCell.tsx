@@ -25,7 +25,7 @@ const items = statusTypes.map((key) => ({
 }))
 
 export const StatusCell: React.FC<StatusCellProps> = ({ status, onUpdate }) => (
-  <div className='flex items-center relative editable-elemenet max-h-[43px] w-full'>
+  <div className='relative editable-elemenet max-h-[43px] w-full'>
     <Dropdown>
       <DropdownTrigger>
         <StatusButton status={status} />

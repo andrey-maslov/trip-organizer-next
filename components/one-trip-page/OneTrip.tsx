@@ -30,6 +30,7 @@ import { useIsMobile } from '@/hooks/useIsMobile'
 import { Loader } from '@/components/Loader'
 import { DEFAULT_CURRENCY } from '@/constants/constants'
 import { TripSummary } from '@/components/one-trip-page/TripSummary'
+import { TripCalendar } from '@/components/one-trip-page/calendar-view/TripCalendar'
 
 export const OneTrip = () => {
   const { slug } = useParams()
@@ -200,6 +201,9 @@ export const OneTrip = () => {
         </Tab>
         <Tab key='edit' title='Edit mode'>
           <TripTable trip={trip} />
+        </Tab>
+        <Tab key='calendar' title='Calendar mode'>
+          <TripCalendar trip={trip} />
         </Tab>
       </Tabs>
       {/* SUMMARY */}
