@@ -10,7 +10,7 @@ import {
 export type MakeOptional<T, K extends keyof T> =
   Omit<T, K> & Partial<Pick<T, K>>;
 
-export type DateType = Date | string | undefined
+export type DateType = string | undefined
 
 export type Trip = {
   _id: string

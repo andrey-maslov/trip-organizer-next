@@ -1,4 +1,4 @@
-import { ExchangeRates, Expense, Section } from '@/types/types'
+import { ExchangeRates, Expense, Section, Trip } from '@/types/types'
 import { placementTypes, transportTypes } from '@/constants/constants'
 import dayjs from 'dayjs'
 
@@ -158,4 +158,23 @@ export const convertAmount = (
 
 export const round = (num: number, digits = 0): number => {
   return +num.toFixed(digits) || 0
+}
+
+export const getTripStartDate = (trip: Trip): Date => {
+  if (trip.dateTimeStart) {
+    return new Date(trip.dateTimeStart);
+  }
+
+  const dateDefault = new Date()
+
+  if (trip.sections && trip.sections.length > 0) {
+    const dates = trip.sections.flatMap(section => [
+      section.startingPoint?.dateTime,
+      section.endPoint?.dateTime
+    ]).filter((date): date is string => Boolean(date));
+
+    return dates.length > 0 ? new Date(dates.sort()[0]) : dateDefault;
+  }
+
+  return dateDefault;
 }

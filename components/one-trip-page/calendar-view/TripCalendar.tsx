@@ -1,10 +1,15 @@
-import { Calendar, dayjsLocalizer,
+'use client'
+
+import {
+  Calendar,
+  dayjsLocalizer,
   Views,
-  DateLocalizer, } from 'react-big-calendar'
+  DateLocalizer,
+} from 'react-big-calendar'
 import dayjs from 'dayjs'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { Trip } from '@/types/types'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 // the dayjsLocalizer extends Day.js with the following plugins:
 // - IsBetween
@@ -17,6 +22,8 @@ import React, { useMemo } from 'react'
 
 // add optional time zone support
 import timezone from 'dayjs/plugin/timezone'
+import { parseDate } from '@/lib/date'
+import { getTripStartDate } from '@/utils/utils'
 dayjs.extend(timezone)
 
 const localizer = dayjsLocalizer(dayjs)
@@ -26,24 +33,38 @@ type Props = {
 }
 
 export const TripCalendar = ({ trip }: Props) => {
+  // Have to use controlled state when using SSR (Next.js)
+  const [view, setView] = useState(Views.MONTH)
+  const [date, setDate] = useState(getTripStartDate(trip))
 
-  const eventsList = useMemo(() => trip.sections.map(({startingPoint, endPoint, name}) => {
-    const currentDate = new Date()
-    const startDateISOString = startingPoint?.dateTime ?? currentDate.toISOString()
-    const endDateISOString = endPoint?.dateTime ?? currentDate.toISOString()
+  const onView = useCallback((newView: any) => setView(newView), [setView])
+  const onNavigate = useCallback((newDate: any) => setDate(newDate), [setDate])
 
-    return {
-      title: name,
-      start: new Date(startDateISOString),
-      end: new Date(endDateISOString),
-    }
-  }), [])
+  const eventsList: { title: string; start: Date; end: Date }[] =
+    useMemo(() => {
+      const filteredSections = trip.sections.filter(
+        (section) =>
+          section.isEnabled &&
+          section.endPoint?.dateTime &&
+          section.startingPoint?.dateTime
+      )
 
-  const { defaultDate, views, max } = useMemo(
+      return filteredSections
+        .map(({ startingPoint, endPoint, name }) => {
+          return {
+            title: name,
+            start: parseDate(startingPoint?.dateTime) ?? new Date(),
+            end: parseDate(endPoint?.dateTime) ?? new Date(),
+          }
+        })
+        .filter((section) => section.start && section.end)
+    }, [])
+
+  const { defaultDate, views } = useMemo(
     () => ({
-      defaultDate: new Date(2024, 8, 1),
-      max: dayjs().endOf('day').subtract(1, 'hours').toDate(),
-      views: Object.keys(Views).map((k) => Views[k as keyof typeof Views]),
+      defaultDate: new Date(),
+      // max: dayjs().endOf('day').subtract(1, 'hours').toDate(),
+      views: [Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA],
     }),
     []
   )
@@ -51,16 +72,20 @@ export const TripCalendar = ({ trip }: Props) => {
   return (
     <div>
       <Calendar
-        defaultDate={defaultDate}
+        // defaultDate={defaultDate}
         localizer={localizer}
         events={eventsList}
-        showMultiDayTimes
-        step={60}
-        max={max}
+        // showMultiDayTimes
+        // step={60}
+        date={date}
+        onNavigate={onNavigate}
+        // max={max}
+        view={view}
         views={views}
+        onView={onView}
         startAccessor='start'
         endAccessor='end'
-        style={{ height: 500 }}
+        style={{ height: 600 }}
       />
     </div>
   )

@@ -174,7 +174,7 @@ export const TripPointCell: FC<PointCellProps> = ({
                     value={zonedDateTime}
                     onChange={(value) => {
                       if (!value) {
-                        return;
+                        return
                       }
 
                       const updatedValue = value.set({

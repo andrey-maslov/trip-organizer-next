@@ -137,3 +137,9 @@ export const getTimeZone = () => {
 }
 
 export const parseDateTimeToZoned = () => {}
+
+export function parseDate(dateString: string | undefined | null): Date | null {
+  if (!dateString || typeof dateString !== 'string') return null;
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? null : date;
+}
