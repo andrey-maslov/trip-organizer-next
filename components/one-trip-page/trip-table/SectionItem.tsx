@@ -14,11 +14,13 @@ import { DragHandle } from '@/components/one-trip-page/trip-table/SortableItem'
 type SectionItemProps = {
   columns: Column[]
   section: SectionFE
+  previousSection?: SectionFE
   trip: Trip
 }
 
 export const SectionItem: FC<SectionItemProps> = ({
   section,
+  previousSection,
   columns,
   trip,
 }) => {
@@ -99,8 +101,10 @@ export const SectionItem: FC<SectionItemProps> = ({
             <RenderCell
               columnKey={column.uid}
               section={section}
+              previousSection={previousSection}
               tripId={trip._id}
               onSave={onSectionUpdate}
+              tripStart={trip.dateTimeStart}
             />
           )}
         </div>

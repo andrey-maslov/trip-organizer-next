@@ -1,7 +1,7 @@
 import { Key } from 'react'
 import { getKeyValue } from '@heroui/react'
 
-import { Expense, Section, SectionFE, Status } from '@/types/types'
+import { DateType, Expense, Section, SectionFE, Status } from '@/types/types'
 import { TripTypeCell } from '@/components/one-trip-page/cells/TripTypeCell'
 import { NameCell } from '@/components/one-trip-page/cells/NameCell'
 import { StatusCell } from '@/components/one-trip-page/cells/StatusCell'
@@ -11,15 +11,25 @@ import { TripPointCell } from '@/components/one-trip-page/cells/TripPointCell'
 import { ExpensesCell } from '@/components/one-trip-page/cells/ExpensesCell'
 import { DurationCell } from '@/components/one-trip-page/cells/DurationCell'
 import { NoteCell } from '@/components/one-trip-page/cells/NoteCell'
+import { defaultPoint } from '@/constants/defaultEntities'
 
 type Props = {
   columnKey: Key
   section: SectionFE
+  previousSection?: SectionFE
   tripId: string
   onSave: (data: Partial<Section>) => void
+  tripStart: DateType
 }
 
-export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
+export const RenderCell = ({
+  columnKey,
+  section,
+  previousSection,
+  tripId,
+  onSave,
+  tripStart,
+}: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
   const cellValue = getKeyValue(section, columnKey as string | number)
 
@@ -56,22 +66,33 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     )
   }
   if (columnKey === 'startingPoint') {
-    const data = section.startingPoint
+    const currentDate = new Date()
+    // TODO when setting point after point, local state in not changed, so we dont see the changes that exist in DB
+    const prevPoint = previousSection?.endPoint ?? {
+      ...defaultPoint,
+      dateTime: tripStart ?? currentDate.toISOString(),
+    }
 
     return (
       <TripPointCell
-        initialPoint={data}
+        point={section.startingPoint}
+        previousPoint={prevPoint}
         title='Set your starting point'
         onUpdate={(startingPoint) => onSave({ startingPoint })}
       />
     )
   }
   if (columnKey === 'endPoint') {
-    const data = section.endPoint
+    const currentDate = new Date()
 
+    const prevPoint = section.startingPoint ?? {
+      ...defaultPoint,
+      dateTime: tripStart ?? currentDate.toISOString(),
+    }
     return (
       <TripPointCell
-        initialPoint={data}
+        point={section.endPoint}
+        previousPoint={prevPoint}
         title='Set your finishing point'
         onUpdate={(endPoint) => onSave({ endPoint })}
       />
@@ -86,7 +107,13 @@ export const RenderCell = ({ columnKey, section, tripId, onSave }: Props) => {
     )
   }
   if (columnKey === 'duration') {
-    return <DurationCell end={section.endPoint} start={section.startingPoint} />
+    return (
+      <DurationCell
+        end={section.endPoint}
+        start={section.startingPoint}
+        sectionType={section.type}
+      />
+    )
   }
   if (columnKey === 'note') {
     return (

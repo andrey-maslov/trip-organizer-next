@@ -132,6 +132,30 @@ export const getHumanizedTimeDuration = (
   return timestampToDuration(durationMs)
 }
 
+/**
+ * Returns number of nights between two dates with human-readable format (English)
+ * @param checkIn - ISO string for check-in date
+ * @param checkOut - ISO string for check-out date
+ * @returns A string like "1 night" or "3 nights"
+ */
+export const getNumberOfNightsText = (
+  checkIn: string,
+  checkOut: string
+): string => {
+  const start = new Date(checkIn)
+  const end = new Date(checkOut)
+
+  // Clear time to focus only on dates
+  start.setHours(0, 0, 0, 0)
+  end.setHours(0, 0, 0, 0)
+
+  const msPerNight = 1000 * 60 * 60 * 24
+  const diffInMs = end.getTime() - start.getTime()
+  const nights = Math.max(1, Math.floor(diffInMs / msPerNight))
+
+  return `${nights} night${nights === 1 ? '' : 's'}`
+}
+
 export const getTimeZone = () => {
   return getLocalTimeZone() ?? 'UTC'
 }

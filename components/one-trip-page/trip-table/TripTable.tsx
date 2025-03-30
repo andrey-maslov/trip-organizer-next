@@ -73,16 +73,22 @@ export const TripTable = ({ trip }: Props) => {
             {sectionsToDisplay?.length > 0 ? (
               <SortableList
                 items={sectionsToDisplay}
-                renderItem={(section) => (
-                  <SortableList.Item id={section.id}>
-                    <SectionItem
-                      key={section.id}
-                      columns={columns}
-                      section={section}
-                      trip={trip}
-                    />
-                  </SortableList.Item>
-                )}
+                renderItem={(section, index) => {
+                  const previousSection =
+                    index > 0 ? sectionsToDisplay[index - 1] : undefined
+
+                  return (
+                    <SortableList.Item id={section.id}>
+                      <SectionItem
+                        key={section.id}
+                        columns={columns}
+                        section={section}
+                        previousSection={previousSection}
+                        trip={trip}
+                      />
+                    </SortableList.Item>
+                  )
+                }}
                 onChange={(value) => {
                   setSectionsToDisplay(value)
 

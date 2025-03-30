@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import {
   Autocomplete,
   AutocompleteItem,
@@ -15,22 +15,38 @@ import { parseAbsolute, toTimeZone } from '@internationalized/date'
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 
 import { timeZones } from '@/constants/timezones'
-import { GAPlace, TripPoint } from '@/types/types'
+import { GAPlace } from '@/types/types'
 import {
   CustomData,
   CustomDateTimePicker,
 } from '@/components/CustomDateTimePicker'
-import { getFormattedDate, getFormattedTime, getTimeZone } from '@/lib/date'
+import { getTimeZone } from '@/lib/date'
 import { defaultPoint } from '@/constants/defaultEntities'
-import { truncateSentence } from '@/utils/utils'
 import { ButtonEdit } from '@/components/ButtonEdit'
-import { ButtonClear } from '@/components/ButtonClear'
+import { TripPointPreview } from '@/components/one-trip-page/cells/TripPointPreview'
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
 // const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
 
+type TripPoint = {
+  place: {
+    name?: string
+    secondaryName?: string
+    address?: string
+    placeId?: string
+  }
+  dateTime?: string
+  timeZone?: string
+}
+
+const availableTimeZones =
+  typeof Intl.supportedValuesOf === 'function'
+    ? Intl.supportedValuesOf('timeZone')
+    : []
+
 type PointCellProps = {
-  initialPoint: TripPoint
+  point: TripPoint
+  previousPoint?: TripPoint
   onUpdate: (value: TripPoint) => void
   title: string
 }
@@ -53,7 +69,8 @@ const placeAutocompleteStyles = {
 }
 
 export const TripPointCell: FC<PointCellProps> = ({
-  initialPoint,
+  point, // current point
+  previousPoint, // previous point
   onUpdate,
   title,
 }) => {
@@ -66,12 +83,18 @@ export const TripPointCell: FC<PointCellProps> = ({
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
+  const [currentPoint, setCurrentPoint] = useState(() => {
+    return point ?? previousPoint ?? defaultPoint
+  })
+
   const [editPlace, setEditPlace] = useState(
-    !Boolean(initialPoint?.place?.address)
+    !Boolean(currentPoint?.place?.address)
   )
-  const [point, setPoint] = useState(
-    initialPoint ? initialPoint : { ...defaultPoint, timeZone: getTimeZone() }
-  )
+
+  useEffect(() => {
+    setCurrentPoint(point ?? previousPoint ?? defaultPoint)
+  }, [point, previousPoint])
+
   const [place, setPlace] = useState<{
     label: string
     value: GAPlace | any
@@ -79,9 +102,12 @@ export const TripPointCell: FC<PointCellProps> = ({
 
   const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
     const currentDate = new Date()
-    const dateISOString = initialPoint?.dateTime ?? currentDate.toISOString()
+    const dateISOString = currentPoint?.dateTime ?? currentDate.toISOString()
 
-    return parseAbsolute(dateISOString, initialPoint?.timeZone ?? getTimeZone())
+    return parseAbsolute(
+      dateISOString,
+      previousPoint?.timeZone ?? getTimeZone()
+    )
   })
 
   const savePoint = () => {
@@ -92,10 +118,10 @@ export const TripPointCell: FC<PointCellProps> = ({
           address: place?.value.description,
           placeId: place?.value.place_id,
         }
-      : point.place
+      : currentPoint.place
 
     const pointDto: TripPoint = {
-      ...point,
+      ...currentPoint,
       place: newPlace,
       dateTime: zonedDateTime.toAbsoluteString(),
     }
@@ -103,25 +129,7 @@ export const TripPointCell: FC<PointCellProps> = ({
     onUpdate(pointDto)
   }
 
-  const pointAddress = point.place?.address ?? place?.value?.description
-
-  const renderButtonContent = () => {
-    if (!initialPoint?.place && !initialPoint?.dateTime) {
-      return '+'
-    }
-
-    return (
-      <>
-        {truncateSentence(initialPoint?.['place']?.name, 20) ?? '-'}
-        <br />
-        {getFormattedDate(initialPoint?.dateTime, 'medium')} <br />
-        {getFormattedTime(initialPoint?.dateTime, {
-          locale: 'ru',
-          tz: initialPoint?.timeZone,
-        })}
-      </>
-    )
-  }
+  const pointAddress = currentPoint.place?.address ?? place?.value?.description
 
   return (
     <div className='flex items-center relative w-full overflow-hidden p-1'>
@@ -132,9 +140,9 @@ export const TripPointCell: FC<PointCellProps> = ({
         size='sm'
         variant='light'
         onPress={onOpen}
-        title={initialPoint?.place?.name}
+        title={currentPoint?.place?.name}
       >
-        {renderButtonContent()}
+        <TripPointPreview point={point} />
       </Button>
 
       <Modal
@@ -152,7 +160,6 @@ export const TripPointCell: FC<PointCellProps> = ({
                   <div className='flex items-center justify-between'>
                     <div>{pointAddress}</div>
                     <ButtonEdit onClick={() => setEditPlace(!editPlace)} />
-                    {/*<ButtonClear onClick={() => setEditPlace(!editPlace)} />*/}
                   </div>
                 ) : (
                   <div className='h-10 relative z-30'>
@@ -195,13 +202,13 @@ export const TripPointCell: FC<PointCellProps> = ({
                     value,
                   }))}
                   // defaultSelectedKey={getTimeZone()}
-                  inputValue={point.timeZone as string}
+                  inputValue={currentPoint.timeZone as string}
                   label='Time zone'
                   placeholder='Select time zone'
                   size='sm'
                   variant='underlined'
                   onSelectionChange={(value) => {
-                    setPoint((prev) => ({
+                    setCurrentPoint((prev) => ({
                       ...prev,
                       timeZone: value as string,
                     }))
