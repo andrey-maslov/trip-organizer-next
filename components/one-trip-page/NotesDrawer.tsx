@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Drawer from 'react-modern-drawer'
 import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { BsChevronDoubleLeft } from 'react-icons/bs'
 import { Button } from '@heroui/button'
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 import clsx from 'clsx'
 import { MdOutlineDelete } from 'react-icons/md'
 import { IoCloseOutline } from 'react-icons/io5'
@@ -17,15 +17,14 @@ import { useQueryParams } from '@/hooks/useQueryParams'
 import 'react-modern-drawer/dist/index.css'
 
 import { title, subtitle } from '@/components/primitives'
-import { deleteOneNote, getOneNote, getOneTrip } from '@/queries/queries.db'
-
-const DynamicTiptapEditor = dynamic(
-  () => import('../tiptap-editor/TiptapEditor'),
-  {
-    ssr: false,
-    loading: () => <p>Loading editor...</p>,
-  }
-)
+import {
+  deleteOneNote,
+  getOneNote,
+  getOneTrip,
+  updateNote,
+} from '@/queries/queries.db'
+import TiptapEditor from '@/components/tiptap-editor/TiptapEditor'
+import { debounce } from 'throttle-debounce'
 
 export const NotesDrawer = () => {
   const { slug } = useParams()
@@ -35,12 +34,14 @@ export const NotesDrawer = () => {
 
   const [isOpen, setOpen] = useState(false)
   const [isFullscreen, setFullscreen] = useState(Boolean(searchObj.fullscreen))
+  const [isSaved, setSaved] = useState(true)
+  const [isError, setError] = React.useState(false)
+  const [content, setContent] = React.useState<any>('')
 
   useEffect(() => {
     setOpen(Boolean(searchObj.note))
   }, [searchObj, searchObj.note])
 
-  // TODO check why the fetch is doubled
   const { data: trip } = useQuery({
     queryKey: ['trip', slug],
     queryFn: () => getOneTrip(slug as string),
@@ -50,8 +51,27 @@ export const NotesDrawer = () => {
   // Fetch note
   const { data: note } = useQuery({
     queryKey: ['note', searchObj.note],
-    queryFn: () => getOneNote(searchObj.note as string),
+    queryFn: async () => {
+      const res = await getOneNote(searchObj.note as string)
+      if (res.content !== undefined) {
+        setContent(res.content as any)
+      }
+      return res
+    },
     enabled: Boolean(searchObj.note),
+  })
+
+  // Update Note
+  const { mutate: updateNoteMutation } = useMutation({
+    mutationFn: (data: any) => updateNote(data),
+    onSuccess: async () => {
+      setSaved(true)
+      setError(false)
+    },
+    onError: (err) => {
+      setSaved(false)
+      setError(true)
+    },
   })
 
   // Delete Note
@@ -74,6 +94,15 @@ export const NotesDrawer = () => {
 
   const section = (trip?.sections ?? []).find(
     (section) => section.note === searchObj.note
+  )
+
+  const onValueChange = useCallback(
+    debounce(300, (value: any) => {
+      setContent(value)
+      console.log('Note: ', note)
+      updateNoteMutation({ ...note, content: value })
+    }),
+    [note]
   )
 
   if (!isOpen) {
@@ -138,7 +167,14 @@ export const NotesDrawer = () => {
         <h2 className={subtitle({ class: 'mb-2' })}>
           Section: {section?.name}
         </h2>
-        <DynamicTiptapEditor note={note} />
+        {note?.content && (
+          <TiptapEditor
+            content={content}
+            isError={isError}
+            isSaved={isSaved}
+            onChangeContent={onValueChange}
+          />
+        )}
       </div>
     </Drawer>
   )

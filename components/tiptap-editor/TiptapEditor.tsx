@@ -15,24 +15,19 @@ import Placeholder from '@tiptap/extension-placeholder'
 // TODO activate task list ext https://tiptap.dev/docs/editor/api/nodes/task-list
 
 import { Divider } from '@heroui/divider'
-import { useMutation } from '@tanstack/react-query'
 
 import { Toolbar } from './Toolbar'
 
 import './tiptap.scss'
 import './content.scss'
-import { Note } from '@/types/types'
-import { updateNote } from '@/queries/queries.db'
 
 import clsx from 'clsx'
 
-import {
-  getDocumentStatus,
-  throttleOnUpdate,
-} from '@/components/tiptap-editor/tiptap-editor.utils'
+import { getDocumentStatus } from '@/components/tiptap-editor/tiptap-editor.utils'
+import { throttle } from 'throttle-debounce'
 
 type TiptapProps = {
-  note: Note | null | undefined
+  content: any
   deleteNote?: () => void
   editable?: boolean
   placeholder?: string
@@ -47,37 +42,26 @@ type TiptapProps = {
   withEmojiSuggestion?: boolean
   withEmojisReplacer?: boolean
   withHexColorsDecorator?: boolean
+  isError: boolean
+  isSaved: boolean
+  onChangeContent?: (val: any) => void
 }
 
 const TiptapEditor = ({
-  note,
+  content,
   editable = true,
-  deleteNote,
-  // placeholder = "Type '/' for actions…",
   withToolbar = true,
   withTypographyExtension = false,
   withPlaceholderExtension = true,
   // withTaskListExtension = false,
   withLinkExtension = true,
+  isError,
+  isSaved = false,
+  onChangeContent,
 }: TiptapProps) => {
   const extensions: Extensions = [StarterKit]
 
-  const [isSaved, setSaved] = useState(true)
   const [isRecentlySaved, setRecentlySaved] = React.useState(false)
-  const [isError, setError] = React.useState(false)
-
-  // Update Note
-  const { mutate: updateNoteMutation } = useMutation({
-    mutationFn: (data: any) => updateNote(data),
-    onSuccess: async () => {
-      setSaved(true)
-      setError(false)
-    },
-    onError: (err) => {
-      setSaved(false)
-      setError(true)
-    },
-  })
 
   if (withTypographyExtension) {
     extensions.push(Typography)
@@ -104,18 +88,19 @@ const TiptapEditor = ({
   //   extensions.push(TaskList, TaskItem)
   // }
 
+  const onValueChange = throttle(2000, (editor) => {
+    const output = editor.getJSON()
+
+    onChangeContent?.(output as any)
+  })
+
   const editor = useEditor({
-    content: note?.content,
+    content,
     extensions,
     editable,
     autofocus: true,
     onUpdate: ({ editor }) => {
-      if (!note?._id) {
-        return
-      }
-      // add callback
-      setSaved(false)
-      throttleOnUpdate(editor, note._id, updateNoteMutation)
+      if (onValueChange) onValueChange(editor)
     },
   })
 
@@ -137,6 +122,12 @@ const TiptapEditor = ({
 
     return () => clearTimeout(timeout)
   }, [isRecentlySaved])
+
+  useEffect(() => {
+    return () => {
+      editor?.destroy?.()
+    }
+  }, [])
 
   if (!editor) {
     return null

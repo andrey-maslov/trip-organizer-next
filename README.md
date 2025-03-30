@@ -62,3 +62,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 - [dnd kit](https://dndkit.com/)
 - [Example on Codepen](https://codesandbox.io/p/sandbox/dnd-kit-sortable-starter-template-22x1ix)
 - [multiple contexts](https://stackoverflow.com/questions/78486777/dnd-kit-nested-sortablecontext-components-overlapping-context)
+
+### Calendar - React big calendar
+- [docs](https://jquense.github.io/react-big-calendar/examples/?path=/story/about-big-calendar--page)
+- [custom view](https://www.tothenew.com/blog/creating-a-custom-calendar-view-using-react-big-calendar/)
+- [demos](https://github.com/jquense/react-big-calendar/tree/master/stories/demos)
+
+
+/hc/pl/sections/360000869054-Polityka-prywatno%C5%9Bci
+/hc/pl/articles/360003999633-Regulamin-dla-Klient%C3%B3w-Indywidualnych
+/hc/pl/articles/206872787-Cennik-dla-Klient%C3%B3w-Biznesowych
+/hc/pl/articles/216416787
+/hc/pl/articles/216416787-Cennik-dla-Klient%C3%B3w-Indywidualnych
+/hc/pl/articles/360005056953
