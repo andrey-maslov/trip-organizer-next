@@ -1,4 +1,4 @@
-import { Key } from 'react'
+import { Key, useEffect } from 'react'
 import { getKeyValue } from '@heroui/react'
 
 import { DateType, Expense, Section, SectionFE, Status } from '@/types/types'
@@ -32,6 +32,8 @@ export const RenderCell = ({
 }: Props) => {
   // assertion is here because of types of the function 'getKeyValue'
   const cellValue = getKeyValue(section, columnKey as string | number)
+
+  useEffect(() => {}, [section])
 
   if (columnKey === 'type') {
     return (
@@ -67,7 +69,7 @@ export const RenderCell = ({
   }
   if (columnKey === 'startingPoint') {
     const currentDate = new Date()
-    // TODO when setting point after point, local state in not changed, so we dont see the changes that exist in DB
+
     const prevPoint = previousSection?.endPoint ?? {
       ...defaultPoint,
       dateTime: tripStart ?? currentDate.toISOString(),

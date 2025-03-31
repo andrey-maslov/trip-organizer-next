@@ -116,7 +116,7 @@ export const truncateSentence = (
     return ''
   }
 
-  return sentence.substring(0, charLimit) + (sentence.length > charLimit && '...')
+  return sentence.substring(0, charLimit) + (sentence.length > charLimit ? '...' : '')
 }
 
 /**

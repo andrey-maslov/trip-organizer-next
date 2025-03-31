@@ -87,13 +87,7 @@ export const TripPointCell: FC<PointCellProps> = ({
     return point ?? previousPoint ?? defaultPoint
   })
 
-  const [editPlace, setEditPlace] = useState(
-    !Boolean(currentPoint?.place?.address)
-  )
-
-  useEffect(() => {
-    setCurrentPoint(point ?? previousPoint ?? defaultPoint)
-  }, [point, previousPoint])
+  const [editPlace, setEditPlace] = useState(!Boolean(point?.place?.address))
 
   const [place, setPlace] = useState<{
     label: string
@@ -109,6 +103,27 @@ export const TripPointCell: FC<PointCellProps> = ({
       previousPoint?.timeZone ?? getTimeZone()
     )
   })
+
+  useEffect(() => {
+    const newPoint = point ?? previousPoint ?? defaultPoint
+
+    setCurrentPoint(newPoint)
+    setZonedDateTime(() => {
+      const currentDate = new Date()
+      const dateISOString = newPoint?.dateTime ?? currentDate.toISOString()
+
+      return parseAbsolute(
+        dateISOString,
+        previousPoint?.timeZone ?? getTimeZone()
+      )
+    })
+    if (newPoint.place.name) {
+      setPlace({
+        label: newPoint.place.name,
+        value: { place_id: newPoint.place.placeId },
+      })
+    }
+  }, [point, previousPoint])
 
   const savePoint = () => {
     const newPlace = place?.value
@@ -128,6 +143,8 @@ export const TripPointCell: FC<PointCellProps> = ({
 
     onUpdate(pointDto)
   }
+
+  console.log(place)
 
   const pointAddress = currentPoint.place?.address ?? place?.value?.description
 
@@ -163,9 +180,11 @@ export const TripPointCell: FC<PointCellProps> = ({
                   </div>
                 ) : (
                   <div className='h-10 relative z-30'>
+                    {/*TODO consider utilising https://www.npmjs.com/package/react-google-autocomplete*/}
                     <GooglePlacesAutocomplete
                       apiKey={API_KEY}
                       selectProps={{
+                        defaultValue: place,
                         value: place,
                         onChange: (value) => setPlace(value),
                         styles: placeAutocompleteStyles,
