@@ -24,6 +24,7 @@ import { getTimeZone } from '@/lib/date'
 import { defaultPoint } from '@/constants/defaultEntities'
 import { ButtonEdit } from '@/components/ButtonEdit'
 import { TripPointPreview } from '@/components/one-trip-page/cells/TripPointPreview'
+import GoogleAutocomplete from "react-google-autocomplete";
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
 // const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
@@ -117,7 +118,7 @@ export const TripPointCell: FC<PointCellProps> = ({
         previousPoint?.timeZone ?? getTimeZone()
       )
     })
-    if (newPoint.place.name) {
+    if (newPoint.place?.name) {
       setPlace({
         label: newPoint.place.name,
         value: { place_id: newPoint.place.placeId },
@@ -144,7 +145,7 @@ export const TripPointCell: FC<PointCellProps> = ({
     onUpdate(pointDto)
   }
 
-  console.log(place)
+  // console.log(place)
 
   const pointAddress = currentPoint.place?.address ?? place?.value?.description
 
@@ -181,15 +182,22 @@ export const TripPointCell: FC<PointCellProps> = ({
                 ) : (
                   <div className='h-10 relative z-30'>
                     {/*TODO consider utilising https://www.npmjs.com/package/react-google-autocomplete*/}
-                    <GooglePlacesAutocomplete
+                    {/*<GooglePlacesAutocomplete*/}
+                    {/*  apiKey={API_KEY}*/}
+                    {/*  selectProps={{*/}
+                    {/*    defaultValue: place,*/}
+                    {/*    value: place,*/}
+                    {/*    onChange: (value) => setPlace(value),*/}
+                    {/*    styles: placeAutocompleteStyles,*/}
+                    {/*  }}*/}
+                    {/*/>*/}
+                    <GoogleAutocomplete
                       apiKey={API_KEY}
-                      selectProps={{
-                        defaultValue: place,
-                        value: place,
-                        onChange: (value) => setPlace(value),
-                        styles: placeAutocompleteStyles,
+                      defaultValue={currentPoint?.place?.address}
+                      onPlaceSelected={(place) => {
+                        console.log(place);
                       }}
-                    />
+                    />;
                   </div>
                 )}
 
