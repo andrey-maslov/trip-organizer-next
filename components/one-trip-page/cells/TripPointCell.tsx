@@ -14,7 +14,6 @@ import { Button } from '@heroui/react'
 import { parseAbsolute, toTimeZone } from '@internationalized/date'
 
 import { timeZones } from '@/constants/timezones'
-import { GAPlace } from '@/types/types'
 import {
   CustomData,
   CustomDateTimePicker,
@@ -27,7 +26,7 @@ import { GooglePlacesAutocompleteCustom } from '@/components/GooglePlacesAutocom
 
 // const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
 
-type TripPoint = {
+export type TripPoint = {
   place: {
     name?: string
     secondaryName?: string
@@ -73,10 +72,7 @@ export const TripPointCell: FC<PointCellProps> = ({
 
   const [editPlace, setEditPlace] = useState(!Boolean(point?.place?.address))
 
-  const [place, setPlace] = useState<{
-    label: string
-    value: GAPlace | any
-  } | null>(null)
+  const [place, setPlace] = useState<TripPoint['place'] | null>(null)
 
   const [zonedDateTime, setZonedDateTime] = useState<CustomData>(() => {
     const currentDate = new Date()
@@ -102,35 +98,21 @@ export const TripPointCell: FC<PointCellProps> = ({
       )
     })
     if (newPoint.place?.name) {
-      setPlace({
-        label: newPoint.place.name,
-        value: { place_id: newPoint.place.placeId },
-      })
+      setPlace(newPoint.place)
     }
   }, [point, previousPoint])
 
   const savePoint = () => {
-    const newPlace = place?.value
-      ? {
-          name: place?.value.structured_formatting.main_text,
-          secondaryName: place?.value.structured_formatting.secondary_text,
-          address: place?.value.description,
-          placeId: place?.value.place_id,
-        }
-      : currentPoint.place
-
     const pointDto: TripPoint = {
       ...currentPoint,
-      place: newPlace,
+      place: place || currentPoint.place,
       dateTime: zonedDateTime.toAbsoluteString(),
     }
 
     onUpdate(pointDto)
   }
 
-  // console.log(place)
-
-  const pointAddress = currentPoint.place?.address ?? place?.value?.description
+  const pointAddress = currentPoint.place?.address ?? place?.address
 
   return (
     <div className='flex items-center relative w-full overflow-hidden p-1'>
@@ -164,27 +146,12 @@ export const TripPointCell: FC<PointCellProps> = ({
                   </div>
                 ) : (
                   <div className='h-10 relative z-30'>
-                    {/*TODO consider utilising https://www.npmjs.com/package/react-google-autocomplete*/}
-                    {/*<GooglePlacesAutocomplete*/}
-                    {/*  apiKey={API_KEY}*/}
-                    {/*  selectProps={{*/}
-                    {/*    defaultValue: place,*/}
-                    {/*    value: place,*/}
-                    {/*    onChange: (value) => setPlace(value),*/}
-                    {/*    styles: placeAutocompleteStyles,*/}
-                    {/*  }}*/}
-                    {/*/>*/}
-
-
                     <GooglePlacesAutocompleteCustom
-
                       // defaultValue={currentPoint?.place?.address}
                       onPlaceSelect={(place) => {
-                        console.log(place);
+                        setPlace(place)
                       }}
-                    />;
-
-
+                    />
                   </div>
                 )}
 
