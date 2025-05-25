@@ -12,7 +12,6 @@ import {
 } from '@heroui/react'
 import { Button } from '@heroui/react'
 import { parseAbsolute, toTimeZone } from '@internationalized/date'
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete'
 
 import { timeZones } from '@/constants/timezones'
 import { GAPlace } from '@/types/types'
@@ -24,9 +23,8 @@ import { getTimeZone } from '@/lib/date'
 import { defaultPoint } from '@/constants/defaultEntities'
 import { ButtonEdit } from '@/components/ButtonEdit'
 import { TripPointPreview } from '@/components/one-trip-page/cells/TripPointPreview'
-import GoogleAutocomplete from "react-google-autocomplete";
+import { GooglePlacesAutocompleteCustom } from '@/components/GooglePlacesAutocompleteCustom'
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? 'YOUR_API_KEY'
 // const placeNameTypes = ['locality', 'political'] // to think about field address_components https://developers.google.com/maps/documentation/javascript/reference/places-service?hl=en#PlaceResult.address_components
 
 type TripPoint = {
@@ -53,21 +51,6 @@ type PointCellProps = {
 }
 
 const POINT_DEFAULT: TripPoint = { place: {} }
-
-const placeAutocompleteStyles = {
-  input: (provided: any) => ({
-    ...provided,
-    // color: 'blue',
-  }),
-  option: (provided: any) => ({
-    ...provided,
-    // color: 'blue',
-  }),
-  singleValue: (provided: any) => ({
-    ...provided,
-    // color: 'blue',
-  }),
-}
 
 export const TripPointCell: FC<PointCellProps> = ({
   point, // current point
@@ -191,13 +174,17 @@ export const TripPointCell: FC<PointCellProps> = ({
                     {/*    styles: placeAutocompleteStyles,*/}
                     {/*  }}*/}
                     {/*/>*/}
-                    <GoogleAutocomplete
-                      apiKey={API_KEY}
-                      defaultValue={currentPoint?.place?.address}
-                      onPlaceSelected={(place) => {
+
+
+                    <GooglePlacesAutocompleteCustom
+
+                      // defaultValue={currentPoint?.place?.address}
+                      onPlaceSelect={(place) => {
                         console.log(place);
                       }}
                     />;
+
+
                   </div>
                 )}
 
